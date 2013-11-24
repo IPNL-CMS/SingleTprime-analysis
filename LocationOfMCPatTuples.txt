@@ -1,0 +1,56 @@
+SingleTop:
+  T-tW-channel: 496681
+    /T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_tW-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_tW-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#d88ae144-2c93-4144-92ae-2ec6390f8475
+    File block located at:  ['lyogrid06.in2p3.fr']
+  T-s-channel: 259575
+    /T_s-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_s-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /T_s-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_s-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#fbf19850-1251-4d63-86a8-c3bd11791c17
+    File block located at:  ['lyogrid06.in2p3.fr']
+  Tbar-tW-channel: 492545
+    /Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_tW-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_tW-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#20ddab35-edd7-465b-bba9-0706c126bb35
+    File block located at:  ['lyogrid06.in2p3.fr']
+  Tbar-s-channel: 139803
+    /Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_s-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_s-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#894fe371-ded4-4800-8414-613cc05fa654
+    File block located at:  ['lyogrid06.in2p3.fr']
+  T-t-channel: 3752921
+    /T_t-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_t-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /T_t-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_t-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#0480b0ae-ece2-40e9-88f0-fd6631eefb2b
+    File block located at:  ['lyogrid06.in2p3.fr']
+    File block name: /T_t-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_t-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#2450ab63-6f44-4ecf-aad6-8b03caf32273
+    File block located at:  ['lyogrid06.in2p3.fr']
+  Tbar-t-channel: 1932775
+    /Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_t-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_t-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#6d3b3f0d-11ce-4b71-852a-69179b0c40f7
+    File block located at:  ['lyogrid06.in2p3.fr']
+TTJets:
+  TTJets-MSDecay: 19904943
+    /TTJets_MSDecays_central_TuneZ2star_8TeV-madgraph-tauola/jruizalv-TTJets_MSDecay_START53_V1_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /TTJets_MSDecays_central_TuneZ2star_8TeV-madgraph-tauola/jruizalv-TTJets_MSDecay_START53_V1_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#765de6f8-d473-4769-9779-43a83e4a7161
+    File block located at:  ['lyogrid06.in2p3.fr']
+DYJets:
+  DYToCC: 1997817
+    /DYToCC_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToCC_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /DYToCC_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToCC_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#b3080211-d56c-44ae-a089-957fde551a2d
+    File block located at:  ['lyogrid06.in2p3.fr']
+  DYToBB: 2001966
+    /DYToBB_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToBB_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /DYToBB_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToBB_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#f5937bb5-08f6-468d-b07f-dcb65cd8593c
+    File block located at:  ['lyogrid06.in2p3.fr']
+DiBoson:
+  ZZ: 9789108
+    /ZZ_TuneZ2star_8TeV_pythia6_tauola/jruizalv-ZZ_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /ZZ_TuneZ2star_8TeV_pythia6_tauola/jruizalv-ZZ_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#7ea4f4b2-413b-4e2e-a44e-f3f8349c11bd
+    File block located at:  ['lyogrid06.in2p3.fr']
+QCD:
+  QCD_Pt_300_470: 5926583
+    /QCD_Pt-300to470_TuneZ2star_8TeV_pythia6/jruizalv-QCD_Pt_300_470_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /QCD_Pt-300to470_TuneZ2star_8TeV_pythia6/jruizalv-QCD_Pt_300_470_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#7cb2604b-92cf-45f4-83e6-24fc72a34c55
+    File block located at:  ['lyogrid06.in2p3.fr']
+Wjets:
+  Wjets_VBF: 4919407
+    /WJetsFullyHadronic_Ht100_Pt50_Pt30_deta22_Mqq200_8TeV-madgraph/jruizalv-Wjets_VBF_START53_V7C_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER
+    File block name: /WJetsFullyHadronic_Ht100_Pt50_Pt30_deta22_Mqq200_8TeV-madgraph/jruizalv-Wjets_VBF_START53_V7C_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER#f3765948-3e72-4643-b40a-1020a70352b1
+    File block located at:  ['lyogrid06.in2p3.fr']
