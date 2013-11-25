@@ -5,7 +5,6 @@ This README file draw how to use this repository in order to do:
 
 1. Run the extractor + analysis in a given dataset
 2. How to access the code for the analysis
-3. How to use the default macro to plot the Tprime mass
 
 First you should set up your working area. For that please foolow the instructions here:
 
@@ -51,6 +50,37 @@ you will have printed in the screen the total number of events processed and the
 
 Running on MC for the backgrounds:
 
-To run over the backgrounds you have to use crab, as all datasets are not present in in2p3 T2. Then, for the moment, the only possibility is to run in the extractor + analysis mode.
+To run over the backgrounds you have to use crab, as all datasets are not present in in2p3 T2. For the moment, the only possibility is to run in the extractor + analysis mode.
 
-To run over the backgrounds, 
+For this task you will find in the test/ folder the script createAndRunMCCrab.py. In between lines 20 to 31 you can add new datasets to run on the extracto. All this datasets are already pat tuples. Additionally, you can comment out a dataset, for example if you have already run over it, putting a # at the beginning of the corresponding line.
+
+With all datasets you want to process with the extractor added, just type from the test/ folder:
+
+./createAndRunMCCrab.py --create-cfg
+
+to create the crab configuration files,
+
+./createAndRunMCCrab.py --run
+
+to launch all the crab jobs,
+
+./createAndRunMCCrab.py --status
+
+to get the status of all jobs, and
+
+./createAndRunMCCrab.py --get
+
+to get the output of all crab jobs.
+
+With this done you should find the extractor results in the in2p3 T2 under the following location:
+
+/dpm/in2p3.fr/home/cms/data/store/user/jruizalv/jruizalv/Extracted_MC/
+
+Search a subdirectory named under the date you launched the production and a directory under with the name you inserted createAndRunMCCrab.py for the dataset. For example for TTbar, if you launched a crab submission the 3 of december you should find the results of the extractor in the following folder:
+
+/dpm/in2p3.fr/home/cms/data/store/user/jruizalv/jruizalv/Extracted_MC/3Dec13/TTJets/
+
+Remember the commands rfdir and frcp commands to list and copy from the T2, respectively.
+
+The extractor files are not very heavy, so you copy them into /gridgroup/cms/ area to have a local access. There is a script to do this task, test/CopyExtractorResulst.py
+
