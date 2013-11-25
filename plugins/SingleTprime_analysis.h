@@ -79,6 +79,10 @@ namespace patextractor {
     float m_DRTrueSecondWJetRecoJet; 
     float m_DRTrueTopJetRecoJet;   
 
+    float RelMass;
+    float PTNormalizedMass;
+    float MotherPTNormalizedMass;
+
     float m_DRTrueWJets;
     float m_DRMatchedWJets;
     float m_DPhiTrueWJets;   
@@ -95,20 +99,22 @@ namespace patextractor {
     float m_DPtMatching;
 
     //Booleans to activate each cut
-    bool Cut0;
-    bool Cut1;
-    bool Cut2;
-    bool Cut3;
-    bool Cut4;
-    bool Cut5;
-    bool Cut6;
-    bool Cut7;
-    bool Cut8;
-    bool Cut9;
-    bool Cut10;
-    bool Cut11;
-    bool Cut12;
-    bool Cut13;
+    bool Cut0; //Event preselection
+    bool Cut1; //Leading jet PT
+    bool Cut2; //HT
+    bool Cut3; //2B-tags
+    bool Cut4; //DR(jj^{H})<2.5
+    bool Cut5; //DR(jj^{W})<3
+    bool Cut6; //H pt and Top pt
+    bool Cut7; //DR(WH)
+    bool Cut8; //DPH and DPT
+    bool Cut9; //Jetmultiplicity
+    bool Cut10; //DPH DPW
+    bool Cut11; //MH
+    bool Cut12; //RelHT
+    bool Cut13; //Aplanarity
+    bool Cut14; //DR(TH)
+    bool Cut15; //Mh related to Mtop
 
     bool DoMCMatching;
 
@@ -128,6 +134,8 @@ namespace patextractor {
     int m_Cut11;
     int m_Cut12;
     int m_Cut13;
+    int m_Cut14;
+    int m_Cut15;
  
     //Reconstructed particles
     TLorentzVector* ReconstructedHiggs;

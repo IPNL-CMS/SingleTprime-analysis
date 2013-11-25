@@ -47,7 +47,10 @@ float DeltaPhiWjets=2.3;                                        //
 float MinHiggsMass=100;                                         //
 float MaxHiggsMass=135;                                         //
 float RelHT=0.65;                                               //
-float Aplanarity=0.06; ///////////////////////////////////////////
+float Aplanarity=0.06;                                          //
+float MaxDeltaRTH=3.6;                                          //
+float MinDeltaRTH=2.6;                                          // 
+float RelMassCut=0.7;  ///////////////////////////////////////////
 float HiggsMass=125.0;
 float HiggsMassWindow=2000.0;
 float WMass=80.3;
@@ -160,7 +163,11 @@ namespace patextractor {
 
   m_tree_stp->Branch("trigger_passed", &m_trigger_passed, "trigger_passed/I");
 
-  // Weights and errors from differents scale factors
+  m_tree_stp->Branch("Relative_Mass",  &RelMass   ,"RelMass/F");
+  m_tree_stp->Branch("PT_Normalized_Mass",  &PTNormalizedMass   ,"PTNormalizedMass/F");
+  m_tree_stp->Branch("Mother_PT_Normalized_Mass",  &MotherPTNormalizedMass   ,"MotherPTNormalizedMass/F");
+
+  // Weights and errors from differents scale factoHJ.DeltaR(WJ)<MinDeltaRWH || HJ.DeltaR(WJ)>MaxDeltaRWHrs
   m_tree_stp->Branch("weight", &m_weight, "weight/F");
   m_tree_stp->Branch("weight_error_low", &m_weight_error_low, "weight_error_low/F");
   m_tree_stp->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");
@@ -181,6 +188,8 @@ namespace patextractor {
   m_tree_cuts->Branch("Cut_11", &m_Cut11, "Cut11_passed/I");
   m_tree_cuts->Branch("Cut_12", &m_Cut12, "Cut12_passed/I");
   m_tree_cuts->Branch("Cut_13", &m_Cut13, "Cut13_passed/I");
+  m_tree_cuts->Branch("Cut_14", &m_Cut14, "Cut14_passed/I");
+  m_tree_cuts->Branch("Cut_15", &m_Cut15, "Cut15_passed/I");
 
   // Initialize the analysis parameters using the ParameterSet iConfig
   //int an_option = iConfig.getUntrackedParameter<int>("an_option", 0);
@@ -207,6 +216,8 @@ namespace patextractor {
   Cut11=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut11");
   Cut12=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut12");
   Cut13=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut13");
+  Cut14=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut14");
+  Cut15=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut15");
 
   DoMCMatching=cmsswSettings.getParameter<bool>("DoMatching");
 
@@ -500,6 +511,10 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
 
   ReconstructedTprime->SetPxPyPzE(ReconstructedHiggs->Px()+ReconstructedTop->Px(),ReconstructedHiggs->Py()+ReconstructedTop->Py(),ReconstructedHiggs->Pz()+ReconstructedTop->Pz(),ReconstructedHiggs->E()+ReconstructedTop->E());
 
+  RelMass=(HJ.M()+TJ.M())/ReconstructedTprime->M();
+  PTNormalizedMass=(HJ.M()+TJ.M())/(HJ.Pt()+TJ.Pt());
+  MotherPTNormalizedMass=(HJ.M()+TJ.M())/ReconstructedTprime->Pt();
+
   /////////
   //Cut 6//
   /////////
@@ -612,6 +627,20 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
 
   if (Cut13) {if (m_Aplanarity>Aplanarity) return 0;}
   m_Cut13=1;
+
+  //////////
+  //Cut 14//
+  //////////
+
+  if (Cut14) {if (HJ.DeltaR(TJ)<MinDeltaRTH || HJ.DeltaR(TJ)>MaxDeltaRTH) return 0;}
+  m_Cut14=1;
+
+  //////////
+  //Cut 15//
+  //////////
+
+  if (Cut15) {if (RelMass>RelMassCut) return 0;}
+  m_Cut15=1;
 
   ///////////////////////////
   //Comparing with MC truth//
@@ -1008,6 +1037,10 @@ void SingleTprime_analysis::reset()
   m_DRTrueSecondWJetRecoJet=0; 
   m_DRTrueTopJetRecoJet=0;
 
+  RelMass=0.;
+  PTNormalizedMass=0.;
+  MotherPTNormalizedMass=0.;
+  
   m_DRTrueWJets=0;   
   m_DRMatchedWJets=0;
   m_DPhiTrueWJets=0;
@@ -1041,6 +1074,8 @@ void SingleTprime_analysis::reset()
   m_Cut11= 0;
   m_Cut12= 0;
   m_Cut13= 0;
+  m_Cut14= 0;
+  m_Cut15= 0;
 
   m_trigger_passed = false;
 

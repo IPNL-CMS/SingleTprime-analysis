@@ -56,8 +56,8 @@ float Lumi=20000;
 
 void GeneralAnalyzer()
 {
-  int ParcialTestMax=NumberOfProcesses;
-  int ParcialTestMin=NumberOfProcesses-2;
+  int ParcialTestMax=1; //NumberOfProcesses;
+  int ParcialTestMin=0;
   TH1F *FiveJetsMass[NumberOfProcesses];
   int EntriePerSample[NumberOfProcesses];
   bool SurvivalMarker[NumberOfProcesses];
@@ -179,6 +179,9 @@ void GeneralAnalyzer()
 	  FiveJetsMass[k]->SetFillColor(kSpring);
 	  FiveJetsMass[k]->SetFillStyle(3444);
 	  FiveJetsMass[k]->SetLineWidth(3);
+	  TFile f("Signal.root", "RECREATE");
+	  FiveJetsMass[k]->Write();
+	  //TprimeMass[0]->Write();
 	  //Signal->Add(FiveJetsMass[k]);
 	}
       //Settings for Single Top
@@ -186,6 +189,13 @@ void GeneralAnalyzer()
 	{
 	  FiveJetsMass[k]->SetFillColor(kBlack);
 	  FiveJetsMass[k]->SetFillStyle(3305);
+	  TH1F *SingleTopTprimeMass=(TH1F*)gDirectory->Get("TprimeMass1");
+	  if (k!=1) SingleTopTprimeMass->Add(FiveJetsMass[k]);
+	  if (k==6)
+	    {
+	      TFile f("SingleTop.root", "RECREATE");
+	      SingleTopTprimeMass->Write();
+	    }
 	  //Singletop->Add(FiveJetsMass[k]);
 	}
       //Settings for TTbar
@@ -193,19 +203,23 @@ void GeneralAnalyzer()
 	{
 	  FiveJetsMass[k]->SetFillColor(kRed);
 	  FiveJetsMass[k]->SetFillStyle(3345);
+	  TFile f("TTJets.root", "RECREATE");
+	  FiveJetsMass[k]->Write();
 	  //TTbar->Add(FiveJetsMass[k]);
 	}
       //Settings for QCD
-      else if (k==11) {FiveJetsMass[k]->SetFillColor(kViolet);}
+      else if (k==11) {FiveJetsMass[k]->SetFillColor(kViolet); TFile f("QCD.root", "RECREATE"); FiveJetsMass[k]->Write();}
       //Settings for DiBoson
-      else if (k==0) {FiveJetsMass[k]->SetFillColor(kWhite);}
+      else if (k==0) {FiveJetsMass[k]->SetFillColor(kWhite); TFile f("Diboson.root", "RECREATE"); FiveJetsMass[k]->Write();}
       //Setting for Zjets
-      else if (k==8 || k==9) {FiveJetsMass[k]->SetFillColor(kBlue);}
+      else if (k==8 || k==9) {FiveJetsMass[k]->SetFillColor(kBlue); TFile f("Zjets.root", "RECREATE"); FiveJetsMass[k]->Write();}
       //Setting for Wjets
       if (k==10) 
 	{
 	  FiveJetsMass[k]->SetFillColor(kYellow+1);
 	  FiveJetsMass[k]->SetFillStyle(3354);
+	  TFile f("Wjets.root", "RECREATE");
+	  FiveJetsMass[k]->Write();
 	}
       BKGandSignal->Add(FiveJetsMass[k]);
       BKGandSignallegend->AddEntry(FiveJetsMass[k]);
@@ -216,7 +230,7 @@ void GeneralAnalyzer()
   //BKGandSignal->Add(Signal);
   //BKGandSignallegend->AddEntry(Signal);
 
-  TCanvas *MyPlot = new TCanvas("MyPlot","Single t prime to top Higgs with backgrounds",600,600);
+  /*TCanvas *MyPlot = new TCanvas("MyPlot","Single t prime to top Higgs with backgrounds",600,600);
   MyPlot->Clear();
   MyPlot->cd(1);
   BKGandSignal->Draw("hist");
@@ -226,6 +240,6 @@ void GeneralAnalyzer()
   //BKGandSignal->SetMinimum(FiveJetsMass[0]->GetMinimum()+1.);  
   gPad->RedrawAxis("");
   gPad->Update();
-  MyPlot->Update();
+  MyPlot->Update();*/
   
 }

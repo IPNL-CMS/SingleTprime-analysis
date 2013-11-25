@@ -1,7 +1,7 @@
 ####################################
 # Variable to run only the analysis#
 ####################################
-OnlyAnalysis = False
+OnlyAnalysis = True
 ####################################
 
 import FWCore.ParameterSet.Config as cms
@@ -59,20 +59,22 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           btag_CSVL = cms.double(0.679)
           ),
 	cuts = cms.PSet(
-	  cut0 = cms.bool(True),
-	  cut1 = cms.bool(True),
-	  cut2 = cms.bool(True),
-          cut3 = cms.bool(True),
-          cut4 = cms.bool(True), #Higgs
-          cut5 = cms.bool(True), #W
-          cut6 = cms.bool(True),
-          cut7 = cms.bool(True),
-          cut8 = cms.bool(True),
-          cut9 = cms.bool(True),
-          cut10 = cms.bool(True),
-          cut11 = cms.bool(True),
-          cut12 = cms.bool(True),
-          cut13 = cms.bool(True)
+	  cut0 = cms.bool(True), #Event preselection
+	  cut1 = cms.bool(True), #Leading jet PT
+	  cut2 = cms.bool(True), #HT
+          cut3 = cms.bool(True), #2btags
+          cut4 = cms.bool(True), #Higgs jets DR<2.5
+          cut5 = cms.bool(True), #W jets DR<3
+          cut6 = cms.bool(True), #H pt and Top pt
+          cut7 = cms.bool(True), #DR(WH)
+          cut8 = cms.bool(True), #DPH and DPT
+          cut9 = cms.bool(True), #Jet multiplicity
+          cut10 = cms.bool(True), #DPH and DPW
+          cut11 = cms.bool(True), #MH
+          cut12 = cms.bool(True), #RelHT
+          cut13 = cms.bool(True), #Aplanarity
+          cut14 = cms.bool(False), #DR(TH)
+          cut15 = cms.bool(False)  #RelMass
           ),
         DoMatching = cms.bool(False)
       )
