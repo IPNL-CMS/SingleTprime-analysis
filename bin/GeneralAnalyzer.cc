@@ -56,7 +56,7 @@ float Lumi=20000;
 
 void GeneralAnalyzer()
 {
-  int ParcialTestMax=1; //NumberOfProcesses;
+  int ParcialTestMax=NumberOfProcesses;
   int ParcialTestMin=0;
   TH1F *FiveJetsMass[NumberOfProcesses];
   int EntriePerSample[NumberOfProcesses];
@@ -154,7 +154,7 @@ void GeneralAnalyzer()
       gPad->Close();
       if (PassedPerCut[NumberOfProcesses]!=0)
 	{
-	  string A1 = Form("Reconstructed_Tprime.M() >> TprimeMass%i",k);
+	  string A1 = Form("Reconstructed_Tprime.M() >> TprimeMass%i(155,50,1600)",k);
 	  string A2 = Form("TprimeMass%i",k);
 	  AnalysisChain.Draw(A1.c_str());
 	  FiveJetsMass[k] = (TH1F*)gDirectory->Get(A2.c_str());
@@ -212,7 +212,14 @@ void GeneralAnalyzer()
       //Settings for DiBoson
       else if (k==0) {FiveJetsMass[k]->SetFillColor(kWhite); TFile f("Diboson.root", "RECREATE"); FiveJetsMass[k]->Write();}
       //Setting for Zjets
-      else if (k==8 || k==9) {FiveJetsMass[k]->SetFillColor(kBlue); TFile f("Zjets.root", "RECREATE"); FiveJetsMass[k]->Write();}
+      else if (k==8 || k==9) 
+	{
+	  FiveJetsMass[k]->SetFillColor(kBlue); 
+	  TH1F *ZjetsTprimeMass=(TH1F*)gDirectory->Get("TprimeMass9");
+	  //if (k!=8) ZjetsTprimeMass->Add(FiveJetsMass[k]);
+	  TFile f("Zjets.root", "RECREATE"); 
+	  ZjetsTprimeMass->Write();
+	}
       //Setting for Wjets
       if (k==10) 
 	{

@@ -51,8 +51,7 @@ USER.ui_working_dir = ${ui_working_dir}
 USER.eMail = ${email}
 CMSSW.datasetpath = ${dataset}
 CMSSW.total_number_of_events = ${events}
-USER.publish_data_name = ${public_name}
-"""
+""" #USER.publish_data_name = ${public_name}
 )
 
 multicrab_singleTprime = r"""
@@ -73,7 +72,7 @@ for dataset in datasets:
   #publish_name = "%s_%s_%s-v%d" % (dataset_name, dataset_globaltag, d, version)
   output_file = "%s_%s_multicrab_MC.cfg" % (dataset_name, d)
   ui_working_dir = ("%s_multicrab_MC") % (dataset_name)
-  publish_name = ("%s_extracted") % (dataset_name)
+  #publish_name = ("%s_extracted") % (dataset_name)
 
   if options.create_cfg:
     output_dir_singleTprime = ("jruizalv/Extracted_MC/%s/%s" % (d, dataset_name))
@@ -87,7 +86,7 @@ for dataset in datasets:
     print("")
 
     f = open(output_file, "w")
-    f.write(full_template.substitute(ui_working_dir=ui_working_dir, dataset=dataset_path, remote_dir=output_dir_singleTprime, name=dataset_name, email=email, events=dataset_size, public_name=publish_name))
+    f.write(full_template.substitute(ui_working_dir=ui_working_dir, dataset=dataset_path, remote_dir=output_dir_singleTprime, name=dataset_name, email=email, events=dataset_size)) #, public_name=publish_name))
     f.close()
 
   if options.run:
