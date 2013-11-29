@@ -18,28 +18,32 @@
 using namespace std;
 
 const TString StorageDirPrefix="file:/home/cms/jruizalv/work/CMSSW_5_3_9_patch2/src/Extractors/PatExtractor/bin/";
-const TString Samples[7] = {"Diboson.root", "SingleTop.root", "TTJets.root", "Zjets.root", "Wjets.root", "QCD.root", "Signal.root"};
+const int NOS=5;
+//const TString Samples[NOS] = {"Diboson.root", "SingleTop.root", "TTJets.root", "Zjets.root", "Wjets.root", "QCD.root", "Signal.root"};
+const TString Samples[NOS] = {"Diboson.root", "SingleTop.root", "TTJets.root", "QCD.root", "Signal.root"};
 
 void Plotter()
 {
-  TFile *CurrentFile[7];
-  TH1F *TprimeHistos[7];
+  TFile *CurrentFile[NOS];
+  TH1F *TprimeHistos[NOS];
   
-  for (int i=0; i<7; i++)
+  for (int i=0; i<NOS; i++)
     {
       CurrentFile[i] = new TFile(StorageDirPrefix + Samples[i], "READ");
       if ( CurrentFile[i]->IsOpen() ) printf( Samples[i] + " File opened successfully\n");
       if (i==0) {TprimeHistos[0]->SetDefaultSumw2(); TprimeHistos[0]= (TH1F*)gDirectory->Get("TprimeMass0");}
       else if (i==1) {TprimeHistos[1]->SetDefaultSumw2(); TprimeHistos[1]= (TH1F*)gDirectory->Get("TprimeMass1");}
       else if (i==2) {TprimeHistos[2]->SetDefaultSumw2(); TprimeHistos[2]= (TH1F*)gDirectory->Get("TprimeMass7");}
-      else if (i==3) {TprimeHistos[3]->SetDefaultSumw2(); TprimeHistos[3]= (TH1F*)gDirectory->Get("TprimeMass9");}
-      else if (i==4) {TprimeHistos[4]->SetDefaultSumw2(); TprimeHistos[4]= (TH1F*)gDirectory->Get("TprimeMass10");}
-      else if (i==5) {TprimeHistos[5]->SetDefaultSumw2(); TprimeHistos[5]= (TH1F*)gDirectory->Get("TprimeMass11");}
-      else if (i==6) {TprimeHistos[6]->SetDefaultSumw2(); TprimeHistos[6]= (TH1F*)gDirectory->Get("TprimeMass12");}
+      else if (i==3) {TprimeHistos[3]->SetDefaultSumw2(); TprimeHistos[3]= (TH1F*)gDirectory->Get("TprimeMass11");}
+      else if (i==4) {TprimeHistos[4]->SetDefaultSumw2(); TprimeHistos[4]= (TH1F*)gDirectory->Get("TprimeMass12");}
+      //else if (i==3) {TprimeHistos[3]->SetDefaultSumw2(); TprimeHistos[3]= (TH1F*)gDirectory->Get("TprimeMass9");}
+      //else if (i==4) {TprimeHistos[4]->SetDefaultSumw2(); TprimeHistos[4]= (TH1F*)gDirectory->Get("TprimeMass10");}
+      //else if (i==5) {TprimeHistos[5]->SetDefaultSumw2(); TprimeHistos[5]= (TH1F*)gDirectory->Get("TprimeMass11");}
+      //else if (i==6) {TprimeHistos[6]->SetDefaultSumw2(); TprimeHistos[6]= (TH1F*)gDirectory->Get("TprimeMass12");}
     }
   
   THStack *BKGandSignal = new THStack("BKGandSignal", "BKG and signal for 5 jets; M_{5j} GeV; Events");
-  for (int i=0; i<7; i++)
+  for (int i=0; i<NOS; i++)
     {
       
       //float BinSize=TprimeHistos[i]->GetBinWidth(1);
@@ -59,7 +63,8 @@ void Plotter()
   MyPlot->cd(1);
   BKGandSignal->Draw("hist");
   //BKGandSignallegend->Draw();
-  TprimeHistos[6]->Draw("histsame");
+  TprimeHistos[4]->Draw("histsame");
+  //TprimeHistos[6]->Draw("histsame");
   gPad->SetLogy();
   //BKGandSignal->SetMinimum(FiveJetsMass[0]->GetMinimum()+1.);  
   gPad->RedrawAxis("");

@@ -19,16 +19,19 @@ datasets = [
     # Single Top
     ["/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_tW-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "T-tw"],
     ["/T_s-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_s-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "T-s"],
-    ["/DYToCC_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToCC_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "DYToCC"],
+    #["/DYToCC_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToCC_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "DYToCC"],
     ["/Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_tW-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "Tbar-tw"],
     ["/Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_s-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "Tbar-s"],
     ["/Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-Tbar_t-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "Tbar-t"],
     ["/T_t-channel_TuneZ2star_8TeV-powheg-tauola/jruizalv-T_t-channel_START53_V7A_12Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "T-t"],
-    ["/DYToBB_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToBB_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "DYToBB"],
+    #["/DYToBB_M_50_TuneZ2star_8TeV_pythia6/jruizalv-DYToBB_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "DYToBB"],
     ["/TTJets_MSDecays_central_TuneZ2star_8TeV-madgraph-tauola/jruizalv-TTJets_MSDecay_START53_V1_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "TTJets"],
     ["/ZZ_TuneZ2star_8TeV_pythia6_tauola/jruizalv-ZZ_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "ZZ"],
     ["/QCD_Pt-300to470_TuneZ2star_8TeV_pythia6/jruizalv-QCD_Pt_300_470_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "QCD_PT_300_470"],
-    ["/WJetsFullyHadronic_Ht100_Pt50_Pt30_deta22_Mqq200_8TeV-madgraph/jruizalv-Wjets_VBF_START53_V7C_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "Wjets_VBF"]
+    #["/WJetsFullyHadronic_Ht100_Pt50_Pt30_deta22_Mqq200_8TeV-madgraph/jruizalv-Wjets_VBF_START53_V7C_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "Wjets_VBF"],
+    ["/WZ_TuneZ2star_8TeV_pythia6_tauola/jruizalv-WZ_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "WZ"],
+    #["/QCD_Pt-120to170_TuneZ2star_8TeV_pythia6/jruizalv-QCD_Pt_120_170_START53_V7A_25Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "QCD_PT_120_170"],
+    ["/QCD_Pt-470to600_TuneZ2star_8TeV_pythia6/jruizalv-QCD_Pt_470_600_START53_V7A_13Nov13-v1-37c7db7f214621ff15b94bc076828bf1/USER", "QCD_PT_470_600"]
     
     ]
 

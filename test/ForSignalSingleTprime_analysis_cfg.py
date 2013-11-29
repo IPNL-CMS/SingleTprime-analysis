@@ -1,7 +1,7 @@
 ####################################
 # Variable to run only the analysis#
 ####################################
-OnlyAnalysis = False
+OnlyAnalysis = True
 ####################################
 
 import FWCore.ParameterSet.Config as cms

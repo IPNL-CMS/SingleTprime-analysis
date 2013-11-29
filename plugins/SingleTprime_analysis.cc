@@ -48,9 +48,13 @@ float MinHiggsMass=100;                                         //
 float MaxHiggsMass=135;                                         //
 float RelHT=0.65;                                               //
 float Aplanarity=0.06;                                          //
-float MaxDeltaRTH=3.6;                                          //
-float MinDeltaRTH=2.6;                                          // 
-float RelMassCut=0.7;  ///////////////////////////////////////////
+float MaxDeltaRTH=3.3;                                          //
+float MinDeltaRTH=2.8;                                          // 
+float RelMassCut=0.7;                                           //
+float MotherPTNormalizedMassCut=10.;                            //
+float PTNormalizedMassCut=0.7;                                  //
+int NumberOfTopsCut=3;                                          //
+float NumberofLooseBtag=0;   /////////////////////////////////////
 float HiggsMass=125.0;
 float HiggsMassWindow=2000.0;
 float WMass=80.3;
@@ -166,6 +170,8 @@ namespace patextractor {
   m_tree_stp->Branch("Relative_Mass",  &RelMass   ,"RelMass/F");
   m_tree_stp->Branch("PT_Normalized_Mass",  &PTNormalizedMass   ,"PTNormalizedMass/F");
   m_tree_stp->Branch("Mother_PT_Normalized_Mass",  &MotherPTNormalizedMass   ,"MotherPTNormalizedMass/F");
+  m_tree_stp->Branch("Number_of_Tops",  &NumberOfTops   ,"NumberOfTops/I");
+  m_tree_stp->Branch("Number_of_Loose_and_non_med_b_tags",  &LooseNoMedBtags   ,"LooseNoMedBtags/I");
 
   // Weights and errors from differents scale factoHJ.DeltaR(WJ)<MinDeltaRWH || HJ.DeltaR(WJ)>MaxDeltaRWHrs
   m_tree_stp->Branch("weight", &m_weight, "weight/F");
@@ -185,11 +191,15 @@ namespace patextractor {
   m_tree_cuts->Branch("Cut_8", &m_Cut8, "Cut8_passed/I");
   m_tree_cuts->Branch("Cut_9", &m_Cut9, "Cut9_passed/I");
   m_tree_cuts->Branch("Cut_10", &m_Cut10, "Cut10_passed/I");
-  m_tree_cuts->Branch("Cut_11", &m_Cut11, "Cut11_passed/I");
+  m_tree_cuts->Branch("Cut_11", &m_Cut11, "Cut11_passed/INumberOfTops");
   m_tree_cuts->Branch("Cut_12", &m_Cut12, "Cut12_passed/I");
   m_tree_cuts->Branch("Cut_13", &m_Cut13, "Cut13_passed/I");
   m_tree_cuts->Branch("Cut_14", &m_Cut14, "Cut14_passed/I");
   m_tree_cuts->Branch("Cut_15", &m_Cut15, "Cut15_passed/I");
+  m_tree_cuts->Branch("Cut_16", &m_Cut16, "Cut16_passed/I");
+  m_tree_cuts->Branch("Cut_17", &m_Cut17, "Cut17_passed/I");
+  m_tree_cuts->Branch("Cut_18", &m_Cut18, "Cut18_passed/I");
+  m_tree_cuts->Branch("Cut_19", &m_Cut19, "Cut19_passed/I");
 
   // Initialize the analysis parameters using the ParameterSet iConfig
   //int an_option = iConfig.getUntrackedParameter<int>("an_option", 0);
@@ -218,6 +228,10 @@ namespace patextractor {
   Cut13=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut13");
   Cut14=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut14");
   Cut15=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut15");
+  Cut16=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut16");
+  Cut17=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut17");
+  Cut18=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut18");
+  Cut19=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut19");
 
   DoMCMatching=cmsswSettings.getParameter<bool>("DoMatching");
 
@@ -293,6 +307,9 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
           jetIsBTagged[i] = false;
         }
       
+      //Third Loose B-tag
+      if ((m_jetMet->getJetBTagProb_CSV(i)) < m_JET_btag_CSVL && (m_jetMet->getJetBTagProb_CSV(i)) > 0.244) ++LooseNoMedBtags;
+
       //if (!isJetSel(jeti)) continue; // apply the pt cut
       if (isJetForwSel(jeti)/* && !JetsInAcceptance[i]*/) CountingBadJets++;
       if (isJetAccepSel(jeti)) {JetsInAcceptance[i]=true; CountingGoodJets++; if (FiveJetCounter==0) {LeadingJet=AllJets[i];}; if (FiveJetCounter<5) {PentaJet+=AllJets[i]; FiveJetCounter++;}}
@@ -471,6 +488,7 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
   int IndexTopJet=0;
   bool EventWithTop=false;
   int TopCounter=0;
+  int RestrictedTopCounter=0;
   float DiffWithTopMass=0;
   for (int i=0;i<n_jets;++i)
     {
@@ -481,6 +499,7 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
       if (fabs(Trijet.M()-TopMass)>TopMassWindow) continue;
       //cout << "Mass of jet i: " << jeti.M() << " and j: " << jetj.M() << endl;
       //cout << "Mass of the b-tagged jets couple " << i << j << " is " << DiBjet.M() << endl;
+      if (fabs(Trijet.M()-TopMass)>30) RestrictedTopCounter++;
       EventWithTop=true;
       if (TopCounter==0)
 	{
@@ -514,6 +533,7 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
   RelMass=(HJ.M()+TJ.M())/ReconstructedTprime->M();
   PTNormalizedMass=(HJ.M()+TJ.M())/(HJ.Pt()+TJ.Pt());
   MotherPTNormalizedMass=(HJ.M()+TJ.M())/ReconstructedTprime->Pt();
+  NumberOfTops=RestrictedTopCounter;
 
   /////////
   //Cut 6//
@@ -641,6 +661,34 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
 
   if (Cut15) {if (RelMass>RelMassCut) return 0;}
   m_Cut15=1;
+
+  //////////
+  //Cut 16//
+  //////////
+
+  if (Cut16) {if (PTNormalizedMass>PTNormalizedMassCut) return 0;}
+  m_Cut16=1;
+
+  //////////
+  //Cut 17//
+  //////////
+
+  if (Cut17) {if (MotherPTNormalizedMass>MotherPTNormalizedMassCut) return 0;}
+  m_Cut17=1;
+
+  //////////
+  //Cut 18//
+  //////////
+
+  if (Cut18) {if (NumberOfTops>=NumberOfTopsCut) return 0;}
+  m_Cut18=1;
+
+  //////////
+  //Cut 19//
+  //////////
+
+  if (Cut19) {if (LooseNoMedBtags<=NumberofLooseBtag) return 0;}
+  m_Cut19=1;
 
   ///////////////////////////
   //Comparing with MC truth//
@@ -1040,6 +1088,8 @@ void SingleTprime_analysis::reset()
   RelMass=0.;
   PTNormalizedMass=0.;
   MotherPTNormalizedMass=0.;
+  NumberOfTops=0;
+  LooseNoMedBtags=0;
   
   m_DRTrueWJets=0;   
   m_DRMatchedWJets=0;
@@ -1076,6 +1126,10 @@ void SingleTprime_analysis::reset()
   m_Cut13= 0;
   m_Cut14= 0;
   m_Cut15= 0;
+  m_Cut16= 0;
+  m_Cut17= 0;
+  m_Cut18= 0;
+  m_Cut19= 0;
 
   m_trigger_passed = false;
 
