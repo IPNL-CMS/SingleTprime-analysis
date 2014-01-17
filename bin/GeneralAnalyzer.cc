@@ -57,11 +57,25 @@ float Lumi=20000;
 void GeneralAnalyzer()
 {
   int ParcialTestMax=NumberOfProcesses;
-  int ParcialTestMin=10;
+  int ParcialTestMin=0;
   TH1F *FiveJetsMass[NumberOfProcesses];
+  TH1F *LeadingJetPT[NumberOfProcesses];
+  TH1F *THT[NumberOfProcesses];
+  TH1F *DRHjets[NumberOfProcesses];
+  TH1F *DRWjets[NumberOfProcesses];
+  TH1F *Hpt[NumberOfProcesses];
+  TH1F *Tpt[NumberOfProcesses];
+  TH1F *DRWH[NumberOfProcesses];
+  TH1F *DPHjets[NumberOfProcesses];
+  TH1F *DPWjets[NumberOfProcesses];
+  TH1F *DPTjets[NumberOfProcesses];
+  TH1F *HiggsMass[NumberOfProcesses];
+  TH1F *RelHT[NumberOfProcesses];
+  TH1F *DRTH[NumberOfProcesses];
+  TH1F *PtNormalizedMass[NumberOfProcesses];
   int EntriePerSample[NumberOfProcesses];
   bool SurvivalMarker[NumberOfProcesses];
-  //for (int k=0; k<NumberOfProcesses; k++)
+
   for (int k=ParcialTestMin; k<ParcialTestMax; k++)
     {
       TChain CutsChain("cuts");
@@ -176,6 +190,19 @@ void GeneralAnalyzer()
 	  gPad->Close();
 	  SurvivalMarker[k]=true;
 	}
+      /////////////////////
+      //Saving Histograms//
+      /////////////////////
+      string LJPT1 = Form("jet1_pt >> jet1_pt%i(100,10,500)",k);
+      string LJPT2 = Form("jet1_pt%i",k);
+      AnalysisChain.Draw(LJPT1.c_str());
+      LeadingJetPT[k] = (TH1F*)gDirectory->Get(LJPT2.c_str());
+      gPad->Close();
+      string THT1 = Form("THT >> THT%i(100,600,1400)",k);
+      string THT2 = Form("THT%i",k);
+      AnalysisChain.Draw(THT1.c_str());
+      THT[k] = (TH1F*)gDirectory->Get(THT2.c_str());
+      gPad->Close();
 
     }
 
@@ -183,10 +210,18 @@ void GeneralAnalyzer()
 
   THStack *BKGandSignal = new THStack("BKGandSignal", "BKG and signal for 5 jets; M_{5j} GeV; Events");
   TLegend* BKGandSignallegend = new TLegend(0.75,0.55,0.90,0.9);
-  //TH1F *Signal; TH1F *Singletop; TH1F *TTbar;
+  //TprimeMass histo recollection
   TH1F *SingleTopTprimeMass=(TH1F*)gDirectory->Get("TprimeMass3");
   TH1F *QCDTprimeMass=(TH1F*)gDirectory->Get("TprimeMass10");  
   TH1F *DibosonTprimeMass=(TH1F*)gDirectory->Get("TprimeMass0");
+  //LeadingJetPT histo recollection
+  TH1F *SingleTopTprimeMassLJPT=(TH1F*)gDirectory->Get("jet1_pt3");
+  TH1F *QCDTprimeMassLJPT=(TH1F*)gDirectory->Get("jet1_pt10");  
+  TH1F *DibosonTprimeMassLJPT=(TH1F*)gDirectory->Get("jet1_pt0");
+  //THT histo recollection
+  TH1F *SingleTopTprimeMassTHT=(TH1F*)gDirectory->Get("THT3");
+  TH1F *QCDTprimeMassTHT=(TH1F*)gDirectory->Get("THT10");  
+  TH1F *DibosonTprimeMassTHT=(TH1F*)gDirectory->Get("THT0");
   for (int k=ParcialTestMin; k<ParcialTestMax; k++)
     {
       if (!SurvivalMarker[k]) continue;
@@ -194,24 +229,44 @@ void GeneralAnalyzer()
       //Settings for signal
       if (k==NumberOfProcesses-1)
 	{
+	  //TprimeMass
 	  FiveJetsMass[k]->SetFillColor(kSpring);
 	  FiveJetsMass[k]->SetFillStyle(3444);
 	  FiveJetsMass[k]->SetLineWidth(3);
 	  TFile f("Signal.root", "RECREATE");
 	  FiveJetsMass[k]->Write();
-	  //TprimeMass[0]->Write();
-	  //Signal->Add(FiveJetsMass[k]);
+	  //LJPT
+	  LeadingJetPT[k]->SetFillColor(kSpring);
+	  LeadingJetPT[k]->SetFillStyle(3444);
+	  LeadingJetPT[k]->SetLineWidth(3);
+	  LeadingJetPT[k]->Write();
+	  //THT
+	  THT[k]->SetFillColor(kSpring);
+	  THT[k]->SetFillStyle(3444);
+	  THT[k]->SetLineWidth(3);
+	  THT[k]->Write();
 	}
       //Settings for Single Top
       else if (k<=8 && k>=3) 
 	{
 	  FiveJetsMass[k]->SetFillColor(kBlack);
 	  FiveJetsMass[k]->SetFillStyle(3305);
-	  if (k!=3) SingleTopTprimeMass->Add(FiveJetsMass[k]);
+	  LeadingJetPT[k]->SetFillColor(kBlack);
+	  LeadingJetPT[k]->SetFillStyle(3305);
+	  THT[k]->SetFillColor(kBlack);
+	  THT[k]->SetFillStyle(3305);
+	  if (k!=3) 
+	    {
+	      SingleTopTprimeMass->Add(FiveJetsMass[k]); 
+	      SingleTopTprimeMassLJPT->Add(LeadingJetPT[k]);
+	      SingleTopTprimeMassTHT->Add(THT[k]);
+	    }
 	  if (k==8)
 	    {
 	      TFile f("SingleTop.root", "RECREATE");
 	      SingleTopTprimeMass->Write();
+	      SingleTopTprimeMassLJPT->Write();
+	      SingleTopTprimeMassTHT->Write();
 	    }
 	  //Singletop->Add(FiveJetsMass[k]);
 	}
@@ -220,51 +275,57 @@ void GeneralAnalyzer()
 	{
 	  FiveJetsMass[k]->SetFillColor(kRed);
 	  FiveJetsMass[k]->SetFillStyle(3345);
+	  LeadingJetPT[k]->SetFillColor(kRed);
+	  LeadingJetPT[k]->SetFillStyle(3345);
+	  THT[k]->SetFillColor(kRed);
+	  THT[k]->SetFillStyle(3345);
 	  TFile f("TTJets.root", "RECREATE");
 	  FiveJetsMass[k]->Write();
-	  //TTbar->Add(FiveJetsMass[k]);
+	  LeadingJetPT[k]->Write();
+	  THT[k]->Write();
 	}
       //Settings for QCD
       else if (k>=10 && k<=14) 
 	{
 	  FiveJetsMass[k]->SetFillColor(kViolet); 
-	  if (k!=10) QCDTprimeMass->Add(FiveJetsMass[k]);
+	  LeadingJetPT[k]->SetFillColor(kViolet); 
+	  THT[k]->SetFillColor(kViolet); 
+	  if (k!=10) 
+	    {
+	      QCDTprimeMass->Add(FiveJetsMass[k]);
+	      QCDTprimeMassLJPT->Add(LeadingJetPT[k]);
+	      QCDTprimeMassTHT->Add(THT[k]);
+	    }
 	  if (k==14)
 	    {
 	      TFile f("QCD.root", "RECREATE"); 
 	      QCDTprimeMass->Write();
+	      QCDTprimeMassLJPT->Write();
+	      QCDTprimeMassTHT->Write();
 	    }
 	}
       //Settings for DiBoson
       else if (k<=2 && k>=0) 
 	{
 	  FiveJetsMass[k]->SetFillColor(kWhite); 
-	  if (k!=0) DibosonTprimeMass->Add(FiveJetsMass[k]);
+	  LeadingJetPT[k]->SetFillColor(kWhite); 
+	  THT[k]->SetFillColor(kWhite); 
+	  if (k!=0) 
+	    {
+	      DibosonTprimeMass->Add(FiveJetsMass[k]);
+	      DibosonTprimeMassLJPT->Add(LeadingJetPT[k]);
+	      DibosonTprimeMassTHT->Add(THT[k]);
+	    }
 	  if (k==2)
 	    {
 	      TFile f("Diboson.root", "RECREATE"); 
 	      DibosonTprimeMass->Write();
+	      DibosonTprimeMassLJPT->Write();
+	      DibosonTprimeMassTHT->Write();
 	    }
 	}
       BKGandSignal->Add(FiveJetsMass[k]);
       BKGandSignallegend->AddEntry(FiveJetsMass[k]);
     }
-
-  //BKGandSignal->Add(Singletop);
-  //BKGandSignallegend->AddEntry(Singletop);
-  //BKGandSignal->Add(Signal);
-  //BKGandSignallegend->AddEntry(Signal);
-
-  /*TCanvas *MyPlot = new TCanvas("MyPlot","Single t prime to top Higgs with backgrounds",600,600);
-  MyPlot->Clear();
-  MyPlot->cd(1);
-  BKGandSignal->Draw("hist");
-  //BKGandSignallegend->Draw();
-  //FiveJetsMass[0]->Draw("histsame");
-  gPad->SetLogy();
-  //BKGandSignal->SetMinimum(FiveJetsMass[0]->GetMinimum()+1.);  
-  gPad->RedrawAxis("");
-  gPad->Update();
-  MyPlot->Update();*/
   
 }
