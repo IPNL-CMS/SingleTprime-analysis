@@ -17,28 +17,28 @@
 
 #include "TMath.h"
 #include "TF1.h"
-#include "FilesNames.C"
+#include "FilesNames_DRTH_Tighten.C"
 
 using namespace std;
 
 // Global Parameters
 // Location of root files
 
-const TString StorageDirPrefix[NumberOfProcesses]={"file:/gridgroup/cms/jruizalv/Extracted_MC/ZZ/", "file:/gridgroup/cms/jruizalv/Extracted_MC/T-s/", "file:/gridgroup/cms/jruizalv/Extracted_MC/T-t/","file:/gridgroup/cms/jruizalv/Extracted_MC/T-tw/", "file:/gridgroup/cms/jruizalv/Extracted_MC/Tbar-s/", "file:/gridgroup/cms/jruizalv/Extracted_MC/Tbar-t/", "file:/gridgroup/cms/jruizalv/Extracted_MC/Tbar-tw/", "file:/gridgroup/cms/jruizalv/Extracted_MC/TTJets/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DYToCC/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DYToBB/", "file:/gridgroup/cms/jruizalv/Extracted_MC/Wjets_VBF/", "file:/gridgroup/cms/jruizalv/Extracted_MC/QCD_300_CSVM/", "file:/home/cms/jruizalv/work/CMSSW_5_3_9_patch2/src/Extractors/PatExtractor/test/"};
+const TString StorageDirPrefix[NumberOfProcesses]={"file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/ZZ/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/WZ/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/WW/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/T-s/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/T-t/","file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/T-tw/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/Tbar-s/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/Tbar-t/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/Tbar-tw/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/TTJets/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/QCD_PT_170_300/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/QCD_PT_300_470/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/QCD_PT_470_600/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/QCD_PT_600_800/", "file:/gridgroup/cms/jruizalv/Extracted_MC/DRTH_PTNormMass_tighten/QCD_PT_800_1000/", "file:/home/cms/jruizalv/work/CMSSW_5_3_9_patch2/src/Extractors/PatExtractor/test/"};
 
-//QCD_PT_300_470/
-
-const int NumberOfHistos=14;
-const TString Histos[NumberOfHistos] = {"Cut_0", "Cut_1", "Cut_2", "Cut_3", "Cut_4", "Cut_5", "Cut_6", "Cut_7", "Cut_8", "Cut_9", "Cut_10", "Cut_11", "Cut_12", "Cut_13"};
+const int NumberOfHistos=20;
+const TString Histos[NumberOfHistos] = {"Cut_0", "Cut_1", "Cut_2", "Cut_3", "Cut_4", "Cut_5", "Cut_6", "Cut_7", "Cut_8", "Cut_9", "Cut_10", "Cut_11", "Cut_12", "Cut_13", "Cut_14", "Cut_15", "Cut_16", "Cut_17", "Cut_18", "Cut_19"};
 
 //Computing weights (Everything in pb)
-const float XS[NumberOfProcesses]={8.258, 2.82, 47, 10.7, 1.57, 25, 10.7, 234.0, 3060.099, 3840.86, 1759.549, 1205.0, 0.15}; // 113.8791, 26.9921, 3.550036, 54.838, 33.72, 1205.0}; //Signal,T_s,T_t,T_tW,Tbar_s,Tbar_t,Tbar_tW,TTbar,QCD_300,DYToBB,DYToCC,ZZ,    QCD_470,QCD_600,QCD_800,WW,WZ,Wjets_VBF
+const float XS[NumberOfProcesses]={8.258, 33.72, 54.838, 2.82, 47, 10.7, 1.57, 25, 10.7, 234.0, 34138.15, 1759.549, 113.8791, 26.9921, 3.550036, 0.15}; 
 /*float T_s_xs=2.82;
 float T_t_xs=47;
 float T_tW_xs=10.7;
 float Tbar_s_xs=1.57;
 float Tbar_t_xs=25;
 float Tbar_tW_xs=10.7;
+float QCD_120_xs=156293.3;
+float QCD_170_xs=34138.15;
 float QCD_300_xs=1759.549;
 float QCD_470_xs=113.8791;
 float QCD_600_xs=26.9921;
@@ -57,7 +57,7 @@ float Lumi=20000;
 void GeneralAnalyzer()
 {
   int ParcialTestMax=NumberOfProcesses;
-  int ParcialTestMin=0;
+  int ParcialTestMin=10;
   TH1F *FiveJetsMass[NumberOfProcesses];
   int EntriePerSample[NumberOfProcesses];
   bool SurvivalMarker[NumberOfProcesses];
@@ -69,70 +69,85 @@ void GeneralAnalyzer()
       TH1F *ALLCuts[NumberOfHistos];
       for (int i=0; i<NumberOfSamples[k]; i++)
 	{
-	  if (k==NumberOfProcesses-1)
+	  if (k==0)
 	    {
-	      CutsChain.Add(StorageDirPrefix[k] + SamplesSignal[i]);
-	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesSignal[i]);
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesZZ[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesZZ[i]);
 	    }
 	  else if (k==1)
+	    {
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesWZ[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesWZ[i]);
+	    }
+	  else if (k==2)
+	    {
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesWW[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesWW[i]);
+	    }
+	  else if (k==3)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesT_s[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesT_s[i]);
 	    }
-	  else if (k==2)
+	  else if (k==4)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesT_t[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesT_t[i]);
 	    }
-	  else if (k==3)
+	  else if (k==5)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesT_tw[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesT_tw[i]);
 	    }
-	  else if (k==4)
+	  else if (k==6)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesTbar_s[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesTbar_s[i]);
 	    }
-	  else if (k==5)
+	  else if (k==7)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesTbar_t[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesTbar_t[i]);
 	    }
-	  else if (k==6)
+	  else if (k==8)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesTbar_tw[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesTbar_tw[i]);
 	    }
-	  else if (k==7)
+	  else if (k==9)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesTTbar[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesTTbar[i]);
+	    }
+	  else if (k==10)
+	    {
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesQCD170[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesQCD170[i]);
 	    }
 	  else if (k==11)
 	    {
 	      CutsChain.Add(StorageDirPrefix[k] + SamplesQCD300[i]);
 	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesQCD300[i]);
 	    }
-	  else if (k==8)
+	  else if (k==12)
 	    {
-	      CutsChain.Add(StorageDirPrefix[k] + SamplesDYToCC[i]);
-	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesDYToCC[i]);
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesQCD470[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesQCD470[i]);
 	    }
-	  else if (k==9)
+	  else if (k==13)
 	    {
-	      CutsChain.Add(StorageDirPrefix[k] + SamplesDYToBB[i]);
-	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesDYToBB[i]);
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesQCD600[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesQCD600[i]);
 	    }
-	  else if (k==0)
+	  else if (k==14)
 	    {
-	      CutsChain.Add(StorageDirPrefix[k] + SamplesZZ[i]);
-	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesZZ[i]);
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesQCD800[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesQCD800[i]);
 	    }
-	  else if (k==10)
+	  else if (k==NumberOfProcesses-1)
 	    {
-	      CutsChain.Add(StorageDirPrefix[k] + SamplesWjets_VBF[i]);
-	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesWjets_VBF[i]);
+	      CutsChain.Add(StorageDirPrefix[k] + SamplesSignal[i]);
+	      AnalysisChain.Add(StorageDirPrefix[k] + SamplesSignal[i]);
 	    }
 	}
       
@@ -150,11 +165,11 @@ void GeneralAnalyzer()
 	}
       
       EntriePerSample[k]=EntriesPerCut[0];
-      cout << PassedPerCut[NumberOfProcesses] << endl;
+      cout << PassedPerCut[NumberOfHistos-1] << endl;
       gPad->Close();
-      if (PassedPerCut[NumberOfProcesses]!=0)
+      if (PassedPerCut[NumberOfHistos-1]!=0)
 	{
-	  string A1 = Form("Reconstructed_Tprime.M() >> TprimeMass%i(155,50,1600)",k);
+	  string A1 = Form("Reconstructed_Tprime.M() >> TprimeMass%i(60,400,1600)",k);
 	  string A2 = Form("TprimeMass%i",k);
 	  AnalysisChain.Draw(A1.c_str());
 	  FiveJetsMass[k] = (TH1F*)gDirectory->Get(A2.c_str());
@@ -169,6 +184,9 @@ void GeneralAnalyzer()
   THStack *BKGandSignal = new THStack("BKGandSignal", "BKG and signal for 5 jets; M_{5j} GeV; Events");
   TLegend* BKGandSignallegend = new TLegend(0.75,0.55,0.90,0.9);
   //TH1F *Signal; TH1F *Singletop; TH1F *TTbar;
+  TH1F *SingleTopTprimeMass=(TH1F*)gDirectory->Get("TprimeMass3");
+  TH1F *QCDTprimeMass=(TH1F*)gDirectory->Get("TprimeMass10");  
+  TH1F *DibosonTprimeMass=(TH1F*)gDirectory->Get("TprimeMass0");
   for (int k=ParcialTestMin; k<ParcialTestMax; k++)
     {
       if (!SurvivalMarker[k]) continue;
@@ -185,13 +203,12 @@ void GeneralAnalyzer()
 	  //Signal->Add(FiveJetsMass[k]);
 	}
       //Settings for Single Top
-      else if (k<=6 && k>=1) 
+      else if (k<=8 && k>=3) 
 	{
 	  FiveJetsMass[k]->SetFillColor(kBlack);
 	  FiveJetsMass[k]->SetFillStyle(3305);
-	  TH1F *SingleTopTprimeMass=(TH1F*)gDirectory->Get("TprimeMass1");
-	  if (k!=1) SingleTopTprimeMass->Add(FiveJetsMass[k]);
-	  if (k==6)
+	  if (k!=3) SingleTopTprimeMass->Add(FiveJetsMass[k]);
+	  if (k==8)
 	    {
 	      TFile f("SingleTop.root", "RECREATE");
 	      SingleTopTprimeMass->Write();
@@ -199,7 +216,7 @@ void GeneralAnalyzer()
 	  //Singletop->Add(FiveJetsMass[k]);
 	}
       //Settings for TTbar
-      else if (k==7) 
+      else if (k==9) 
 	{
 	  FiveJetsMass[k]->SetFillColor(kRed);
 	  FiveJetsMass[k]->SetFillStyle(3345);
@@ -208,25 +225,26 @@ void GeneralAnalyzer()
 	  //TTbar->Add(FiveJetsMass[k]);
 	}
       //Settings for QCD
-      else if (k==11) {FiveJetsMass[k]->SetFillColor(kViolet); TFile f("QCD.root", "RECREATE"); FiveJetsMass[k]->Write();}
-      //Settings for DiBoson
-      else if (k==0) {FiveJetsMass[k]->SetFillColor(kWhite); TFile f("Diboson.root", "RECREATE"); FiveJetsMass[k]->Write();}
-      //Setting for Zjets
-      else if (k==8 || k==9) 
+      else if (k>=10 && k<=14) 
 	{
-	  FiveJetsMass[k]->SetFillColor(kBlue); 
-	  TH1F *ZjetsTprimeMass=(TH1F*)gDirectory->Get("TprimeMass9");
-	  //if (k!=8) ZjetsTprimeMass->Add(FiveJetsMass[k]);
-	  TFile f("Zjets.root", "RECREATE"); 
-	  ZjetsTprimeMass->Write();
+	  FiveJetsMass[k]->SetFillColor(kViolet); 
+	  if (k!=10) QCDTprimeMass->Add(FiveJetsMass[k]);
+	  if (k==14)
+	    {
+	      TFile f("QCD.root", "RECREATE"); 
+	      QCDTprimeMass->Write();
+	    }
 	}
-      //Setting for Wjets
-      if (k==10) 
+      //Settings for DiBoson
+      else if (k<=2 && k>=0) 
 	{
-	  FiveJetsMass[k]->SetFillColor(kYellow+1);
-	  FiveJetsMass[k]->SetFillStyle(3354);
-	  TFile f("Wjets.root", "RECREATE");
-	  FiveJetsMass[k]->Write();
+	  FiveJetsMass[k]->SetFillColor(kWhite); 
+	  if (k!=0) DibosonTprimeMass->Add(FiveJetsMass[k]);
+	  if (k==2)
+	    {
+	      TFile f("Diboson.root", "RECREATE"); 
+	      DibosonTprimeMass->Write();
+	    }
 	}
       BKGandSignal->Add(FiveJetsMass[k]);
       BKGandSignallegend->AddEntry(FiveJetsMass[k]);

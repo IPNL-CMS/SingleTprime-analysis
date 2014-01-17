@@ -32,10 +32,10 @@ void Plotter()
       CurrentFile[i] = new TFile(StorageDirPrefix + Samples[i], "READ");
       if ( CurrentFile[i]->IsOpen() ) printf( Samples[i] + " File opened successfully\n");
       if (i==0) {TprimeHistos[0]->SetDefaultSumw2(); TprimeHistos[0]= (TH1F*)gDirectory->Get("TprimeMass0");}
-      else if (i==1) {TprimeHistos[1]->SetDefaultSumw2(); TprimeHistos[1]= (TH1F*)gDirectory->Get("TprimeMass1");}
-      else if (i==2) {TprimeHistos[2]->SetDefaultSumw2(); TprimeHistos[2]= (TH1F*)gDirectory->Get("TprimeMass7");}
-      else if (i==3) {TprimeHistos[3]->SetDefaultSumw2(); TprimeHistos[3]= (TH1F*)gDirectory->Get("TprimeMass11");}
-      else if (i==4) {TprimeHistos[4]->SetDefaultSumw2(); TprimeHistos[4]= (TH1F*)gDirectory->Get("TprimeMass12");}
+      else if (i==1) {TprimeHistos[1]->SetDefaultSumw2(); TprimeHistos[1]= (TH1F*)gDirectory->Get("TprimeMass3");}
+      else if (i==2) {TprimeHistos[2]->SetDefaultSumw2(); TprimeHistos[2]= (TH1F*)gDirectory->Get("TprimeMass9");}
+      else if (i==3) {TprimeHistos[3]->SetDefaultSumw2(); TprimeHistos[3]= (TH1F*)gDirectory->Get("TprimeMass10");}
+      else if (i==4) {TprimeHistos[4]->SetDefaultSumw2(); TprimeHistos[4]= (TH1F*)gDirectory->Get("TprimeMass15");}
       //else if (i==3) {TprimeHistos[3]->SetDefaultSumw2(); TprimeHistos[3]= (TH1F*)gDirectory->Get("TprimeMass9");}
       //else if (i==4) {TprimeHistos[4]->SetDefaultSumw2(); TprimeHistos[4]= (TH1F*)gDirectory->Get("TprimeMass10");}
       //else if (i==5) {TprimeHistos[5]->SetDefaultSumw2(); TprimeHistos[5]= (TH1F*)gDirectory->Get("TprimeMass11");}
@@ -70,5 +70,24 @@ void Plotter()
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
+
+  //Calculation of Estimator
+  double bkg[4]={0,0,0,0};
+  double sig=0;
+
+  sig=TprimeHistos[4]->Integral(TprimeHistos[4]->GetXaxis()->FindBin(710),TprimeHistos[4]->GetXaxis()->FindBin(750));
+  for (int k=0; k<4; k++) bkg[k]=TprimeHistos[k]->Integral(TprimeHistos[k]->GetXaxis()->FindBin(710),TprimeHistos[k]->GetXaxis()->FindBin(750));
+  
+  cout << "Estimator under the peak!" << endl;
+  cout << "Number of signal events: " << sig << ", Number of BKG events: " << bkg[0]+bkg[1]+bkg[2]+bkg[3] << ", S/sqrt(S+B)=" << sig/sqrt(sig+bkg[0]+bkg[1]+bkg[2]+bkg[3]) << endl;
+
+  double bkgFR[4]={0,0,0,0};
+  double sigFR=0;
+
+  sigFR=TprimeHistos[4]->Integral();
+  for (int k=0; k<4; k++) bkgFR[k]=TprimeHistos[k]->Integral();
+  
+  cout << "Estimator in full range!" << endl;
+  cout << "Number of signal events: " << sigFR << ", Number of BKG events: " << bkgFR[0]+bkgFR[1]+bkgFR[2]+bkgFR[3] << ", S/sqrt(S+B)=" << sigFR/sqrt(sigFR+bkgFR[0]+bkgFR[1]+bkgFR[2]+bkgFR[3]) << endl;
 
 }
