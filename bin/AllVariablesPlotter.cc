@@ -78,13 +78,16 @@ void AllVariablesPlotter()
     }
   
   THStack *BKGandSignal = new THStack("BKGandSignal", "BKG and signal for 5 jets; M_{5j} GeV; Events");
-  THStack *BKGandSignalLJPT = new THStack("BKGandSignalLJPT", "BKG and signal for Leading Jet PT; pT(j_{1}) GeV; Events");
-  THStack *BKGandSignalTHT = new THStack("BKGandSignalTHT", "BKG and signal for HT; HT GeV; Events");
+  THStack *BKGLJPT = new THStack("BKGandSignalLJPT", "BKG and signal for Leading Jet PT; pT(j_{1}) GeV; Events");
+  THStack *BKGTHT = new THStack("BKGandSignalTHT", "BKG and signal for HT; HT GeV; Events");
   for (int i=0; i<NOS; i++)
     {
       BKGandSignal->Add(TprimeHistos[i]);
-      BKGandSignalLJPT->Add(LeadingJetPT[i]);
-      BKGandSignalTHT->Add(THT[i]);
+      if (i!=NOS-1)
+	{
+	  BKGLJPT->Add(LeadingJetPT[i]);
+	  BKGTHT->Add(THT[i]);
+	}
     }
 
   //PostScript Plotting
@@ -111,7 +114,7 @@ void AllVariablesPlotter()
   MyPlot->Clear();
   MyPlot->cd(1);
   ps->NewPage();
-  BKGandSignalLJPT->Draw("hist");
+  BKGLJPT->Draw("hist");
   LeadingJetPT[4]->Draw("histsame");
   gPad->SetLogy();
   gPad->RedrawAxis("");
@@ -121,7 +124,7 @@ void AllVariablesPlotter()
   MyPlot->Clear();
   MyPlot->cd(1);
   ps->NewPage();
-  BKGandSignalTHT->->Draw("hist");
+  BKGTHT->Draw("hist");
   THT[4]->Draw("histsame");
   gPad->SetLogy();
   gPad->RedrawAxis("");
