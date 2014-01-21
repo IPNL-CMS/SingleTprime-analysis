@@ -355,7 +355,7 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
   //Cut 1//
   /////////
 
-  if (LeadingJet.Pt()<LeadingJetPt) return 0;
+  if(Cut1) {if (LeadingJet.Pt()<LeadingJetPt) return 0;}
   m_Cut1=1;
 
   //cout << "The HT of the event is " << TotalHT << endl;
@@ -371,14 +371,14 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
   //Cut 2//
   /////////
 
-  if (Cut1) {if (TotalHT<THTcut) return 0;}
+  if (Cut2) {if (TotalHT<THTcut) return 0;}
   m_Cut2=1;
 
   /////////
   //Cut 3//
   /////////
 
-  if (Cut2) {if (BtagCounter<2) return 0;}
+  if (Cut3) {if (BtagCounter<2) return 0;}
   m_Cut3=1;
 
   ///////////////////////////////////////////////
