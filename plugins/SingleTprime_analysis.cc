@@ -54,7 +54,8 @@ float RelMassCut=0.7;                                           //
 float MotherPTNormalizedMassCut=10.;                            //
 float PTNormalizedMassCut=0.7;                                  //
 int NumberOfTopsCut=3;                                          //
-float NumberofLooseBtag=0;   /////////////////////////////////////
+float NumberofLooseBtag=2;                                      //
+float DeltaPhiLeadingJets=2.8;   /////////////////////////////////
 float HiggsMass=125.0;
 float HiggsMassWindow=2000.0;
 float WMass=80.3;
@@ -172,6 +173,7 @@ namespace patextractor {
   m_tree_stp->Branch("Mother_PT_Normalized_Mass",  &MotherPTNormalizedMass   ,"MotherPTNormalizedMass/F");
   m_tree_stp->Branch("Number_of_Tops",  &NumberOfTops   ,"NumberOfTops/I");
   m_tree_stp->Branch("Number_of_Loose_and_non_med_b_tags",  &LooseNoMedBtags   ,"LooseNoMedBtags/I");
+  m_tree_stp->Branch("DeltaPTwoLeadingJets",  &m_DP2LeadingJets   ,"DP2LeadingJets/F");
 
   // Weights and errors from differents scale factoHJ.DeltaR(WJ)<MinDeltaRWH || HJ.DeltaR(WJ)>MaxDeltaRWHrs
   m_tree_stp->Branch("weight", &m_weight, "weight/F");
@@ -191,7 +193,7 @@ namespace patextractor {
   m_tree_cuts->Branch("Cut_8", &m_Cut8, "Cut8_passed/I");
   m_tree_cuts->Branch("Cut_9", &m_Cut9, "Cut9_passed/I");
   m_tree_cuts->Branch("Cut_10", &m_Cut10, "Cut10_passed/I");
-  m_tree_cuts->Branch("Cut_11", &m_Cut11, "Cut11_passed/INumberOfTops");
+  m_tree_cuts->Branch("Cut_11", &m_Cut11, "Cut11_passed/I");
   m_tree_cuts->Branch("Cut_12", &m_Cut12, "Cut12_passed/I");
   m_tree_cuts->Branch("Cut_13", &m_Cut13, "Cut13_passed/I");
   m_tree_cuts->Branch("Cut_14", &m_Cut14, "Cut14_passed/I");
@@ -200,6 +202,7 @@ namespace patextractor {
   m_tree_cuts->Branch("Cut_17", &m_Cut17, "Cut17_passed/I");
   m_tree_cuts->Branch("Cut_18", &m_Cut18, "Cut18_passed/I");
   m_tree_cuts->Branch("Cut_19", &m_Cut19, "Cut19_passed/I");
+  m_tree_cuts->Branch("Cut_20", &m_Cut20, "Cut20_passed/I");
 
   // Initialize the analysis parameters using the ParameterSet iConfig
   //int an_option = iConfig.getUntrackedParameter<int>("an_option", 0);
@@ -232,13 +235,14 @@ namespace patextractor {
   Cut17=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut17");
   Cut18=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut18");
   Cut19=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut19");
+  Cut20=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut20");
 
   DoMCMatching=cmsswSettings.getParameter<bool>("DoMatching");
 
   m_weight = 1.;
 }
 
-SingleTprime_analysis::~SingleTprime_analysis(){}
+  SingleTprime_analysis::~SingleTprime_analysis(){}
 
   int SingleTprime_analysis::SingleTprime_Sel() //Main function for the analysis
 {
@@ -366,6 +370,8 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
   if (n_jets>3) m_jet4pt = AllJets[3].Pt();
   if (n_jets>4) m_jet5pt = AllJets[4].Pt();
   if (n_jets>5) m_jet6pt = AllJets[5].Pt();
+
+  m_DP2LeadingJets=fabs(AllJets[1].Phi()-AllJets[0].Phi());
 
   /////////
   //Cut 2//
@@ -687,8 +693,15 @@ SingleTprime_analysis::~SingleTprime_analysis(){}
   //Cut 19//
   //////////
 
-  if (Cut19) {if (LooseNoMedBtags<=NumberofLooseBtag) return 0;}
+  if (Cut19) {if (LooseNoMedBtags>NumberofLooseBtag) return 0;}
   m_Cut19=1;
+
+  //////////
+  //Cut 20//
+  //////////
+
+  if (Cut20) {if (m_DP2LeadingJets>DeltaPhiLeadingJets) return 0;}
+  m_Cut20=1;
 
   ///////////////////////////
   //Comparing with MC truth//
@@ -1090,6 +1103,7 @@ void SingleTprime_analysis::reset()
   MotherPTNormalizedMass=0.;
   NumberOfTops=0;
   LooseNoMedBtags=0;
+  m_DP2LeadingJets=0;
   
   m_DRTrueWJets=0;   
   m_DRMatchedWJets=0;
@@ -1130,6 +1144,7 @@ void SingleTprime_analysis::reset()
   m_Cut17= 0;
   m_Cut18= 0;
   m_Cut19= 0;
+  m_Cut20= 0;
 
   m_trigger_passed = false;
 

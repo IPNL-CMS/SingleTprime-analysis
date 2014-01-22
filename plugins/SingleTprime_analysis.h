@@ -78,10 +78,13 @@ namespace patextractor {
     float m_DRTrueFirstWJetRecoJet;
     float m_DRTrueSecondWJetRecoJet; 
     float m_DRTrueTopJetRecoJet;   
+    float m_DP2LeadingJets;
 
     float RelMass;
     float PTNormalizedMass;
     float MotherPTNormalizedMass;
+    int NumberOfTops;
+    int LooseNoMedBtags;
 
     float m_DRTrueWJets;
     float m_DRMatchedWJets;
@@ -115,6 +118,11 @@ namespace patextractor {
     bool Cut13; //Aplanarity
     bool Cut14; //DR(TH)
     bool Cut15; //Mh related to Mtop
+    bool Cut16; //Normalized Pt Mass
+    bool Cut17; //Normalized Mother Pt Mass
+    bool Cut18; //One Top
+    bool Cut19; //Third loose b-tag
+    bool Cut20; //Delta Phi between two leading jets
 
     bool DoMCMatching;
 
@@ -136,6 +144,11 @@ namespace patextractor {
     int m_Cut13;
     int m_Cut14;
     int m_Cut15;
+    int m_Cut16;
+    int m_Cut17;
+    int m_Cut18;
+    int m_Cut19;
+    int m_Cut20;
  
     //Reconstructed particles
     TLorentzVector* ReconstructedHiggs;
