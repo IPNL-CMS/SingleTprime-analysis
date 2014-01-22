@@ -17,7 +17,7 @@
 
 using namespace std;
 
-const TString StorageDirPrefix="file:/home/cms/jruizalv/work/CMSSW_5_3_9_patch2/src/Extractors/PatExtractor/bin/";
+const TString StorageDirPrefix="file:/afs/cern.ch/user/j/jruizalv/Temporal_From_IPNL/";
 const int NOS=5;
 //const TString Samples[NOS] = {"Diboson.root", "SingleTop.root", "TTJets.root", "Zjets.root", "Wjets.root", "QCD.root", "Signal.root"};
 const TString Samples[NOS] = {"Diboson.root", "SingleTop.root", "TTJets.root", "QCD.root", "Signal.root"};
@@ -49,23 +49,23 @@ void AllVariablesPlotter()
       if ( CurrentFile[i]->IsOpen() ) printf( Samples[i] + " File opened successfully\n");
       if (i==0) 
 	{
-	  TprimeHistos[0]->SetDefaultSumw2(); TprimeHistos[0]= (TH1F*)gDirectory->Get("TprimeMass0");
-	  LeadingJetPT[0]->SetDefaultSumw2(); LeadingJetPT[0]= (TH1F*)gDirectory->Get("jet1_pt0");
-	  THT[0]->SetDefaultSumw2(); THT[0]= (TH1F*)gDirectory->Get("THT0");
-	  DRHjets[0]->SetDefaultSumw2(); DRHjets[0]= (TH1F*)gDirectory->Get("DeltaR_of_Higgs_Jets0");
-	  DRWjets[0]->SetDefaultSumw2(); DRWjets[0]= (TH1F*)gDirectory->Get("DeltaR_of_W_Jets0");
-	  Hpt[0]->SetDefaultSumw2(); Hpt[0]= (TH1F*)gDirectory->Get("HPt0");
-	  Tpt[0]->SetDefaultSumw2(); Tpt[0]= (TH1F*)gDirectory->Get("TPt0");
-	  DRWH[0]->SetDefaultSumw2(); DRWH[0]= (TH1F*)gDirectory->Get("DeltaR_of_W_Higgs0");
-	  DPHjets[0]->SetDefaultSumw2(); DPHjets[0]= (TH1F*)gDirectory->Get("DeltaPhi_of_Higgs_jets0");
-	  DPWjets[0]->SetDefaultSumw2(); DPWjets[0]= (TH1F*)gDirectory->Get("DeltaPhi_of_W_jets0");
-	  DPTjets[0]->SetDefaultSumw2(); DPTjets[0]= (TH1F*)gDirectory->Get("DeltaPhi_of_T_jet0");
-	  HiggsMass[0]->SetDefaultSumw2(); HiggsMass[0]= (TH1F*)gDirectory->Get("HM0");
-	  RelHT[0]->SetDefaultSumw2(); RelHT[0]= (TH1F*)gDirectory->Get("RelHT0");
-	  DRTH[0]->SetDefaultSumw2(); DRTH[0]= (TH1F*)gDirectory->Get("DeltaR_of_Top_Higgs0");
-	  PtNormalizedMass[0]->SetDefaultSumw2(); PtNormalizedMass[0]= (TH1F*)gDirectory->Get("PT_Normalized_Mass0");
-	  RelativeMass[0]->SetDefaultSumw2(); PtNormalizedMass[0]= (TH1F*)gDirectory->Get("Relative_Mass0");
-	  MotherPtNormalizedMass[0]->SetDefaultSumw2(); MotherPtNormalizedMass[0]= (TH1F*)gDirectory->Get("Mother_PT_Normalized_Mass0");
+	  TprimeHistos[0]->SetDefaultSumw2(); TprimeHistos[0]= (TH1F*)gDirectory->Get("TprimeMass1");
+	  LeadingJetPT[0]->SetDefaultSumw2(); LeadingJetPT[0]= (TH1F*)gDirectory->Get("jet1_pt1");
+	  THT[0]->SetDefaultSumw2(); THT[0]= (TH1F*)gDirectory->Get("THT1");
+	  DRHjets[0]->SetDefaultSumw2(); DRHjets[0]= (TH1F*)gDirectory->Get("DeltaR_of_Higgs_Jets1");
+	  DRWjets[0]->SetDefaultSumw2(); DRWjets[0]= (TH1F*)gDirectory->Get("DeltaR_of_W_Jets1");
+	  Hpt[0]->SetDefaultSumw2(); Hpt[0]= (TH1F*)gDirectory->Get("HPt1");
+	  Tpt[0]->SetDefaultSumw2(); Tpt[0]= (TH1F*)gDirectory->Get("TPt1");
+	  DRWH[0]->SetDefaultSumw2(); DRWH[0]= (TH1F*)gDirectory->Get("DeltaR_of_W_Higgs1");
+	  DPHjets[0]->SetDefaultSumw2(); DPHjets[0]= (TH1F*)gDirectory->Get("DeltaPhi_of_Higgs_jets1");
+	  DPWjets[0]->SetDefaultSumw2(); DPWjets[0]= (TH1F*)gDirectory->Get("DeltaPhi_of_W_jets1");
+	  DPTjets[0]->SetDefaultSumw2(); DPTjets[0]= (TH1F*)gDirectory->Get("DeltaPhi_of_T_jet1");
+	  HiggsMass[0]->SetDefaultSumw2(); HiggsMass[0]= (TH1F*)gDirectory->Get("HM1");
+	  RelHT[0]->SetDefaultSumw2(); RelHT[0]= (TH1F*)gDirectory->Get("RelHT1");
+	  DRTH[0]->SetDefaultSumw2(); DRTH[0]= (TH1F*)gDirectory->Get("DeltaR_of_Top_Higgs1");
+	  PtNormalizedMass[0]->SetDefaultSumw2(); PtNormalizedMass[0]= (TH1F*)gDirectory->Get("PT_Normalized_Mass1");
+	  RelativeMass[0]->SetDefaultSumw2(); PtNormalizedMass[0]= (TH1F*)gDirectory->Get("Relative_Mass1");
+	  MotherPtNormalizedMass[0]->SetDefaultSumw2(); MotherPtNormalizedMass[0]= (TH1F*)gDirectory->Get("Mother_PT_Normalized_Mass1");
 	}
       else if (i==1) 
 	{
@@ -147,6 +147,7 @@ void AllVariablesPlotter()
 	  RelativeMass[4]->SetDefaultSumw2(); PtNormalizedMass[4]= (TH1F*)gDirectory->Get("Relative_Mass15");
 	  MotherPtNormalizedMass[4]->SetDefaultSumw2(); MotherPtNormalizedMass[4]= (TH1F*)gDirectory->Get("Mother_PT_Normalized_Mass15");
 	}
+      //CurrentFile[i]->Close();
     }
   
   THStack *BKGandSignal = new THStack("BKGandSignal", "BKG and signal for 5 jets; M_{5j} GeV; Events");
@@ -166,8 +167,11 @@ void AllVariablesPlotter()
   THStack *BKGPtNormalizedMass= new THStack("BKGPtNormalizedMass", "BKG for PtNormalizedMass; PTNM; Events");
   THStack *BKGRelativeMass= new THStack("BKGRelativeMass", "BKG for RelativeMass; RM; Events");
   THStack *BKGMotherPtNormalizedMass= new THStack("BKGMotherPtNormalizedMass", "BKG for MotherPtNormalizedMass; PTNM; Events");
+  cout << "1 Marker" << endl;
   for (int i=0; i<NOS; i++)
     {
+      //TprimeHistos[i]->GetXaxis()->SetRange(300,1600);
+      //TprimeHistos[i]->GetYaxis()->SetRange(1,50000);
       BKGandSignal->Add(TprimeHistos[i]);
       if (i!=NOS-1)
 	{
@@ -185,8 +189,8 @@ void AllVariablesPlotter()
 	  BKGRelHT->Add(RelHT[i]);
 	  BKGDRTH->Add(DRTH[i]);
 	  BKGPtNormalizedMass->Add(PtNormalizedMass[i]);
-	  BKGRelativeMass->Add(RelativeMass[i]);
-	  BKGMotherPtNormalizedMass->Add(MotherPtNormalizedMass[i]);
+	  //BKGRelativeMass->Add(RelativeMass[i]);
+	  //BKGMotherPtNormalizedMass->Add(MotherPtNormalizedMass[i]);
 	}
     }
 
@@ -204,9 +208,12 @@ void AllVariablesPlotter()
   MyPlot->Clear();
   MyPlot->cd(1);
   ps->NewPage();
-  BKGandSignal->Draw("hist");
-  TprimeHistos[4]->Draw("histsame");
+  TprimeHistos[4]->Draw("hist");
+  TprimeHistos[4]->GetYaxis()->SetRangeUser(0.1,BKGandSignal->GetMaximum());
+  BKGandSignal->Draw("histsame");
+  BKGandSignal->GetYaxis()->SetRangeUser(0.1,BKGandSignal->GetMaximum());
   gPad->SetLogy();
+  TprimeHistos[4]->Draw("histsame"); //Preserve double drawing of signal
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -214,9 +221,12 @@ void AllVariablesPlotter()
   MyPlot->Clear();
   MyPlot->cd(1);
   ps->NewPage();
-  BKGLJPT->Draw("hist");
-  LeadingJetPT[4]->Draw("histsame");
+  LeadingJetPT[4]->Draw("hist");
+  LeadingJetPT[4]->GetYaxis()->SetRangeUser(0.1,BKGLJPT->GetMaximum());
+  BKGLJPT->Draw("histsame");
+  BKGLJPT->GetYaxis()->SetRangeUser(0.1,BKGLJPT->GetMaximum());
   gPad->SetLogy();
+  LeadingJetPT[4]->Draw("histsame");  
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -224,14 +234,17 @@ void AllVariablesPlotter()
   MyPlot->Clear();
   MyPlot->cd(1);
   ps->NewPage();
-  BKGTHT->Draw("hist");
-  THT[4]->Draw("histsame");
+  THT[4]->Draw("hist");
+  THT[4]->GetYaxis()->SetRangeUser(0.1,BKGTHT->GetMaximum());
+  BKGTHT->Draw("histsame");
+  BKGTHT->GetYaxis()->SetRangeUser(0.1,BKGTHT->GetMaximum());
   gPad->SetLogy();
+  THT[4]->Draw("histsame");
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
   //Fourth Page
-  MyPlot->Clear();
+  /*MyPlot->Clear();
   MyPlot->cd(1);
   ps->NewPage();
   BKGDRHjets->Draw("hist");
@@ -246,7 +259,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGDRWjets->Draw("hist");
   DRWjets[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -256,7 +269,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGHpt->Draw("hist");
   Hpt[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -276,7 +289,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGDRWH->Draw("hist");
   DRWH[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -286,7 +299,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGDPHjets->Draw("hist");
   DPHjets[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -296,7 +309,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGDPWjets->Draw("hist");
   DPWjets[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -306,7 +319,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGDPTjets->Draw("hist");
   DPTjets[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -316,7 +329,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGHiggsMass->Draw("hist");
   HiggsMass[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -346,7 +359,7 @@ void AllVariablesPlotter()
   ps->NewPage();
   BKGPtNormalizedMass->Draw("hist");
   PtNormalizedMass[4]->Draw("histsame");
-  gPad->SetLogy();
+  //gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
   MyPlot->Update();
@@ -369,5 +382,5 @@ void AllVariablesPlotter()
   gPad->SetLogy();
   gPad->RedrawAxis("");
   gPad->Update();
-  MyPlot->Update();
+  MyPlot->Update();*/
 }
