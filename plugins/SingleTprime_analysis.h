@@ -86,6 +86,17 @@ namespace patextractor {
     int NumberOfTops;
     int LooseNoMedBtags;
 
+    //Proving non-boosted regime//
+    float Njets_TpPT_0to100;
+    float Njets_TpPT_100to200;
+    float Njets_TpPT_200to300;
+    float Njets_TpPT_300to400;
+    float Njets_TpPT_400to500;
+    float Njets_TpPT_500to600;
+    float Njets_TpPT_600to700;
+    float Njets_TpPT_700to800;
+    //////////////////////////////
+
     float m_DRTrueWJets;
     float m_DRMatchedWJets;
     float m_DPhiTrueWJets;   

@@ -180,6 +180,16 @@ namespace patextractor {
   m_tree_stp->Branch("weight_error_low", &m_weight_error_low, "weight_error_low/F");
   m_tree_stp->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");
 
+  //Proving non-boosted regime
+  m_tree_stp->Branch("Njets_for_TpPT_0to100", &Njets_TpPT_0to100, "N_jets0-100/F");
+  m_tree_stp->Branch("Njets_for_TpPT_100to200", &Njets_TpPT_100to200, "N_jets100-200/F");
+  m_tree_stp->Branch("Njets_for_TpPT_200to300", &Njets_TpPT_200to300, "N_jets200-300/F");
+  m_tree_stp->Branch("Njets_for_TpPT_300to400", &Njets_TpPT_300to400, "N_jets300-400/F");
+  m_tree_stp->Branch("Njets_for_TpPT_400to500", &Njets_TpPT_400to500, "N_jets400-500/F");
+  m_tree_stp->Branch("Njets_for_TpPT_500to600", &Njets_TpPT_500to600, "N_jets500-600/F");
+  m_tree_stp->Branch("Njets_for_TpPT_600to700", &Njets_TpPT_600to700, "N_jets600-700/F");
+  m_tree_stp->Branch("Njets_for_TpPT_700to800", &Njets_TpPT_700to800, "N_jets700-800/F");
+
   //Cuts
   m_tree_cuts->Branch("Trigger_cut", &m_triggercut, "Trigger_passed/I");
   m_tree_cuts->Branch("Cut_0", &m_Cut0, "Cut0_passed/I");
@@ -856,6 +866,16 @@ namespace patextractor {
       else return 0;
     }
 
+  if (TrueTprime->Pt()!=0 && TrueTprime->Pt()<100) Njets_TpPT_0to100=n_jets;
+  else if (TrueTprime->Pt()>=100 && TrueTprime->Pt()<200) Njets_TpPT_100to200=n_jets;
+  else if (TrueTprime->Pt()>=200 && TrueTprime->Pt()<300) Njets_TpPT_200to300=n_jets;
+  else if (TrueTprime->Pt()>=300 && TrueTprime->Pt()<400) Njets_TpPT_300to400=n_jets;
+  else if (TrueTprime->Pt()>=400 && TrueTprime->Pt()<500) Njets_TpPT_400to500=n_jets;
+  else if (TrueTprime->Pt()>=500 && TrueTprime->Pt()<600) Njets_TpPT_500to600=n_jets;
+  else if (TrueTprime->Pt()>=600 && TrueTprime->Pt()<700) Njets_TpPT_600to700=n_jets;
+  else if (TrueTprime->Pt()>=700 && TrueTprime->Pt()<800) Njets_TpPT_700to800=n_jets;
+
+
   // Finally fill the analysis tree 
   //SingleTprime_analysis::fillTree();
   
@@ -1104,6 +1124,15 @@ void SingleTprime_analysis::reset()
   NumberOfTops=0;
   LooseNoMedBtags=0;
   m_DP2LeadingJets=0;
+
+  Njets_TpPT_0to100=0;
+  Njets_TpPT_100to200=0;
+  Njets_TpPT_200to300=0;
+  Njets_TpPT_300to400=0;
+  Njets_TpPT_400to500=0;
+  Njets_TpPT_500to600=0;
+  Njets_TpPT_600to700=0;
+  Njets_TpPT_700to800=0;
   
   m_DRTrueWJets=0;   
   m_DRMatchedWJets=0;
