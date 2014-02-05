@@ -79,7 +79,8 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           cut17 = cms.bool(False), #PTNormalizedMotherMass
           cut18 = cms.bool(False), #One Top
           cut19 = cms.bool(False),  #Third Loose B-tag
-	  cut20 = cms.bool(False)   #DeltaPhi 2 Leading Jets
+	  cut20 = cms.bool(False),   #DeltaPhi 2 Leading Jets
+          cut21 = cms.bool(False)   #Higgs Mass over Top Mass
           ),
         DoMatching = cms.bool(False)
       )

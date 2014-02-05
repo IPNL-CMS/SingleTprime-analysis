@@ -64,7 +64,7 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
 	  cut2 = cms.bool(True), #HT
           cut3 = cms.bool(True), #2btags (Do not deactivate)
           cut4 = cms.bool(True), #Higgs jets DR<2.5 (Do not deactivate)
-          cut5 = cms.bool(True), #W jets DR<3
+          cut5 = cms.bool(True), #W jets DR<3 (Do not deactivate)
           cut6 = cms.bool(True), #H pt and Top pt
           cut7 = cms.bool(True), #DR(WH)
           cut8 = cms.bool(True), #DPH and DPT
@@ -73,13 +73,14 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           cut11 = cms.bool(True), #MH
           cut12 = cms.bool(True), #RelHT
           cut13 = cms.bool(False), #Aplanarity
-          cut14 = cms.bool(True), #DR(TH)
-          cut15 = cms.bool(False),  #RelMass
-          cut16 = cms.bool(True), #PTNormlaizedMass
+          cut14 = cms.bool(False), #DR(TH)
+          cut15 = cms.bool(True),  #RelMass
+          cut16 = cms.bool(False), #PTNormlaizedMass
           cut17 = cms.bool(False), #PTNormalizedMotherMass
-          cut18 = cms.bool(False), #One Top
+          cut18 = cms.bool(True), #One Top
           cut19 = cms.bool(False),  #Third Loose B-tag
-          cut20 = cms.bool(True)  #DeltaPhi 2 Leading Jets
+          cut20 = cms.bool(False),  #DeltaPhi 2 Leading Jets
+	  cut21 = cms.bool(False)   #Higgs Mass over Top Mass
           ),
         DoMatching = cms.bool(False)
       )

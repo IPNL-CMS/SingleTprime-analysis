@@ -34,34 +34,39 @@ int NumberOfGoodJets=5; //////////////////////////////////////////
 int NumberOfBadJets=6;                                          //
 float LeadingJetPt=150;                                         //
 float THTcut=630;                                               //
-float DeltaRHiggsJets=2.5;                                      //
+float DeltaRHiggsJets=1.2;                                      //
 float DeltaRWJets=3.0;                                          //
 float HiggsPt=200;                                              //
-float TopPt=300;                                                //
+float TopPt=200;                                                //
 float MinDeltaRWH=2.2;                                          //
 float MaxDeltaRWH=3.5;                                          //
-float DeltaPhiHiggsJets=2.0; //            SET OF CUTS          //
-float DeltaPhiTopJetW=3.3;                                      //
+float DeltaPhiHiggsJets=1.2; //            SET OF CUTS          //
+float DeltaPhiTopJetW=1.9;                                      //
 int JetMultiplicity=8;                                          //
-float DeltaPhiWjets=2.3;                                        //
-float MinHiggsMass=100;                                         //
-float MaxHiggsMass=135;                                         //
+float DeltaPhiWjets=2.0;                                        //
+float MinHiggsMass=110;                                         //
+float MaxHiggsMass=140;                                         //
 float RelHT=0.65;                                               //
 float Aplanarity=0.06;                                          //
 float MaxDeltaRTH=3.3;                                          //
 float MinDeltaRTH=2.8;                                          // 
-float RelMassCut=0.7;                                           //
+float RelMassMaxCut=0.5;                                        //
+float RelMassMinCut=0.3;                                        //
 float MotherPTNormalizedMassCut=10.;                            //
 float PTNormalizedMassCut=0.7;                                  //
-int NumberOfTopsCut=3;                                          //
+int NumberOfTopsCut=2;                                          //
 float NumberofLooseBtag=2;                                      //
-float DeltaPhiLeadingJets=2.8;   /////////////////////////////////
+float DeltaPhiLeadingJets=2.8;                                  //
+float HMoverTM=0.6;              /////////////////////////////////
 float HiggsMass=125.0;
 float HiggsMassWindow=2000.0;
 float WMass=80.3;
 float WMassWindow=2000.0;
 float TopMass=172.5;
 float TopMassWindow=2000.0;
+float TriggerDiJet1_2=90;
+float TriggerDiJet3_4=70;
+float TriggerDiJet5_6=30;
 
 
 using namespace std;
@@ -213,6 +218,7 @@ namespace patextractor {
   m_tree_cuts->Branch("Cut_18", &m_Cut18, "Cut18_passed/I");
   m_tree_cuts->Branch("Cut_19", &m_Cut19, "Cut19_passed/I");
   m_tree_cuts->Branch("Cut_20", &m_Cut20, "Cut20_passed/I");
+  m_tree_cuts->Branch("Cut_21", &m_Cut21, "Cut21_passed/I");
 
   // Initialize the analysis parameters using the ParameterSet iConfig
   //int an_option = iConfig.getUntrackedParameter<int>("an_option", 0);
@@ -246,6 +252,7 @@ namespace patextractor {
   Cut18=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut18");
   Cut19=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut19");
   Cut20=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut20");
+  Cut21=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut21");
 
   DoMCMatching=cmsswSettings.getParameter<bool>("DoMatching");
 
@@ -258,6 +265,22 @@ namespace patextractor {
 {
   if (!m_trigger_passed) return 0;
   m_triggercut=1;
+
+  //Correction of trigger//
+  TLorentzVector *jetTrigger[6];
+
+  if (m_jetMet->getSize()>=6)
+    {
+      jetTrigger[0] = m_jetMet->getP4(0);
+      jetTrigger[1] = m_jetMet->getP4(1);
+      jetTrigger[2] = m_jetMet->getP4(2);
+      jetTrigger[3] = m_jetMet->getP4(3);
+      jetTrigger[4] = m_jetMet->getP4(4);
+      jetTrigger[5] = m_jetMet->getP4(5);
+    }
+
+  if (m_jetMet->getSize()<6 || jetTrigger[0]->Pt()<TriggerDiJet1_2 ||jetTrigger[1]->Pt()<TriggerDiJet1_2 || jetTrigger[2]->Pt()<TriggerDiJet3_4 || jetTrigger[3]->Pt()<TriggerDiJet3_4 || jetTrigger[4]->Pt()<TriggerDiJet5_6 || jetTrigger[5]->Pt()<TriggerDiJet5_6) return 0;  
+  /////////////////////////
 
   int n_jets = m_jetMet->getSize();
   //cout << "Number of jets " << n_jets << endl;
@@ -555,7 +578,7 @@ namespace patextractor {
   //Cut 6//
   /////////
   
-  if (Cut6) {if (HJ.Pt()<HiggsPt && TJ.Pt()<TopPt) return 0;}
+  if (Cut6) {if (HJ.Pt()<HiggsPt || TJ.Pt()<TopPt) return 0;}
   m_Cut6=1;
 
   /////////
@@ -569,7 +592,7 @@ namespace patextractor {
   //Cut 8//
   /////////
 
-  if (Cut8) {if (fabs(FHJ.Phi()-SHJ.Phi())>2.0 || fabs(TopJet->Phi()-WJ.Phi())>3.3) return 0;}
+  if (Cut8) {if (fabs(FHJ.Phi()-SHJ.Phi())>DeltaPhiHiggsJets || fabs(TopJet->Phi()-WJ.Phi())>DeltaPhiTopJetW) return 0;}
   m_Cut8=1;
 
   /////////
@@ -583,7 +606,7 @@ namespace patextractor {
   //Cut 10//
   //////////
 
-  if (Cut10) {if (fabs(FHJ.Phi()-SHJ.Phi())>2.3 || fabs(FWJ.Phi()-SWJ.Phi())>DeltaPhiWjets) return 0;}
+  if (Cut10) {if (fabs(FHJ.Phi()-SHJ.Phi())>DeltaPhiHiggsJets || fabs(FWJ.Phi()-SWJ.Phi())>DeltaPhiWjets) return 0;}
   m_Cut10=1;
 
   //////////
@@ -675,7 +698,7 @@ namespace patextractor {
   //Cut 15//
   //////////
 
-  if (Cut15) {if (RelMass>RelMassCut) return 0;}
+  if (Cut15) {if (RelMass>RelMassMaxCut || RelMass<RelMassMinCut) return 0;}
   m_Cut15=1;
 
   //////////
@@ -712,6 +735,13 @@ namespace patextractor {
 
   if (Cut20) {if (m_DP2LeadingJets>DeltaPhiLeadingJets) return 0;}
   m_Cut20=1;
+  
+  //////////
+  //Cut 21//
+  //////////
+  
+  if (Cut21) {if (HJ.M()/TJ.M()<HMoverTM) return 0;}
+  m_Cut21=1;
 
   ///////////////////////////
   //Comparing with MC truth//
@@ -866,16 +896,6 @@ namespace patextractor {
       else return 0;
     }
 
-  if (TrueTprime->Pt()!=0 && TrueTprime->Pt()<100) Njets_TpPT_0to100=n_jets;
-  else if (TrueTprime->Pt()>=100 && TrueTprime->Pt()<200) Njets_TpPT_100to200=n_jets;
-  else if (TrueTprime->Pt()>=200 && TrueTprime->Pt()<300) Njets_TpPT_200to300=n_jets;
-  else if (TrueTprime->Pt()>=300 && TrueTprime->Pt()<400) Njets_TpPT_300to400=n_jets;
-  else if (TrueTprime->Pt()>=400 && TrueTprime->Pt()<500) Njets_TpPT_400to500=n_jets;
-  else if (TrueTprime->Pt()>=500 && TrueTprime->Pt()<600) Njets_TpPT_500to600=n_jets;
-  else if (TrueTprime->Pt()>=600 && TrueTprime->Pt()<700) Njets_TpPT_600to700=n_jets;
-  else if (TrueTprime->Pt()>=700 && TrueTprime->Pt()<800) Njets_TpPT_700to800=n_jets;
-
-
   // Finally fill the analysis tree 
   //SingleTprime_analysis::fillTree();
   
@@ -914,6 +934,17 @@ namespace patextractor {
     m_weight_error_low += squared_sf_error;
     m_weight_error_high += squared_sf_error;
   }
+
+  //if (TrueTprime->Pt()==0) return 0;
+  //TLorentzVector TrTp; TrTp.SetPxPyPzE(TrueTprime->Px(), TrueTprime->Py(), TrueTprime->Pz(), TrueTprime->E());
+  //if (TrTp.Pt()<100) Njets_TpPT_0to100=n_jets;
+  //else if (TrTp.Pt()>=100 && TrTp.Pt()<200) Njets_TpPT_100to200=n_jets;
+  //else if (TrTp.Pt()>=200 && TrTp.Pt()<300) Njets_TpPT_200to300=n_jets;
+  //else if (TrTp.Pt()>=400 && TrTp.Pt()<500) Njets_TpPT_400to500=n_jets;
+  //else if (TrTp.Pt()>=400 && TrTp.Pt()<500) Njets_TpPT_400to500=n_jets;
+  //else if (TrTp.Pt()>=500 && TrTp.Pt()<600) Njets_TpPT_500to600=n_jets;
+  //else if (TrTp.Pt()>=600 && TrTp.Pt()<700) Njets_TpPT_600to700=n_jets;
+  //else if (TrTp.Pt()>=700 && TrTp.Pt()<800) Njets_TpPT_700to800=n_jets;
 
   return 1;
 }
@@ -1174,6 +1205,7 @@ void SingleTprime_analysis::reset()
   m_Cut18= 0;
   m_Cut19= 0;
   m_Cut20= 0;
+  m_Cut21= 0;
 
   m_trigger_passed = false;
 

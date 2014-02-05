@@ -134,6 +134,7 @@ namespace patextractor {
     bool Cut18; //One Top
     bool Cut19; //Third loose b-tag
     bool Cut20; //Delta Phi between two leading jets
+    bool Cut21; //HMass over TMass
 
     bool DoMCMatching;
 
@@ -160,6 +161,7 @@ namespace patextractor {
     int m_Cut18;
     int m_Cut19;
     int m_Cut20;
+    int m_Cut21;
  
     //Reconstructed particles
     TLorentzVector* ReconstructedHiggs;
