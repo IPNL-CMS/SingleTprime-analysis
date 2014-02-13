@@ -30,20 +30,22 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 //Constants 
-int NumberOfGoodJets=5; //////////////////////////////////////////
+/*int NumberOfGoodJets=5; //////////////////////////////////////////
 int NumberOfBadJets=6;                                          //
 float LeadingJetPt=150;                                         //
 float THTcut=630;                                               //
+int MinB_tags=3;
+float MaxChi2=50;
 float DeltaRHiggsJets=1.2;                                      //
 float DeltaRWJets=3.0;                                          //
 float HiggsPt=200;                                              //
 float TopPt=200;                                                //
-float MinDeltaRWH=2.2;                                          //
+float MinDeltaRWH=2.7;                                          //
 float MaxDeltaRWH=3.5;                                          //
 float DeltaPhiHiggsJets=1.2; //            SET OF CUTS          //
-float DeltaPhiTopJetW=1.9;                                      //
+float DeltaPhiTopJetW=1.2;                                      //
 int JetMultiplicity=8;                                          //
-float DeltaPhiWjets=2.0;                                        //
+float DeltaPhiWjets=1.3;                                        //
 float MinHiggsMass=110;                                         //
 float MaxHiggsMass=140;                                         //
 float RelHT=0.65;                                               //
@@ -58,6 +60,7 @@ int NumberOfTopsCut=2;                                          //
 float NumberofLooseBtag=2;                                      //
 float DeltaPhiLeadingJets=2.8;                                  //
 float HMoverTM=0.6;              /////////////////////////////////
+*/
 float HiggsMass=125.0;
 float HiggsMassWindow=2000.0;
 float WMass=80.3;
@@ -67,7 +70,12 @@ float TopMassWindow=2000.0;
 float TriggerDiJet1_2=90;
 float TriggerDiJet3_4=70;
 float TriggerDiJet5_6=30;
-
+float TopHadrWidth=17.35;
+float WHadrWidth=10.12;
+float HBBWidth=12.4;
+float TopMassChi2=175.16;
+float WMassChi2=84.06;
+float HMassChi2=125.0;
 
 using namespace std;
 
@@ -179,6 +187,7 @@ namespace patextractor {
   m_tree_stp->Branch("Number_of_Tops",  &NumberOfTops   ,"NumberOfTops/I");
   m_tree_stp->Branch("Number_of_Loose_and_non_med_b_tags",  &LooseNoMedBtags   ,"LooseNoMedBtags/I");
   m_tree_stp->Branch("DeltaPTwoLeadingJets",  &m_DP2LeadingJets   ,"DP2LeadingJets/F");
+  m_tree_stp->Branch("ChiSquaredSorting",  &chi2   ,"chi2/F");
 
   // Weights and errors from differents scale factoHJ.DeltaR(WJ)<MinDeltaRWH || HJ.DeltaR(WJ)>MaxDeltaRWHrs
   m_tree_stp->Branch("weight", &m_weight, "weight/F");
@@ -201,6 +210,7 @@ namespace patextractor {
   m_tree_cuts->Branch("Cut_1", &m_Cut1, "Cut1_passed/I");
   m_tree_cuts->Branch("Cut_2", &m_Cut2, "Cut2_passed/I");
   m_tree_cuts->Branch("Cut_3", &m_Cut3, "Cut3_passed/I");
+  m_tree_cuts->Branch("Cut_chi2", &m_CutChi2, "CutChi2_passed/I");
   m_tree_cuts->Branch("Cut_4", &m_Cut4, "Cut4_passed/I");
   m_tree_cuts->Branch("Cut_5", &m_Cut5, "Cut5_passed/I");
   m_tree_cuts->Branch("Cut_6", &m_Cut6, "Cut6_passed/I");
@@ -235,6 +245,7 @@ namespace patextractor {
   Cut1=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut1");
   Cut2=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut2");
   Cut3=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut3");
+  CutChi2=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cutChi2");
   Cut4=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut4");
   Cut5=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut5");
   Cut6=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut6");
@@ -254,7 +265,40 @@ namespace patextractor {
   Cut20=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut20");
   Cut21=cmsswSettings.getParameter<edm::ParameterSet>("cuts").getParameter<bool>("cut21");
 
+  NumberOfGoodJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("NumberOfGoodJets");
+  NumberOfBadJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("NumberOfBadJets");
+  LeadingJetPt=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("LeadingJetPt");
+  THTcut=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("THTcut");
+  MinB_tags=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MinB_tags");
+  MaxChi2=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MaxChi2");
+  DeltaRHiggsJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaRHiggsJets");
+  DeltaRWJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaRWJets");
+  HiggsPt=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("HiggsPt");
+  TopPt=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("TopPt");
+  MinDeltaRWH=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MinDeltaRWH");
+  MaxDeltaRWH=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MaxDeltaRWH");
+  DeltaPhiHiggsJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaPhiHiggsJets");
+  DeltaPhiTopJetW=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaPhiTopJetW");
+  JetMultiplicity=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("JetMultiplicity");
+  DeltaPhiWjets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaPhiWjets");
+  MinHiggsMass=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MinHiggsMass");
+  MaxHiggsMass=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MaxHiggsMass");
+  RelHT=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("RelHT");
+  Aplanarity=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("Aplanarity");
+  MaxDeltaRTH=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MaxDeltaRTH");
+  MinDeltaRTH=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MinDeltaRTH");
+  RelMassMaxCut=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("RelMassMaxCut");
+  RelMassMinCut=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("RelMassMinCut");
+  MotherPTNormalizedMassCut=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MotherPTNormalizedMassCut");
+  PTNormalizedMassCut=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("PTNormalizedMassCut");
+  NumberOfTopsCut=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("NumberOfTopsCut");
+  NumberofLooseBtag=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("NumberofLooseBtag");
+  DeltaPhiLeadingJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaPhiLeadingJets");
+  HMoverTM=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("HMoverTM");
+
   DoMCMatching=cmsswSettings.getParameter<bool>("DoMatching");
+
+  DoChi2Sorting=cmsswSettings.getParameter<bool>("DoChi2");
 
   m_weight = 1.;
 }
@@ -263,24 +307,27 @@ namespace patextractor {
 
   int SingleTprime_analysis::SingleTprime_Sel() //Main function for the analysis
 {
-  if (!m_trigger_passed) return 0;
-  m_triggercut=1;
-
-  //Correction of trigger//
-  TLorentzVector *jetTrigger[6];
-
-  if (m_jetMet->getSize()>=6)
+  if (!DoMCMatching)
     {
-      jetTrigger[0] = m_jetMet->getP4(0);
-      jetTrigger[1] = m_jetMet->getP4(1);
-      jetTrigger[2] = m_jetMet->getP4(2);
-      jetTrigger[3] = m_jetMet->getP4(3);
-      jetTrigger[4] = m_jetMet->getP4(4);
-      jetTrigger[5] = m_jetMet->getP4(5);
+      if (!m_trigger_passed) return 0;
+      m_triggercut=1;
+      
+      //Correction of trigger//
+      TLorentzVector *jetTrigger[6];
+      
+      if (m_jetMet->getSize()>=6)
+	{
+	  jetTrigger[0] = m_jetMet->getP4(0);
+	  jetTrigger[1] = m_jetMet->getP4(1);
+	  jetTrigger[2] = m_jetMet->getP4(2);
+	  jetTrigger[3] = m_jetMet->getP4(3);
+	  jetTrigger[4] = m_jetMet->getP4(4);
+	  jetTrigger[5] = m_jetMet->getP4(5);
+	}
+      
+      if (m_jetMet->getSize()<6 || jetTrigger[0]->Pt()<TriggerDiJet1_2 ||jetTrigger[1]->Pt()<TriggerDiJet1_2 || jetTrigger[2]->Pt()<TriggerDiJet3_4 || jetTrigger[3]->Pt()<TriggerDiJet3_4 || jetTrigger[4]->Pt()<TriggerDiJet5_6 || jetTrigger[5]->Pt()<TriggerDiJet5_6) return 0;  
+      /////////////////////////
     }
-
-  if (m_jetMet->getSize()<6 || jetTrigger[0]->Pt()<TriggerDiJet1_2 ||jetTrigger[1]->Pt()<TriggerDiJet1_2 || jetTrigger[2]->Pt()<TriggerDiJet3_4 || jetTrigger[3]->Pt()<TriggerDiJet3_4 || jetTrigger[4]->Pt()<TriggerDiJet5_6 || jetTrigger[5]->Pt()<TriggerDiJet5_6) return 0;  
-  /////////////////////////
 
   int n_jets = m_jetMet->getSize();
   //cout << "Number of jets " << n_jets << endl;
@@ -333,7 +380,7 @@ namespace patextractor {
       AllJets[i].SetPxPyPzE(jeti->Px(),jeti->Py(),jeti->Pz(),jeti->E());
       if (m_isMC) jetSF[i] = m_jetMet->getScaleFactor(i);
       //Finding B-tagged jets with loose requirement based on CSV algorithm                              
-      if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVL)
+      /*if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVL)
         {
           ++m_NBtaggedJets_CSVL;
           jetIsBTagged[i] = true;
@@ -342,14 +389,27 @@ namespace patextractor {
       else
         {
           jetIsBTagged[i] = false;
-        }
+	  }*/
       
       //Third Loose B-tag
       if ((m_jetMet->getJetBTagProb_CSV(i)) < m_JET_btag_CSVL && (m_jetMet->getJetBTagProb_CSV(i)) > 0.244) ++LooseNoMedBtags;
 
       //if (!isJetSel(jeti)) continue; // apply the pt cut
       if (isJetForwSel(jeti)/* && !JetsInAcceptance[i]*/) CountingBadJets++;
-      if (isJetAccepSel(jeti)) {JetsInAcceptance[i]=true; CountingGoodJets++; if (FiveJetCounter==0) {LeadingJet=AllJets[i];}; if (FiveJetCounter<5) {PentaJet+=AllJets[i]; FiveJetCounter++;}}
+      if (isJetAccepSel(jeti)) 
+	{
+	  JetsInAcceptance[i]=true; CountingGoodJets++; if (FiveJetCounter==0) {LeadingJet=AllJets[i];}; if (FiveJetCounter<5) {PentaJet+=AllJets[i]; FiveJetCounter++;}
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVL)
+	    {
+	      ++m_NBtaggedJets_CSVL;
+	      jetIsBTagged[i] = true;
+	      ++BtagCounter;
+	    }
+	  else
+	    {
+	      jetIsBTagged[i] = false;
+	    }
+	}
       //if (isJetAccepSel(jeti)) cout << "The pt of InJet " << i << " is " << jeti->Pt() << endl;
       else {JetsInAcceptance[i]=false;}
       //if (isJetForwSel(jeti) && !JetsInAcceptance[i]) cout << "The pt of OutJet " << i << " is " << jeti->Pt() << endl;
@@ -417,24 +477,136 @@ namespace patextractor {
   //Cut 3//
   /////////
 
-  if (Cut3) {if (BtagCounter<2) return 0;}
+  if (Cut3) {if (BtagCounter<MinB_tags) return 0;}
   m_Cut3=1;
+
+
+  //////////////////////////
+  //Chi2 Sorting algorithm//
+  //////////////////////////
+
+  TLorentzVector FHJ;				
+  TLorentzVector SHJ; 
+  TLorentzVector FWJ; 
+  TLorentzVector SWJ; 
+  int IndexHiggsJets[2]={0,0};
+  int IndexWJets[2]={0,0};
+  int IndexTopJet=0;  
+
+  int B_tag_counter=0;
+  int Bsindexes[(BtagCounter-1)*BtagCounter/2][2];
+  float Hchi2[(BtagCounter-1)*BtagCounter/2];
+  float Tchi2=0;
+  float Wchi2=0;
+  float CurrentChi2=-1;
+  int IndexesFromchi2[5]={-1,-1,-1,-1,-1}; //Higgs, W, Top
+
+  if (DoChi2Sorting)
+    {
+      for (int i=0;i<n_jets;++i)
+	{
+	  if (!JetsInAcceptance[i]) continue;
+	  for (int j=i+1;j<n_jets;++j)
+	    {
+	      if (!JetsInAcceptance[j]) continue; 
+	      if (!jetIsBTagged[i]) continue; 
+	      if (!jetIsBTagged[j]) continue; //if (B_tag_counter==2) break; B_tag_counter++;
+	      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+	      TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	      TLorentzVector DiBjet = jeti+jetj;
+	      Hchi2[B_tag_counter]=0;
+	      Hchi2[B_tag_counter]=(DiBjet.M()-HMassChi2)*(DiBjet.M()-HMassChi2)/((HBBWidth)*(HBBWidth));
+	      Bsindexes[B_tag_counter][0]=0; Bsindexes[B_tag_counter][1]=0;
+	      Bsindexes[B_tag_counter][0]=i; Bsindexes[B_tag_counter][1]=j; //cout << "Entries B_tags " << i << " " << j << endl;
+	      B_tag_counter++;
+	    }
+	}
+      
+      for (int l=0;l<(BtagCounter-1)*BtagCounter/2;++l)
+	{
+	  for (int i=0;i<n_jets;++i)
+	    {
+	      if (!JetsInAcceptance[i]) continue;
+	      for (int j=i+1;j<n_jets;++j)
+		{
+		  if (!JetsInAcceptance[j]) continue;
+		  for (int k=0;k<n_jets;++k)
+		    {
+		      if (!JetsInAcceptance[k] || k==i || k==j) continue;
+		      //cout << "FIRST CHECK " << i << j << k << endl;
+		      if (i==Bsindexes[l][0] || i==Bsindexes[l][1] || j==Bsindexes[l][0] || j==Bsindexes[l][1] || k==Bsindexes[l][0] || k==Bsindexes[l][1]) continue;
+		      //cout << "INDEXES!!!!!!!!! " << Bsindexes[l][0] << Bsindexes[l][1] << i << j << k << endl;		  
+		      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+		      TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+		      TLorentzVector Dijet = jeti+jetj;
+		      Wchi2=(Dijet.M()-WMassChi2)*(Dijet.M()-WMassChi2)/((WHadrWidth)*(WHadrWidth));
+		      TLorentzVector jetk; jetk.SetPxPyPzE(AllJets[k].Px(),AllJets[k].Py(),AllJets[k].Pz(),AllJets[k].E());
+		      TLorentzVector Trijet = Dijet+jetk;
+		      Tchi2=(Trijet.M()-TopMassChi2)*(Trijet.M()-TopMassChi2)/((TopHadrWidth)*(TopHadrWidth));
+		      //cout << "Temporal chi2 " << Hchi2[l]+Wchi2+Tchi2 << endl;
+		      if (CurrentChi2==-1) {CurrentChi2=Hchi2[l]+Wchi2+Tchi2; IndexesFromchi2[0]=Bsindexes[l][0]; IndexesFromchi2[1]=Bsindexes[l][1]; IndexesFromchi2[2]=i; IndexesFromchi2[3]=j; IndexesFromchi2[4]=k;}
+		      else
+			{
+			  if (CurrentChi2>(Hchi2[l]+Wchi2+Tchi2)) {CurrentChi2=Hchi2[l]+Wchi2+Tchi2; IndexesFromchi2[0]=Bsindexes[l][0]; IndexesFromchi2[1]=Bsindexes[l][1]; IndexesFromchi2[2]=i; IndexesFromchi2[3]=j; IndexesFromchi2[4]=k;}
+			}
+		    }
+		}
+	    }
+	  //cout << "Current Chi2 " << CurrentChi2 << endl;
+	  //cout << "Current Indexes " << IndexesFromchi2[0] << " " << IndexesFromchi2[1] << " " << IndexesFromchi2[2] << " " << IndexesFromchi2[3] << " " << IndexesFromchi2[4] << endl;
+	}
+      
+      cout << "Minimal chi2 for this events: " << CurrentChi2 << endl;
+
+      //Reconstructing particles from the algorithm result
+      FirstHiggsJet->SetPxPyPzE(AllJets[IndexesFromchi2[0]].Px(),AllJets[IndexesFromchi2[0]].Py(),AllJets[IndexesFromchi2[0]].Pz(),AllJets[IndexesFromchi2[0]].E()); SecondHiggsJet->SetPxPyPzE(AllJets[IndexesFromchi2[1]].Px(),AllJets[IndexesFromchi2[1]].Py(),AllJets[IndexesFromchi2[1]].Pz(),AllJets[IndexesFromchi2[1]].E());
+      ReconstructedHiggs->SetPxPyPzE(AllJets[IndexesFromchi2[0]].Px()+AllJets[IndexesFromchi2[1]].Px(),AllJets[IndexesFromchi2[0]].Py()+AllJets[IndexesFromchi2[1]].Py(),AllJets[IndexesFromchi2[0]].Pz()+AllJets[IndexesFromchi2[1]].Pz(),AllJets[IndexesFromchi2[0]].E()+AllJets[IndexesFromchi2[1]].E());
+      FHJ.SetPxPyPzE(FirstHiggsJet->Px(), FirstHiggsJet->Py(), FirstHiggsJet->Pz(), FirstHiggsJet->E());
+      SHJ.SetPxPyPzE(SecondHiggsJet->Px(), SecondHiggsJet->Py(), SecondHiggsJet->Pz(), SecondHiggsJet->E());
+      m_DRHiggsJets=FHJ.DeltaR(SHJ);
+      IndexHiggsJets[0]=IndexesFromchi2[0]; IndexHiggsJets[1]=IndexesFromchi2[1]; 
+      //
+      FirstWJet->SetPxPyPzE(AllJets[IndexesFromchi2[2]].Px(),AllJets[IndexesFromchi2[2]].Py(),AllJets[IndexesFromchi2[2]].Pz(),AllJets[IndexesFromchi2[2]].E()); SecondWJet->SetPxPyPzE(AllJets[IndexesFromchi2[3]].Px(),AllJets[IndexesFromchi2[3]].Py(),AllJets[IndexesFromchi2[3]].Pz(),AllJets[IndexesFromchi2[3]].E());
+      ReconstructedW->SetPxPyPzE(AllJets[IndexesFromchi2[2]].Px()+AllJets[IndexesFromchi2[3]].Px(),AllJets[IndexesFromchi2[2]].Py()+AllJets[IndexesFromchi2[3]].Py(),AllJets[IndexesFromchi2[2]].Pz()+AllJets[IndexesFromchi2[3]].Pz(),AllJets[IndexesFromchi2[2]].E()+AllJets[IndexesFromchi2[3]].E());
+      FWJ.SetPxPyPzE(FirstWJet->Px(), FirstWJet->Py(), FirstWJet->Pz(), FirstWJet->E());
+      SWJ.SetPxPyPzE(SecondWJet->Px(), SecondWJet->Py(), SecondWJet->Pz(), SecondWJet->E());
+      m_DRWJets=FWJ.DeltaR(SWJ);
+      IndexWJets[0]=IndexesFromchi2[2]; IndexWJets[1]=IndexesFromchi2[3]; 
+      //
+      ReconstructedTop->SetPxPyPzE(AllJets[IndexesFromchi2[2]].Px()+AllJets[IndexesFromchi2[3]].Px()+AllJets[IndexesFromchi2[4]].Px(),AllJets[IndexesFromchi2[2]].Py()+AllJets[IndexesFromchi2[3]].Py()+AllJets[IndexesFromchi2[4]].Py(),AllJets[IndexesFromchi2[2]].Pz()+AllJets[IndexesFromchi2[3]].Pz()+AllJets[IndexesFromchi2[4]].Pz(),AllJets[IndexesFromchi2[2]].E()+AllJets[IndexesFromchi2[3]].E()+AllJets[IndexesFromchi2[4]].E());
+      TopJet->SetPxPyPzE(AllJets[IndexesFromchi2[4]].Px(),AllJets[IndexesFromchi2[4]].Py(),AllJets[IndexesFromchi2[4]].Pz(),AllJets[IndexesFromchi2[4]].E());
+      IndexTopJet=IndexesFromchi2[4];
+
+      if (CutChi2) {if (CurrentChi2>MaxChi2) return 0;}
+      m_CutChi2=1;
+
+      if (Cut4) {if (FHJ.DeltaR(SHJ)>DeltaRHiggsJets) return 0;}
+      m_Cut4=1;
+
+      if (Cut5) {if (FWJ.DeltaR(SWJ)>DeltaRWJets) return 0;}
+      m_Cut5=1;
+
+    }
+  
+  chi2=CurrentChi2;
+  //////////////////////////
 
   ///////////////////////////////////////////////
   //Reconstructing the Higgs from b-tagged jets//
   ///////////////////////////////////////////////
   //cout << "Entering Higgs reconstruction" << endl;
-  int IndexHiggsJets[2]={0,0};
   bool EventWithHiggs=false;
   int HiggsCounter=0;
   float DiffWithHiggMass=0;
+  if (!DoChi2Sorting)
+    {
   for (int i=0;i<n_jets;++i)
     {
       if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;
       TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
       for (int j=i+1;j<n_jets;++j)
 	{
-	  if (!jetIsBTagged[j] || !JetsInAcceptance[i]) continue;
+	  if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;
 	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
 	  TLorentzVector DiBjet = jeti+jetj;
 	  //DiBjet.SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
@@ -468,18 +640,20 @@ namespace patextractor {
 
   if (Cut4) {if (!EventWithHiggs) return 0;}
   m_Cut4=1;
-  TLorentzVector FHJ; FHJ.SetPxPyPzE(FirstHiggsJet->Px(), FirstHiggsJet->Py(), FirstHiggsJet->Pz(), FirstHiggsJet->E());
-  TLorentzVector SHJ; SHJ.SetPxPyPzE(SecondHiggsJet->Px(), SecondHiggsJet->Py(), SecondHiggsJet->Pz(), SecondHiggsJet->E());
+  FHJ.SetPxPyPzE(FirstHiggsJet->Px(), FirstHiggsJet->Py(), FirstHiggsJet->Pz(), FirstHiggsJet->E());
+  SHJ.SetPxPyPzE(SecondHiggsJet->Px(), SecondHiggsJet->Py(), SecondHiggsJet->Pz(), SecondHiggsJet->E());
   m_DRHiggsJets=FHJ.DeltaR(SHJ);
+    }
 
   //////////////////////////////////////////////////////////////////
   //Reconstruction of W from full jets collection minus Higgs jets//
   //////////////////////////////////////////////////////////////////
   //cout << "Entering W reconstruction" << endl;
-  int IndexWJets[2]={0,0};
   bool EventWithW=false;
   int WCounter=0;
-  float DiffWithWMass=0;
+  float DiffWithWMass=0;  
+  if (!DoChi2Sorting)
+    {
   for (int i=0;i<n_jets;++i)
     {
       if (IndexHiggsJets[0]==i || IndexHiggsJets[1]==i || !JetsInAcceptance[i]) continue;
@@ -516,19 +690,21 @@ namespace patextractor {
   if (Cut5) {if (!EventWithW) return 0;}
   m_Cut5=1;
   //cout << "Higgs Jets are: " << IndexHiggsJets[0] << IndexHiggsJets[1] << " W Jets are: " << IndexWJets[0] << IndexWJets[1] << endl;
-  TLorentzVector FWJ; FWJ.SetPxPyPzE(FirstWJet->Px(), FirstWJet->Py(), FirstWJet->Pz(), FirstWJet->E());
-  TLorentzVector SWJ; SWJ.SetPxPyPzE(SecondWJet->Px(), SecondWJet->Py(), SecondWJet->Pz(), SecondWJet->E());
+  FWJ.SetPxPyPzE(FirstWJet->Px(), FirstWJet->Py(), FirstWJet->Pz(), FirstWJet->E());
+  SWJ.SetPxPyPzE(SecondWJet->Px(), SecondWJet->Py(), SecondWJet->Pz(), SecondWJet->E());
   m_DRWJets=FWJ.DeltaR(SWJ);  
+    }
 
   /////////////////////////
   //Reconstruction of Top//
   /////////////////////////
   //cout << "Entering Top reconstruction" << endl;
-  int IndexTopJet=0;
   bool EventWithTop=false;
   int TopCounter=0;
   int RestrictedTopCounter=0;
-  float DiffWithTopMass=0;
+  float DiffWithTopMass=0; 
+  if (!DoChi2Sorting)
+    {
   for (int i=0;i<n_jets;++i)
     {
       if (IndexHiggsJets[0]==i || IndexHiggsJets[1]==i || IndexWJets[0]==i || IndexWJets[1]==i || !JetsInAcceptance[i]) continue;
@@ -559,6 +735,7 @@ namespace patextractor {
     }
 
   if (!EventWithTop) return 0;
+    }
   //cout << "Higgs Jets are: " << IndexHiggsJets[0] << IndexHiggsJets[1] << " W Jets are: " << IndexWJets[0] << IndexWJets[1] << " Top jet is: " << IndexTopJet << endl;
   TLorentzVector HJ; HJ.SetPxPyPzE(ReconstructedHiggs->Px(), ReconstructedHiggs->Py(), ReconstructedHiggs->Pz(), ReconstructedHiggs->E());
   TLorentzVector TJ; TJ.SetPxPyPzE(ReconstructedTop->Px(), ReconstructedTop->Py(), ReconstructedTop->Pz(), ReconstructedTop->E());
@@ -778,7 +955,42 @@ namespace patextractor {
       
       //Taking into account only events where the MC indformation was obtained correctly
       if (FirstTrueHiggsJet->Pt()==0 || SecondTrueHiggsJet->Pt()==0 || FirstTrueWJet->Pt()==0 || SecondTrueWJet->Pt()==0 || TopTrueJet->Pt()==0 || TrueW->Pt()==0 || TrueTprimeAcompainingJet->Pt()==0) return 0;
+      /*
+      //MODIFICATION!!!!!!//
+
+      int GoodMatchedJets=0;
+      bool AllDiffIndex=true;
       
+      for (int j=0; j<5; j++) 
+	{
+	  for (int k=j+1; k<5; k++) {if (MatchedJetsIndexes[j]==MatchedJetsIndexes[k]) AllDiffIndex=false;}
+	}
+      
+      if (AllDiffIndex)
+	{
+	  for (int j=0; j<5; j++)
+	    {
+	      if (IndexesFromchi2[0]==MatchedJetsIndexes[j] || IndexesFromchi2[1]==MatchedJetsIndexes[j] || IndexesFromchi2[2]==MatchedJetsIndexes[j] || IndexesFromchi2[3]==MatchedJetsIndexes[j] || IndexesFromchi2[4]==MatchedJetsIndexes[j]) ++GoodMatchedJets;
+	    }
+	}
+      else cout << "Shared index between decay products of tprime " << MatchedJetsIndexes[0] << MatchedJetsIndexes[1] << MatchedJetsIndexes[2] << MatchedJetsIndexes[3] << MatchedJetsIndexes[4] << endl;
+      
+      if (GoodMatchedJets==5) CorrectTprime=1;
+      
+      int HiggsGoodMatches=0;
+      int WGoodMatches=0;
+      for (int j=0; j<2; j++)
+	{
+	  if (IndexesFromchi2[0]==MatchedJetsIndexes[j] || IndexesFromchi2[1]==MatchedJetsIndexes[j]) HiggsGoodMatches++;
+	  if (IndexesFromchi2[2]==MatchedJetsIndexes[j+2] || IndexesFromchi2[3]==MatchedJetsIndexes[j+2]) WGoodMatches++;
+	}
+      
+      if (HiggsGoodMatches==2) CorrectH=1;
+      if (WGoodMatches==2) CorrectW=1;
+      if (IndexesFromchi2[4]==MatchedJetsIndexes[4]) CorrectTop=1;
+
+      /////////////////////
+      */
       //Disambiguation with Pt
       TLorentzVector TrHFJ; TrHFJ.SetPxPyPzE(FirstTrueHiggsJet->Px(), FirstTrueHiggsJet->Py(), FirstTrueHiggsJet->Pz(), FirstTrueHiggsJet->E());
       TLorentzVector TrHSJ; TrHSJ.SetPxPyPzE(SecondTrueHiggsJet->Px(), SecondTrueHiggsJet->Py(), SecondTrueHiggsJet->Pz(), SecondTrueHiggsJet->E());
@@ -940,7 +1152,7 @@ namespace patextractor {
   //if (TrTp.Pt()<100) Njets_TpPT_0to100=n_jets;
   //else if (TrTp.Pt()>=100 && TrTp.Pt()<200) Njets_TpPT_100to200=n_jets;
   //else if (TrTp.Pt()>=200 && TrTp.Pt()<300) Njets_TpPT_200to300=n_jets;
-  //else if (TrTp.Pt()>=400 && TrTp.Pt()<500) Njets_TpPT_400to500=n_jets;
+  //else if (TrTp.Pt()>=300 && TrTp.Pt()<400) Njets_TpPT_300to400=n_jets;
   //else if (TrTp.Pt()>=400 && TrTp.Pt()<500) Njets_TpPT_400to500=n_jets;
   //else if (TrTp.Pt()>=500 && TrTp.Pt()<600) Njets_TpPT_500to600=n_jets;
   //else if (TrTp.Pt()>=600 && TrTp.Pt()<700) Njets_TpPT_600to700=n_jets;
@@ -1155,6 +1367,7 @@ void SingleTprime_analysis::reset()
   NumberOfTops=0;
   LooseNoMedBtags=0;
   m_DP2LeadingJets=0;
+  chi2=0;
 
   Njets_TpPT_0to100=0;
   Njets_TpPT_100to200=0;
@@ -1188,6 +1401,7 @@ void SingleTprime_analysis::reset()
   m_Cut1= 0;
   m_Cut2= 0;
   m_Cut3= 0;
+  m_CutChi2= 0;
   m_Cut4= 0;
   m_Cut5= 0;
   m_Cut6= 0;

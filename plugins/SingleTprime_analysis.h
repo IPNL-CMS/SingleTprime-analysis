@@ -85,6 +85,7 @@ namespace patextractor {
     float MotherPTNormalizedMass;
     int NumberOfTops;
     int LooseNoMedBtags;
+    float chi2;
 
     //Proving non-boosted regime//
     float Njets_TpPT_0to100;
@@ -116,9 +117,10 @@ namespace patextractor {
     bool Cut0; //Event preselection
     bool Cut1; //Leading jet PT
     bool Cut2; //HT
-    bool Cut3; //2B-tags
-    bool Cut4; //DR(jj^{H})<2.5
-    bool Cut5; //DR(jj^{W})<3
+    bool Cut3; //B-tags
+    bool CutChi2; //Chi2
+    bool Cut4; //DR(jj^{H})
+    bool Cut5; //DR(jj^{W})
     bool Cut6; //H pt and Top pt
     bool Cut7; //DR(WH)
     bool Cut8; //DPH and DPT
@@ -136,7 +138,39 @@ namespace patextractor {
     bool Cut20; //Delta Phi between two leading jets
     bool Cut21; //HMass over TMass
 
+    int NumberOfGoodJets; //////////////////////////////////////////
+    int NumberOfBadJets;                                          //
+    float LeadingJetPt;                                           //
+    float THTcut;                                                 //
+    int MinB_tags;
+    float MaxChi2;
+    float DeltaRHiggsJets;                                        //
+    float DeltaRWJets;                                            //
+    float HiggsPt;                                                //
+    float TopPt;                                                  //
+    float MinDeltaRWH;                                            //
+    float MaxDeltaRWH;                                            //
+    float DeltaPhiHiggsJets; //              SET OF CUTS          //
+    float DeltaPhiTopJetW;                                        //
+    int JetMultiplicity;                                          //
+    float DeltaPhiWjets;                                          //
+    float MinHiggsMass;                                           //
+    float MaxHiggsMass;                                           //
+    float RelHT;                                                  //
+    float Aplanarity;                                             //
+    float MaxDeltaRTH;                                            //
+    float MinDeltaRTH;                                            // 
+    float RelMassMaxCut;                                          //
+    float RelMassMinCut;                                          //
+    float MotherPTNormalizedMassCut;                              //
+    float PTNormalizedMassCut;                                    //
+    int NumberOfTopsCut;                                          //
+    float NumberofLooseBtag;                                      //
+    float DeltaPhiLeadingJets;                                    //
+    float HMoverTM;                /////////////////////////////////
+ 
     bool DoMCMatching;
+    bool DoChi2Sorting;
 
     //Cuts
     int m_triggercut;
@@ -144,6 +178,7 @@ namespace patextractor {
     int m_Cut1;
     int m_Cut2;
     int m_Cut3;
+    int m_CutChi2;
     int m_Cut4;
     int m_Cut5;
     int m_Cut6;
