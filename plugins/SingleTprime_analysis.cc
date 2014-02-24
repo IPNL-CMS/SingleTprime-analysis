@@ -147,6 +147,8 @@ namespace patextractor {
   m_tree_stp->Branch("jet5_pt",  &m_jet5pt   ,"jet5_pt/F");
   m_tree_stp->Branch("jet6_pt",  &m_jet6pt   ,"jet6_pt/F");
   m_tree_stp->Branch("Number_CSVLbtagged_jets",  &m_NBtaggedJets_CSVL   ,"m_NBtaggedJets_CSVL/I");
+  m_tree_stp->Branch("Number_CSVMbtagged_jets",  &m_NBtaggedJets_CSVM   ,"m_NBtaggedJets_CSVM/I");
+  m_tree_stp->Branch("Number_CSVTbtagged_jets",  &m_NBtaggedJets_CSVT   ,"m_NBtaggedJets_CSVT/I");
   m_tree_stp->Branch("DeltaR_of_Higgs_Jets",  &m_DRHiggsJets   ,"DRHiggsJets/F");
   m_tree_stp->Branch("DeltaR_of_W_Jets",  &m_DRWJets   ,"DRWJets/F");
   m_tree_stp->Branch("DeltaR_of_Top_Higgs",  &m_DRTopHiggs   ,"DRTopHiggs/F");
@@ -186,6 +188,7 @@ namespace patextractor {
   m_tree_stp->Branch("Mother_PT_Normalized_Mass",  &MotherPTNormalizedMass   ,"MotherPTNormalizedMass/F");
   m_tree_stp->Branch("Number_of_Tops",  &NumberOfTops   ,"NumberOfTops/I");
   m_tree_stp->Branch("Number_of_Loose_and_non_med_b_tags",  &LooseNoMedBtags   ,"LooseNoMedBtags/I");
+  m_tree_stp->Branch("Number_of_Loose_and_non_med_b_tags",  &LooseNoMedBtags   ,"LooseNoMedBtags/I");
   m_tree_stp->Branch("DeltaPTwoLeadingJets",  &m_DP2LeadingJets   ,"DP2LeadingJets/F");
   m_tree_stp->Branch("ChiSquaredSorting",  &chi2   ,"chi2/F");
 
@@ -203,6 +206,16 @@ namespace patextractor {
   m_tree_stp->Branch("Njets_for_TpPT_500to600", &Njets_TpPT_500to600, "N_jets500-600/F");
   m_tree_stp->Branch("Njets_for_TpPT_600to700", &Njets_TpPT_600to700, "N_jets600-700/F");
   m_tree_stp->Branch("Njets_for_TpPT_700to800", &Njets_TpPT_700to800, "N_jets700-800/F");
+
+  //Quark content
+  m_tree_stp->Branch("U Quark Content",  &UQuarkContent   ,"UQuarkContent/I");
+  m_tree_stp->Branch("D Quark Content",  &DQuarkContent   ,"DQuarkContent/I");
+  m_tree_stp->Branch("S Quark Content",  &SQuarkContent   ,"SQuarkContent/I");
+  m_tree_stp->Branch("C Quark Content",  &CQuarkContent   ,"CQuarkContent/I");
+  m_tree_stp->Branch("B Quark Content",  &BQuarkContent   ,"BQuarkContent/I");
+
+  //TTbar System PT
+  m_tree_stp->Branch("PT_Difference_ttbar",  &PtTTbarDifference   ,"ttbarPTdif/F");
 
   //Cuts
   m_tree_cuts->Branch("Trigger_cut", &m_triggercut, "Trigger_passed/I");
@@ -237,6 +250,8 @@ namespace patextractor {
   m_jet_EtaAccepcut = cmsswSettings.getParameter<edm::ParameterSet>("jets").getParameter<double>("eta_accept"); //2.5;
   m_jet_OverlapAccep = cmsswSettings.getParameter<edm::ParameterSet>("jets").getParameter<double>("eta_overlap"); //2.5;
   m_JET_btag_CSVL = cmsswSettings.getParameter<edm::ParameterSet>("jets").getParameter<double>("btag_CSVL"); //0.244;
+  m_JET_btag_CSVM = cmsswSettings.getParameter<edm::ParameterSet>("jets").getParameter<double>("btag_CSVM");
+  m_JET_btag_CSVT = cmsswSettings.getParameter<edm::ParameterSet>("jets").getParameter<double>("btag_CSVT");
   evt_num = 0;
   m_DRMatching=0.3;
   m_DPtMatching=10.0;
@@ -270,6 +285,7 @@ namespace patextractor {
   LeadingJetPt=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("LeadingJetPt");
   THTcut=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("THTcut");
   MinB_tags=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MinB_tags");
+  MinLooseB_tags=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MinLooseB_tags");
   MaxChi2=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("MaxChi2");
   DeltaRHiggsJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaRHiggsJets");
   DeltaRWJets=cmsswSettings.getParameter<edm::ParameterSet>("selection").getParameter<double>("DeltaRWJets");
@@ -333,12 +349,14 @@ namespace patextractor {
   //cout << "Number of jets " << n_jets << endl;
   bool JetsInAcceptance[n_jets]; //Mas for keeping track of jets inside acceptance
   bool jetIsBTagged[n_jets]; //Mask for keeping track of b-tagged jets
+  bool jetIsLooseBTagged[n_jets]; //Mask for keeping track of loose b-tagged jets
   int CountingGoodJets=0;
   int CountingBadJets=0;
   float TotalHT=0;
   TLorentzVector PentaJet={0,0,0,0}; int FiveJetCounter=0;
   TLorentzVector LeadingJet={0,0,0,0};
   int BtagCounter=0;
+  int LooseBtagCounter=0;
 
   ScaleFactor jetSF[n_jets];
 
@@ -389,26 +407,52 @@ namespace patextractor {
       else
         {
           jetIsBTagged[i] = false;
-	  }*/
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > 0.244)
+		{
+		  jetIsLooseBTagged[i] = true;
+		  ++LooseBtagCounter;
+		}
+	      else
+		{
+		  jetIsLooseBTagged[i] = false;
+		}
+		}*/
       
       //Third Loose B-tag
       if ((m_jetMet->getJetBTagProb_CSV(i)) < m_JET_btag_CSVL && (m_jetMet->getJetBTagProb_CSV(i)) > 0.244) ++LooseNoMedBtags;
 
       //if (!isJetSel(jeti)) continue; // apply the pt cut
       if (isJetForwSel(jeti)/* && !JetsInAcceptance[i]*/) CountingBadJets++;
+      jetIsBTagged[i] = false; jetIsLooseBTagged[i] = false; JetsInAcceptance[i]=false;
       if (isJetAccepSel(jeti)) 
 	{
 	  JetsInAcceptance[i]=true; CountingGoodJets++; if (FiveJetCounter==0) {LeadingJet=AllJets[i];}; if (FiveJetCounter<5) {PentaJet+=AllJets[i]; FiveJetCounter++;}
-	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVL)
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVT)
 	    {
-	      ++m_NBtaggedJets_CSVL;
+	      ++m_NBtaggedJets_CSVT;
+	    }
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVM)
+	    {
+	      ++m_NBtaggedJets_CSVM;
 	      jetIsBTagged[i] = true;
 	      ++BtagCounter;
+	      jetIsLooseBTagged[i] = true;
+	      ++LooseBtagCounter;
 	    }
 	  else
 	    {
 	      jetIsBTagged[i] = false;
-	    }
+	      if ((m_jetMet->getJetBTagProb_CSV(i)) > 0.244)
+		{
+		  ++m_NBtaggedJets_CSVL;
+		  jetIsLooseBTagged[i] = true;
+		  ++LooseBtagCounter;
+		}
+	      else
+		{
+		  jetIsLooseBTagged[i] = false;
+		}
+	    }	  
 	}
       //if (isJetAccepSel(jeti)) cout << "The pt of InJet " << i << " is " << jeti->Pt() << endl;
       else {JetsInAcceptance[i]=false;}
@@ -477,7 +521,16 @@ namespace patextractor {
   //Cut 3//
   /////////
 
-  if (Cut3) {if (BtagCounter<MinB_tags) return 0;}
+  cout << "Exclusive loose b-tags " << LooseBtagCounter-BtagCounter << endl;
+  if (MinLooseB_tags!=0)
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags || (LooseBtagCounter-BtagCounter)<MinLooseB_tags) return 0;}
+    }
+  else
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags) return 0;}
+    }
+
   m_Cut3=1;
 
 
@@ -602,11 +655,14 @@ namespace patextractor {
     {
   for (int i=0;i<n_jets;++i)
     {
-      if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;
+      if (MinLooseB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
       TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
       for (int j=i+1;j<n_jets;++j)
 	{
-	  if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;
+	  //if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;
+	  if (MinLooseB_tags!=0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else {if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
 	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
 	  TLorentzVector DiBjet = jeti+jetj;
 	  //DiBjet.SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
@@ -660,7 +716,7 @@ namespace patextractor {
       TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
       for (int j=i+1;j<n_jets;++j)
 	{
-	  if (IndexHiggsJets[0]==j || IndexHiggsJets[1]==j || !JetsInAcceptance[i]) continue;
+	  if (IndexHiggsJets[0]==j || IndexHiggsJets[1]==j || !JetsInAcceptance[j]) continue;
 	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
 	  TLorentzVector Dijet = jeti+jetj;
 	  if (fabs(Dijet.M()-WMass)>WMassWindow) continue;
@@ -919,6 +975,55 @@ namespace patextractor {
   
   if (Cut21) {if (HJ.M()/TJ.M()<HMoverTM) return 0;}
   m_Cut21=1;
+
+  ///////////////////
+  //TTbar system PT//
+  ///////////////////
+  int NewTopsCounter=0;
+  int NumberOfBs=0; if (MinLooseB_tags!=0) {NumberOfBs=BtagCounter;} else {NumberOfBs=LooseBtagCounter;}
+  TLorentzVector NewTops[NumberOfBs];
+  for (int i=0;i<n_jets;++i)
+    {
+      if (MinLooseB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      for (int j=i+1;j<n_jets;++j)
+	{
+	  if (!JetsInAcceptance[j]) continue;
+	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	  for (int k=j+1;k<n_jets;++k)
+	    {
+	      if (!JetsInAcceptance[k]) continue;
+	      TLorentzVector jetk; jetk.SetPxPyPzE(AllJets[k].Px(),AllJets[k].Py(),AllJets[k].Pz(),AllJets[k].E());
+	      TLorentzVector Trijet = jeti+jetj+jetk;
+	      if (fabs(Trijet.M()-TopMass)>20) continue;
+	      if (NewTopsCounter<=NumberOfBs) {NewTops[NewTopsCounter].SetPxPyPzE(Trijet.Px(),Trijet.Py(),Trijet.Pz(),Trijet.E()); NewTopsCounter++;}
+	      else break;
+
+	    }
+	}
+    }
+
+  cout << NewTopsCounter << " " << NumberOfBs << endl;
+
+  float MinimalPtTTbar=0;
+  bool MarkerToDoCut=false;
+
+  if (NewTopsCounter>=2)
+    {
+      for (int i=0;i<NewTopsCounter;++i)
+	{
+	  if (i==0) MinimalPtTTbar=abs(NewTops[i].Pt()-NewTops[i+1].Pt());
+	  else if (i<NewTopsCounter-1)
+	    {
+	      if (MinimalPtTTbar>abs(NewTops[i].Pt()-NewTops[i+1].Pt())) MinimalPtTTbar=abs(NewTops[i].Pt()-NewTops[i+1].Pt());
+	      cout << i << endl;
+	    }
+	}   
+      MarkerToDoCut=true;
+    }
+
+  if (MarkerToDoCut) PtTTbarDifference=MinimalPtTTbar;
 
   ///////////////////////////
   //Comparing with MC truth//
@@ -1228,6 +1333,10 @@ void SingleTprime_analysis::analyze(const edm::EventSetup& iSetup, PatExtractor&
 
   //MC Identification
 
+#define ID_U (1)
+#define ID_D (2)
+#define ID_S (3)
+#define ID_C (4)
 #define ID_B (5)
 #define ID_T (6)
 #define ID_H (25)
@@ -1327,6 +1436,28 @@ void SingleTprime_analysis::MCidentification()
 	  if (grandMotherIndex != -1) std::cout << "Grandmother type: " << m_MC->getType(grandMotherIndex) << std::endl;
 	}
       
+      if (abs(m_MC->getType(i)) == ID_U)
+	{
+	  UQuarkContent+=1;
+	}
+      else if (abs(m_MC->getType(i)) == ID_D)
+	{
+	  DQuarkContent+=1;
+	}
+      else if (abs(m_MC->getType(i)) == ID_C)
+	{
+	  SQuarkContent+=1;
+	}
+      else if (abs(m_MC->getType(i)) == ID_S)
+	{
+	  CQuarkContent+=1;
+	}
+      else if (abs(m_MC->getType(i)) == ID_B)
+	{
+	  BQuarkContent+=1;
+	}
+
+      
     }
 
 }
@@ -1344,6 +1475,8 @@ void SingleTprime_analysis::reset()
   m_jet5pt = 0.;
   m_jet6pt = 0.;
   m_NBtaggedJets_CSVL=0;
+  m_NBtaggedJets_CSVM=0;
+  m_NBtaggedJets_CSVT=0;
   m_DRHiggsJets=0.;
   m_DRWJets=0.;
   m_DRTopHiggs=0.;
@@ -1368,6 +1501,14 @@ void SingleTprime_analysis::reset()
   LooseNoMedBtags=0;
   m_DP2LeadingJets=0;
   chi2=0;
+
+  UQuarkContent=0;
+  DQuarkContent=0;
+  SQuarkContent=0;
+  CQuarkContent=0;
+  BQuarkContent=0;
+
+  PtTTbarDifference=-10;
 
   Njets_TpPT_0to100=0;
   Njets_TpPT_100to200=0;

@@ -56,7 +56,9 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           eta_max = cms.double(4.5),
           eta_accept = cms.double(2.5),
           eta_overlap = cms.double(2.5),
-          btag_CSVL = cms.double(0.679)
+          btag_CSVL = cms.double(0.244),
+          btag_CSVM = cms.double(0.679),
+          btag_CSVT = cms.double(0.898)
           ),
 	cuts = cms.PSet(
 	  cut0 = cms.bool(True), #Event preselection (Do not deactivate)
@@ -75,7 +77,7 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           cut12 = cms.bool(True), #RelHT
           cut13 = cms.bool(False), #Aplanarity
           cut14 = cms.bool(False), #DR(TH)
-          cut15 = cms.bool(False),  #RelMass
+          cut15 = cms.bool(True),  #RelMass
           cut16 = cms.bool(False), #PTNormlaizedMass
           cut17 = cms.bool(False), #PTNormalizedMotherMass
           cut18 = cms.bool(False), #One Top
@@ -89,17 +91,18 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           LeadingJetPt = cms.double(150),
           THTcut = cms.double(630),
           MinB_tags = cms.double(3),
+          MinLooseB_tags = cms.double(0),
           MaxChi2 = cms.double(50),
           DeltaRHiggsJets = cms.double(1.2),
           DeltaRWJets = cms.double(3.0),
           HiggsPt = cms.double(200),
           TopPt = cms.double(200),
-          MinDeltaRWH = cms.double(2.7),
+          MinDeltaRWH = cms.double(2.2),
           MaxDeltaRWH = cms.double(3.5),
           DeltaPhiHiggsJets = cms.double(1.2),
           DeltaPhiTopJetW = cms.double(1.2),
           JetMultiplicity = cms.double(8.0),
-          DeltaPhiWjets = cms.double(1.3),
+          DeltaPhiWjets = cms.double(2.0),
           MinHiggsMass = cms.double(110),
           MaxHiggsMass = cms.double(140),
           RelHT = cms.double(0.65),
@@ -116,7 +119,7 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           HMoverTM = cms.double(0.6),
           ),
         DoMatching = cms.bool(False),
-	DoChi2 = cms.bool(True) #When active will do chi2 sorting algorithm, instead of default reconstruction
+        DoChi2 = cms.bool(False) #When active will do chi2 sorting algorithm, instead of default reconstruction
       )
     )
   

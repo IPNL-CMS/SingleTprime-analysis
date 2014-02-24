@@ -88,6 +88,11 @@ void SingleT()
   TH1F *ThirdLooseBtag[NumberOfProcesses];
   TH1F *TopMass[NumberOfProcesses];
   TH1F *Chi2[NumberOfProcesses];
+  TH1F *UQuarkContent[NumberOfProcesses];
+  TH1F *DQuarkContent[NumberOfProcesses];
+  TH1F *SQuarkContent[NumberOfProcesses];
+  TH1F *CQuarkContent[NumberOfProcesses];
+  TH1F *BQuarkContent[NumberOfProcesses];
   int EntriePerSample[NumberOfProcesses];
   bool SurvivalMarker[NumberOfProcesses];
 
@@ -317,6 +322,36 @@ void SingleT()
 	  AnalysisChain.Draw(C21.c_str());
 	  Chi2[k] = (TH1F*)gDirectory->Get(C22.c_str());
 	  gPad->Close();
+	  //
+	  string UQ1 = Form("U Quark Content >> UQC%i(10,0,10)",k);
+	  string UQ2 = Form("UQC%i",k);
+	  AnalysisChain.Draw(UQ1.c_str());
+	  UQuarkContent[k] = (TH1F*)gDirectory->Get(UQ2.c_str());
+	  gPad->Close();
+	  //
+	  string DQ1 = Form("D Quark Content >> DQC%i(10,0,10)",k);
+	  string DQ2 = Form("DQC%i",k);
+	  AnalysisChain.Draw(DQ1.c_str());
+	  DQuarkContent[k] = (TH1F*)gDirectory->Get(DQ2.c_str());
+	  gPad->Close();
+	  //
+	  string SQ1 = Form("S Quark Content >> SQC%i(10,0,10)",k);
+	  string SQ2 = Form("SQC%i",k);
+	  AnalysisChain.Draw(SQ1.c_str());
+	  SQuarkContent[k] = (TH1F*)gDirectory->Get(SQ2.c_str());
+	  gPad->Close();
+	  //
+	  string CQ1 = Form("C Quark Content >> CQC%i(10,0,10)",k);
+	  string CQ2 = Form("CQC%i",k);
+	  AnalysisChain.Draw(CQ1.c_str());
+	  CQuarkContent[k] = (TH1F*)gDirectory->Get(CQ2.c_str());
+	  gPad->Close();
+	  //
+	  string BQ1 = Form("B Quark Content >> BQC%i(10,0,10)",k);
+	  string BQ2 = Form("BQC%i",k);
+	  AnalysisChain.Draw(BQ1.c_str());
+	  BQuarkContent[k] = (TH1F*)gDirectory->Get(BQ2.c_str());
+	  gPad->Close();
 	}
 
     }
@@ -372,6 +407,16 @@ void SingleT()
   TH1F *SingleTopTprimeMassTM=(TH1F*)gDirectory->Get("TMass4");
   //Chi2 histo recollection
   TH1F *SingleTopTprimeMassChi2=(TH1F*)gDirectory->Get("ChiSq4");
+  //U quark content histo recollection
+  TH1F *SingleTopTprimeMassUQC=(TH1F*)gDirectory->Get("UQC4");
+  //D quark content histo recollection
+  TH1F *SingleTopTprimeMassDQC=(TH1F*)gDirectory->Get("DQC4");
+  //S quark content histo recollection
+  TH1F *SingleTopTprimeMassSQC=(TH1F*)gDirectory->Get("SQC4");
+  //C quark content histo recollection
+  TH1F *SingleTopTprimeMassCQC=(TH1F*)gDirectory->Get("CQC4");
+  //B quark content histo recollection
+  TH1F *SingleTopTprimeMassBQC=(TH1F*)gDirectory->Get("BQC4");
   for (int k=ParcialTestMin; k<ParcialTestMax; k++)  
     {
       if (!SurvivalMarker[k]) continue;
@@ -404,6 +449,11 @@ void SingleT()
       ThirdLooseBtag[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
       TopMass[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
       Chi2[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      UQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      DQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      SQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      CQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      BQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);      
       //Settings for Single Top
       if (k<=8 && k>=3) 
 	{
@@ -463,7 +513,16 @@ void SingleT()
 	  TopMass[k]->SetFillStyle(3305);
 	  Chi2[k]->SetFillColor(kBlack);
 	  Chi2[k]->SetFillStyle(3305);
-	  
+	  UQuarkContent[k]->SetFillColor(kBlack);
+	  UQuarkContent[k]->SetFillStyle(3305);
+	  DQuarkContent[k]->SetFillColor(kBlack);
+	  DQuarkContent[k]->SetFillStyle(3305);
+	  SQuarkContent[k]->SetFillColor(kBlack);
+	  SQuarkContent[k]->SetFillStyle(3305);
+	  CQuarkContent[k]->SetFillColor(kBlack);
+	  CQuarkContent[k]->SetFillStyle(3305);
+	  BQuarkContent[k]->SetFillColor(kBlack);
+	  BQuarkContent[k]->SetFillStyle(3305);	  
 	  if (k!=ParcialTestMin) 
 	    {
 	      SingleTopTprimeMass->Add(FiveJetsMass[k]); 
@@ -494,6 +553,11 @@ void SingleT()
 	      SingleTopTprimeMassTLBT->Add(ThirdLooseBtag[k]);
 	      SingleTopTprimeMassTM->Add(TopMass[k]);
 	      SingleTopTprimeMassChi2->Add(Chi2[k]);
+	      SingleTopTprimeMassUQC->Add(UQuarkContent[k]);
+	      SingleTopTprimeMassDQC->Add(DQuarkContent[k]);
+	      SingleTopTprimeMassSQC->Add(SQuarkContent[k]);
+	      SingleTopTprimeMassCQC->Add(CQuarkContent[k]);
+	      SingleTopTprimeMassBQC->Add(BQuarkContent[k]);
 	    }
 	  if (k==8)
 	    {
@@ -526,6 +590,11 @@ void SingleT()
 	      SingleTopTprimeMassTLBT->Write();
 	      SingleTopTprimeMassTM->Write();
 	      SingleTopTprimeMassChi2->Write();
+	      SingleTopTprimeMassUQC->Write();
+	      SingleTopTprimeMassDQC->Write();
+	      SingleTopTprimeMassSQC->Write();
+	      SingleTopTprimeMassCQC->Write();
+	      SingleTopTprimeMassBQC->Write();
 	    }
 	}
     }

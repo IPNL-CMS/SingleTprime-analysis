@@ -87,6 +87,14 @@ namespace patextractor {
     int LooseNoMedBtags;
     float chi2;
 
+    int UQuarkContent;
+    int DQuarkContent;
+    int SQuarkContent;
+    int CQuarkContent;
+    int BQuarkContent;
+
+    float PtTTbarDifference;
+
     //Proving non-boosted regime//
     float Njets_TpPT_0to100;
     float Njets_TpPT_100to200;
@@ -143,6 +151,7 @@ namespace patextractor {
     float LeadingJetPt;                                           //
     float THTcut;                                                 //
     int MinB_tags;
+    int MinLooseB_tags;
     float MaxChi2;
     float DeltaRHiggsJets;                                        //
     float DeltaRWJets;                                            //
@@ -243,6 +252,8 @@ namespace patextractor {
 
     //Counter for b-tagged jets
     int m_NBtaggedJets_CSVL;
+    int m_NBtaggedJets_CSVM;
+    int m_NBtaggedJets_CSVT;
 
     /// scale factors for jet energy resolution
     std::vector<double> jetEnergyResolutionScaleFactors_;

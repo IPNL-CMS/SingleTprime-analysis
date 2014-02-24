@@ -28,8 +28,7 @@ const int NumberOfProcesses=16;
 const TString MainFolder = "file:/afs/cern.ch/work/j/jruizalv/private/Analysis/CMSSW_5_3_9_patch3/src/Extractors/PatExtractor/bin/WithTrigger/SUFFIX/";
 
 const int NumberOfHistos=23;
-const TString Histos[NumberOfHistos] = {"Cut_0", "Cut_1", "Cut_2", "Cut_3", "Cut_chi2", "Cut_4", "Cut_5", "Cut_6", "Cut_7", "Cut_8", "Cut_9", "Cut_10", "Cut_11", "Cut_12", "Cut_13", 
-"Cut_14", "Cut_15", "Cut_16", "Cut_17", "Cut_18", "Cut_19", "Cut_20", "Cut_21"};
+const TString Histos[NumberOfHistos] = {"Cut_0", "Cut_1", "Cut_2", "Cut_3", "Cut_chi2", "Cut_4", "Cut_5", "Cut_6", "Cut_7", "Cut_8", "Cut_9", "Cut_10", "Cut_11", "Cut_12", "Cut_13", "Cut_14", "Cut_15", "Cut_16", "Cut_17", "Cut_18", "Cut_19", "Cut_20", "Cut_21"};
 
 //Computing weights (Everything in pb)
 const float XS[NumberOfProcesses]={8.258, 33.72, 54.838, 2.82, 47, 10.7, 1.57, 25, 10.7, 234.0, 34138.15, 1759.549, 113.8791, 26.9921, 3.550036, 0.15}; 
@@ -88,6 +87,11 @@ void QCD()
   TH1F *ThirdLooseBtag[NumberOfProcesses];
   TH1F *TopMass[NumberOfProcesses];
   TH1F *Chi2[NumberOfProcesses];
+  TH1F *UQuarkContent[NumberOfProcesses];
+  TH1F *DQuarkContent[NumberOfProcesses];
+  TH1F *SQuarkContent[NumberOfProcesses];
+  TH1F *CQuarkContent[NumberOfProcesses];
+  TH1F *BQuarkContent[NumberOfProcesses];
   int EntriePerSample[NumberOfProcesses];
   bool SurvivalMarker[NumberOfProcesses];
 
@@ -316,66 +320,105 @@ void QCD()
 	  AnalysisChain.Draw(C21.c_str());
 	  Chi2[k] = (TH1F*)gDirectory->Get(C22.c_str());
 	  gPad->Close();
+	  //
+	  string UQ1 = Form("U Quark Content >> UQC%i(10,0,10)",k);
+	  string UQ2 = Form("UQC%i",k);
+	  AnalysisChain.Draw(UQ1.c_str());
+	  UQuarkContent[k] = (TH1F*)gDirectory->Get(UQ2.c_str());
+	  gPad->Close();
+	  //
+	  string DQ1 = Form("D Quark Content >> DQC%i(10,0,10)",k);
+	  string DQ2 = Form("DQC%i",k);
+	  AnalysisChain.Draw(DQ1.c_str());
+	  DQuarkContent[k] = (TH1F*)gDirectory->Get(DQ2.c_str());
+	  gPad->Close();
+	  //
+	  string SQ1 = Form("S Quark Content >> SQC%i(10,0,10)",k);
+	  string SQ2 = Form("SQC%i",k);
+	  AnalysisChain.Draw(SQ1.c_str());
+	  SQuarkContent[k] = (TH1F*)gDirectory->Get(SQ2.c_str());
+	  gPad->Close();
+	  //
+	  string CQ1 = Form("C Quark Content >> CQC%i(10,0,10)",k);
+	  string CQ2 = Form("CQC%i",k);
+	  AnalysisChain.Draw(CQ1.c_str());
+	  CQuarkContent[k] = (TH1F*)gDirectory->Get(CQ2.c_str());
+	  gPad->Close();
+	  //
+	  string BQ1 = Form("B Quark Content >> BQC%i(10,0,10)",k);
+	  string BQ2 = Form("BQC%i",k);
+	  AnalysisChain.Draw(BQ1.c_str());
+	  BQuarkContent[k] = (TH1F*)gDirectory->Get(BQ2.c_str());
+	  gPad->Close();
 	}
-
     }
-
+  cout << "HERE1" << endl;
   //TprimeMass histo recollection
-  TH1F *QCDTprimeMass=(TH1F*)gDirectory->Get("TprimeMass10");  
+  TH1F *QCDTprimeMass=(TH1F*)gDirectory->Get("TprimeMass11");  
   //LeadingJetPT histo recollection
-  TH1F *QCDTprimeMassLJPT=(TH1F*)gDirectory->Get("jet1_pt10");  
+  TH1F *QCDTprimeMassLJPT=(TH1F*)gDirectory->Get("jet1_pt11");  
   //LeadingJetPT histo recollection
-  TH1F *QCDTprimeMassL2JPT=(TH1F*)gDirectory->Get("jet2_pt10");
+  TH1F *QCDTprimeMassL2JPT=(TH1F*)gDirectory->Get("jet2_pt11");
   //LeadingJetPT histo recollection
-  TH1F *QCDTprimeMassL3JPT=(TH1F*)gDirectory->Get("jet3_pt10");
+  TH1F *QCDTprimeMassL3JPT=(TH1F*)gDirectory->Get("jet3_pt11");
   //LeadingJetPT histo recollection
-  TH1F *QCDTprimeMassL4JPT=(TH1F*)gDirectory->Get("jet4_pt10");
+  TH1F *QCDTprimeMassL4JPT=(TH1F*)gDirectory->Get("jet4_pt11");
   //LeadingJetPT histo recollection
-  TH1F *QCDTprimeMassL5JPT=(TH1F*)gDirectory->Get("jet5_pt10");
+  TH1F *QCDTprimeMassL5JPT=(TH1F*)gDirectory->Get("jet5_pt11");
   //LeadingJetPT histo recollection
-  TH1F *QCDTprimeMassL6JPT=(TH1F*)gDirectory->Get("jet6_pt10");
+  TH1F *QCDTprimeMassL6JPT=(TH1F*)gDirectory->Get("jet6_pt11");
   //THT histo recollection
-  TH1F *QCDTprimeMassTHT=(TH1F*)gDirectory->Get("THT10");  
+  TH1F *QCDTprimeMassTHT=(TH1F*)gDirectory->Get("THT11");  
   //DR Higgs jets histo recollection
-  TH1F *QCDTprimeMassDRHJ=(TH1F*)gDirectory->Get("DeltaR_of_Higgs_Jets10");
+  TH1F *QCDTprimeMassDRHJ=(TH1F*)gDirectory->Get("DeltaR_of_Higgs_Jets11");
   //DR W jets histo recollection
-  TH1F *QCDTprimeMassDRWJ=(TH1F*)gDirectory->Get("DeltaR_of_W_Jets10");
+  TH1F *QCDTprimeMassDRWJ=(TH1F*)gDirectory->Get("DeltaR_of_W_Jets11");
   //Higgs PT histo recollection
-  TH1F *QCDTprimeMassHPT=(TH1F*)gDirectory->Get("HPt10");
+  TH1F *QCDTprimeMassHPT=(TH1F*)gDirectory->Get("HPt11");
   //Top PT histo recollection
-  TH1F *QCDTprimeMassTPT=(TH1F*)gDirectory->Get("TPt10");
+  TH1F *QCDTprimeMassTPT=(TH1F*)gDirectory->Get("TPt11");
   //DR W Higgs histo recollection
-  TH1F *QCDTprimeMassDRWH=(TH1F*)gDirectory->Get("DeltaR_of_W_Higgs10");
+  TH1F *QCDTprimeMassDRWH=(TH1F*)gDirectory->Get("DeltaR_of_W_Higgs11");
   //DP Higgs jets histo recollection
-  TH1F *QCDTprimeMassDPHJ=(TH1F*)gDirectory->Get("DeltaPhi_of_Higgs_jets10");
+  TH1F *QCDTprimeMassDPHJ=(TH1F*)gDirectory->Get("DeltaPhi_of_Higgs_jets11");
   //DP W jets histo recollection
-  TH1F *QCDTprimeMassDPWJ=(TH1F*)gDirectory->Get("DeltaPhi_of_W_jets10");
+  TH1F *QCDTprimeMassDPWJ=(TH1F*)gDirectory->Get("DeltaPhi_of_W_jets11");
   //DP Top jet histo recollection
-  TH1F *QCDTprimeMassDPTJ=(TH1F*)gDirectory->Get("DeltaPhi_of_T_jet10");
+  TH1F *QCDTprimeMassDPTJ=(TH1F*)gDirectory->Get("DeltaPhi_of_T_jet11");
   //Higgs Mass histo recollection
-  TH1F *QCDTprimeMassHM=(TH1F*)gDirectory->Get("HM10");
+  TH1F *QCDTprimeMassHM=(TH1F*)gDirectory->Get("HM11");
   //Relative HT histo recollection
-  TH1F *QCDTprimeMassRelHT=(TH1F*)gDirectory->Get("RelHT10");
+  TH1F *QCDTprimeMassRelHT=(TH1F*)gDirectory->Get("RelHT11");
   //DR Top Higgs histo recollection
-  TH1F *QCDTprimeMassDRTH=(TH1F*)gDirectory->Get("DeltaR_of_Top_Higgs10");
+  TH1F *QCDTprimeMassDRTH=(TH1F*)gDirectory->Get("DeltaR_of_Top_Higgs11");
   //PT Normalized Mass histo recollection
-  TH1F *QCDTprimeMassPTNM=(TH1F*)gDirectory->Get("PT_Normalized_Mass10");
+  TH1F *QCDTprimeMassPTNM=(TH1F*)gDirectory->Get("PT_Normalized_Mass11");
   //Relative Mass histo recollection
-  TH1F *QCDTprimeMassRM=(TH1F*)gDirectory->Get("Relative_Mass10");
+  TH1F *QCDTprimeMassRM=(TH1F*)gDirectory->Get("Relative_Mass11");
   //Mother PT Normalized Mass histo recollection
-  TH1F *QCDTprimeMassMPTNM=(TH1F*)gDirectory->Get("Mother_PT_Normalized_Mass10");
+  TH1F *QCDTprimeMassMPTNM=(TH1F*)gDirectory->Get("Mother_PT_Normalized_Mass11");
   //Number of Tops histo recollection
-  TH1F *QCDTprimeMassNT=(TH1F*)gDirectory->Get("Number_of_Tops10");
+  TH1F *QCDTprimeMassNT=(TH1F*)gDirectory->Get("Number_of_Tops11");
   //Higgs Mass over Top Mass histo recollection
-  TH1F *QCDTprimeMassHMTM=(TH1F*)gDirectory->Get("HMoverTM10");
+  TH1F *QCDTprimeMassHMTM=(TH1F*)gDirectory->Get("HMoverTM11");
   //Higgs Top Asym histo recollection
-  TH1F *QCDTprimeMassHTAsym=(TH1F*)gDirectory->Get("HTAsym10");
+  TH1F *QCDTprimeMassHTAsym=(TH1F*)gDirectory->Get("HTAsym11");
   //Number of loose and non medium b-tag histo recollection
-  TH1F *QCDTprimeMassTLBT=(TH1F*)gDirectory->Get("TLBTag10");
+  TH1F *QCDTprimeMassTLBT=(TH1F*)gDirectory->Get("TLBTag11");
   //Top Mass histo recollection
-  TH1F *QCDTprimeMassTM=(TH1F*)gDirectory->Get("TMass10");
+  TH1F *QCDTprimeMassTM=(TH1F*)gDirectory->Get("TMass11");
   //Chi2 histo recollection
-  TH1F *QCDTprimeMassChi2=(TH1F*)gDirectory->Get("ChiSq10");
+  TH1F *QCDTprimeMassChi2=(TH1F*)gDirectory->Get("ChiSq11");
+  //U quark content histo recollection
+  TH1F *QCDTprimeMassUQC=(TH1F*)gDirectory->Get("UQC11");
+  //D quark content histo recollection
+  TH1F *QCDTprimeMassDQC=(TH1F*)gDirectory->Get("DQC11");
+  //S quark content histo recollection
+  TH1F *QCDTprimeMassSQC=(TH1F*)gDirectory->Get("SQC11");
+  //C quark content histo recollection
+  TH1F *QCDTprimeMassCQC=(TH1F*)gDirectory->Get("CQC11");
+  //B quark content histo recollection
+  TH1F *QCDTprimeMassBQC=(TH1F*)gDirectory->Get("BQC11");  
   for (int k=ParcialTestMin; k<ParcialTestMax; k++)
     {
       if (!SurvivalMarker[k]) continue;
@@ -407,6 +450,11 @@ void QCD()
       ThirdLooseBtag[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
       TopMass[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
       Chi2[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      UQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      DQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      SQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      CQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
+      BQuarkContent[k]->Scale(Lumi*XS[k]/EntriePerSample[k]);
       //Settings for QCD
       if (k>=10 && k<=14)
 	{
@@ -438,6 +486,11 @@ void QCD()
 	  ThirdLooseBtag[k]->SetFillColor(kViolet);
 	  TopMass[k]->SetFillColor(kViolet);
 	  Chi2[k]->SetFillColor(kViolet);
+	  UQuarkContent[k]->SetFillColor(kViolet);
+	  DQuarkContent[k]->SetFillColor(kViolet);
+	  SQuarkContent[k]->SetFillColor(kViolet);
+	  CQuarkContent[k]->SetFillColor(kViolet);
+	  BQuarkContent[k]->SetFillColor(kViolet);
 	  if (k!=10) 
 	    {
 	      QCDTprimeMass->Add(FiveJetsMass[k]);
@@ -468,8 +521,13 @@ void QCD()
 	      QCDTprimeMassTLBT->Add(ThirdLooseBtag[k]);
 	      QCDTprimeMassTM->Add(TopMass[k]);
 	      QCDTprimeMassChi2->Add(Chi2[k]);
+	      QCDTprimeMassUQC->Add(UQuarkContent[k]);
+	      QCDTprimeMassDQC->Add(DQuarkContent[k]);
+	      QCDTprimeMassSQC->Add(SQuarkContent[k]);
+	      QCDTprimeMassCQC->Add(CQuarkContent[k]);
+	      QCDTprimeMassBQC->Add(BQuarkContent[k]);
 	    }
-	  if (k==14)
+	  if (k==12)
 	    {
 	      TFile f("QCD.root", "RECREATE"); 
 	      QCDTprimeMass->Write();
@@ -500,6 +558,11 @@ void QCD()
 	      QCDTprimeMassTLBT->Write();
 	      QCDTprimeMassTM->Write();
 	      QCDTprimeMassChi2->Write();
+	      QCDTprimeMassUQC->Write();
+	      QCDTprimeMassDQC->Write();
+	      QCDTprimeMassSQC->Write();
+	      QCDTprimeMassCQC->Write();
+	      QCDTprimeMassBQC->Write();
 	    }
 	}
     }

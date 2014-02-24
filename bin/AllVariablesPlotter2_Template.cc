@@ -54,6 +54,11 @@ void AllVariablesPlotter2()
   TH1F *ThirdLooseBtag[NOS];
   TH1F *TopMass[NOS];
   TH1F *Chi2[NOS];
+  TH1F *UQuarkContent[NOS];
+  TH1F *DQuarkContent[NOS];
+  TH1F *SQuarkContent[NOS];
+  TH1F *CQuarkContent[NOS];
+  TH1F *BQuarkContent[NOS];
   //TH2F *HptTpt[NOS];
   
   for (int i=0; i<NOS; i++)
@@ -90,6 +95,11 @@ void AllVariablesPlotter2()
 	  ThirdLooseBtag[0]->SetDefaultSumw2();ThirdLooseBtag[0]= (TH1F*)gDirectory->Get("TLBTag4");
 	  TopMass[0]->SetDefaultSumw2(); TopMass[0]= (TH1F*)gDirectory->Get("TMass4");
 	  Chi2[0]->SetDefaultSumw2(); Chi2[0]= (TH1F*)gDirectory->Get("ChiSq4");
+	  UQuarkContent[0]->SetDefaultSumw2(); UQuarkContent[0]= (TH1F*)gDirectory->Get("UQC4");
+	  DQuarkContent[0]->SetDefaultSumw2(); DQuarkContent[0]= (TH1F*)gDirectory->Get("DQC4");
+	  SQuarkContent[0]->SetDefaultSumw2(); SQuarkContent[0]= (TH1F*)gDirectory->Get("SQC4");
+	  CQuarkContent[0]->SetDefaultSumw2(); CQuarkContent[0]= (TH1F*)gDirectory->Get("CQC4");
+	  BQuarkContent[0]->SetDefaultSumw2(); BQuarkContent[0]= (TH1F*)gDirectory->Get("BQC4");
 	}
       else if (i==1) 
 	{
@@ -121,37 +131,47 @@ void AllVariablesPlotter2()
 	  ThirdLooseBtag[1]->SetDefaultSumw2();ThirdLooseBtag[1]= (TH1F*)gDirectory->Get("TLBTag9");
 	  TopMass[1]->SetDefaultSumw2(); TopMass[1]= (TH1F*)gDirectory->Get("TMass9");
 	  Chi2[1]->SetDefaultSumw2(); Chi2[1]= (TH1F*)gDirectory->Get("ChiSq9");
+	  UQuarkContent[1]->SetDefaultSumw2(); UQuarkContent[1]= (TH1F*)gDirectory->Get("UQC9");
+	  DQuarkContent[1]->SetDefaultSumw2(); DQuarkContent[1]= (TH1F*)gDirectory->Get("DQC9");
+	  SQuarkContent[1]->SetDefaultSumw2(); SQuarkContent[1]= (TH1F*)gDirectory->Get("SQC9");
+	  CQuarkContent[1]->SetDefaultSumw2(); CQuarkContent[1]= (TH1F*)gDirectory->Get("CQC9");
+	  BQuarkContent[1]->SetDefaultSumw2(); BQuarkContent[1]= (TH1F*)gDirectory->Get("BQC9");
 	}
       else if (i==2) 
 	{
-	  TprimeHistos[2]->SetDefaultSumw2(); TprimeHistos[2]= (TH1F*)gDirectory->Get("TprimeMass10");
-	  LeadingJetPT[2]->SetDefaultSumw2(); LeadingJetPT[2]= (TH1F*)gDirectory->Get("jet1_pt10");
-	  Leading2JetPT[2]->SetDefaultSumw2(); Leading2JetPT[2]= (TH1F*)gDirectory->Get("jet2_pt10");
-	  Leading3JetPT[2]->SetDefaultSumw2(); Leading3JetPT[2]= (TH1F*)gDirectory->Get("jet3_pt10");
-	  Leading4JetPT[2]->SetDefaultSumw2(); Leading4JetPT[2]= (TH1F*)gDirectory->Get("jet4_pt10");
-	  Leading5JetPT[2]->SetDefaultSumw2(); Leading5JetPT[2]= (TH1F*)gDirectory->Get("jet5_pt10");
-	  Leading6JetPT[2]->SetDefaultSumw2(); Leading6JetPT[2]= (TH1F*)gDirectory->Get("jet6_pt10");
-	  THT[2]->SetDefaultSumw2(); THT[2]= (TH1F*)gDirectory->Get("THT10");
-	  DRHjets[2]->SetDefaultSumw2(); DRHjets[2]= (TH1F*)gDirectory->Get("DeltaR_of_Higgs_Jets10");
-	  DRWjets[2]->SetDefaultSumw2(); DRWjets[2]= (TH1F*)gDirectory->Get("DeltaR_of_W_Jets10");
-	  Hpt[2]->SetDefaultSumw2(); Hpt[2]= (TH1F*)gDirectory->Get("HPt10");
-	  Tpt[2]->SetDefaultSumw2(); Tpt[2]= (TH1F*)gDirectory->Get("TPt10");
-	  DRWH[2]->SetDefaultSumw2(); DRWH[2]= (TH1F*)gDirectory->Get("DeltaR_of_W_Higgs10");
-	  DPHjets[2]->SetDefaultSumw2(); DPHjets[2]= (TH1F*)gDirectory->Get("DeltaPhi_of_Higgs_jets10");
-	  DPWjets[2]->SetDefaultSumw2(); DPWjets[2]= (TH1F*)gDirectory->Get("DeltaPhi_of_W_jets10");
-	  DPTjets[2]->SetDefaultSumw2(); DPTjets[2]= (TH1F*)gDirectory->Get("DeltaPhi_of_T_jet10");
-	  HiggsMass[2]->SetDefaultSumw2(); HiggsMass[2]= (TH1F*)gDirectory->Get("HM10");
-	  RelHT[2]->SetDefaultSumw2(); RelHT[2]= (TH1F*)gDirectory->Get("RelHT10");
-	  DRTH[2]->SetDefaultSumw2(); DRTH[2]= (TH1F*)gDirectory->Get("DeltaR_of_Top_Higgs10");
-	  PtNormalizedMass[2]->SetDefaultSumw2(); PtNormalizedMass[2]= (TH1F*)gDirectory->Get("PT_Normalized_Mass10");
-	  RelativeMass[2]->SetDefaultSumw2(); RelativeMass[2]= (TH1F*)gDirectory->Get("Relative_Mass10");
-	  MotherPtNormalizedMass[2]->SetDefaultSumw2(); MotherPtNormalizedMass[2]= (TH1F*)gDirectory->Get("Mother_PT_Normalized_Mass10");
-	  NumberOfTops[2]->SetDefaultSumw2();NumberOfTops[2]= (TH1F*)gDirectory->Get("Number_of_Tops10");
-	  HiggsMassOverTopMass[2]->SetDefaultSumw2();HiggsMassOverTopMass[2]= (TH1F*)gDirectory->Get("HMoverTM10");
-	  HiggsTopAsymmetry[2]->SetDefaultSumw2();HiggsTopAsymmetry[2]= (TH1F*)gDirectory->Get("HTAsym10");
-	  ThirdLooseBtag[2]->SetDefaultSumw2();ThirdLooseBtag[2]= (TH1F*)gDirectory->Get("TLBTag10");
-	  TopMass[2]->SetDefaultSumw2(); TopMass[2]= (TH1F*)gDirectory->Get("TMass10");
-	  Chi2[2]->SetDefaultSumw2(); Chi2[2]= (TH1F*)gDirectory->Get("ChiSq10");
+	  TprimeHistos[2]->SetDefaultSumw2(); TprimeHistos[2]= (TH1F*)gDirectory->Get("TprimeMass11");
+	  LeadingJetPT[2]->SetDefaultSumw2(); LeadingJetPT[2]= (TH1F*)gDirectory->Get("jet1_pt11");
+	  Leading2JetPT[2]->SetDefaultSumw2(); Leading2JetPT[2]= (TH1F*)gDirectory->Get("jet2_pt11");
+	  Leading3JetPT[2]->SetDefaultSumw2(); Leading3JetPT[2]= (TH1F*)gDirectory->Get("jet3_pt11");
+	  Leading4JetPT[2]->SetDefaultSumw2(); Leading4JetPT[2]= (TH1F*)gDirectory->Get("jet4_pt11");
+	  Leading5JetPT[2]->SetDefaultSumw2(); Leading5JetPT[2]= (TH1F*)gDirectory->Get("jet5_pt11");
+	  Leading6JetPT[2]->SetDefaultSumw2(); Leading6JetPT[2]= (TH1F*)gDirectory->Get("jet6_pt11");
+	  THT[2]->SetDefaultSumw2(); THT[2]= (TH1F*)gDirectory->Get("THT11");
+	  DRHjets[2]->SetDefaultSumw2(); DRHjets[2]= (TH1F*)gDirectory->Get("DeltaR_of_Higgs_Jets11");
+	  DRWjets[2]->SetDefaultSumw2(); DRWjets[2]= (TH1F*)gDirectory->Get("DeltaR_of_W_Jets11");
+	  Hpt[2]->SetDefaultSumw2(); Hpt[2]= (TH1F*)gDirectory->Get("HPt11");
+	  Tpt[2]->SetDefaultSumw2(); Tpt[2]= (TH1F*)gDirectory->Get("TPt11");
+	  DRWH[2]->SetDefaultSumw2(); DRWH[2]= (TH1F*)gDirectory->Get("DeltaR_of_W_Higgs11");
+	  DPHjets[2]->SetDefaultSumw2(); DPHjets[2]= (TH1F*)gDirectory->Get("DeltaPhi_of_Higgs_jets11");
+	  DPWjets[2]->SetDefaultSumw2(); DPWjets[2]= (TH1F*)gDirectory->Get("DeltaPhi_of_W_jets11");
+	  DPTjets[2]->SetDefaultSumw2(); DPTjets[2]= (TH1F*)gDirectory->Get("DeltaPhi_of_T_jet11");
+	  HiggsMass[2]->SetDefaultSumw2(); HiggsMass[2]= (TH1F*)gDirectory->Get("HM11");
+	  RelHT[2]->SetDefaultSumw2(); RelHT[2]= (TH1F*)gDirectory->Get("RelHT11");
+	  DRTH[2]->SetDefaultSumw2(); DRTH[2]= (TH1F*)gDirectory->Get("DeltaR_of_Top_Higgs11");
+	  PtNormalizedMass[2]->SetDefaultSumw2(); PtNormalizedMass[2]= (TH1F*)gDirectory->Get("PT_Normalized_Mass11");
+	  RelativeMass[2]->SetDefaultSumw2(); RelativeMass[2]= (TH1F*)gDirectory->Get("Relative_Mass11");
+	  MotherPtNormalizedMass[2]->SetDefaultSumw2(); MotherPtNormalizedMass[2]= (TH1F*)gDirectory->Get("Mother_PT_Normalized_Mass11");
+	  NumberOfTops[2]->SetDefaultSumw2();NumberOfTops[2]= (TH1F*)gDirectory->Get("Number_of_Tops11");
+	  HiggsMassOverTopMass[2]->SetDefaultSumw2();HiggsMassOverTopMass[2]= (TH1F*)gDirectory->Get("HMoverTM11");
+	  HiggsTopAsymmetry[2]->SetDefaultSumw2();HiggsTopAsymmetry[2]= (TH1F*)gDirectory->Get("HTAsym11");
+	  ThirdLooseBtag[2]->SetDefaultSumw2();ThirdLooseBtag[2]= (TH1F*)gDirectory->Get("TLBTag11");
+	  TopMass[2]->SetDefaultSumw2(); TopMass[2]= (TH1F*)gDirectory->Get("TMass11");
+	  Chi2[2]->SetDefaultSumw2(); Chi2[2]= (TH1F*)gDirectory->Get("ChiSq11");
+	  UQuarkContent[2]->SetDefaultSumw2(); UQuarkContent[2]= (TH1F*)gDirectory->Get("UQC11");
+	  DQuarkContent[2]->SetDefaultSumw2(); DQuarkContent[2]= (TH1F*)gDirectory->Get("DQC11");
+	  SQuarkContent[2]->SetDefaultSumw2(); SQuarkContent[2]= (TH1F*)gDirectory->Get("SQC11");
+	  CQuarkContent[2]->SetDefaultSumw2(); CQuarkContent[2]= (TH1F*)gDirectory->Get("CQC11");
+	  BQuarkContent[2]->SetDefaultSumw2(); BQuarkContent[2]= (TH1F*)gDirectory->Get("BQC11");
 	}
       else if (i==3) 
 	{
@@ -183,20 +203,49 @@ void AllVariablesPlotter2()
 	  ThirdLooseBtag[3]->SetDefaultSumw2();ThirdLooseBtag[3]= (TH1F*)gDirectory->Get("TLBTag15");
 	  TopMass[3]->SetDefaultSumw2(); TopMass[3]= (TH1F*)gDirectory->Get("TMass15");	 
 	  Chi2[3]->SetDefaultSumw2(); Chi2[3]= (TH1F*)gDirectory->Get("ChiSq15"); 
+	  UQuarkContent[3]->SetDefaultSumw2(); UQuarkContent[3]= (TH1F*)gDirectory->Get("UQC15");
+	  DQuarkContent[3]->SetDefaultSumw2(); DQuarkContent[3]= (TH1F*)gDirectory->Get("DQC15");
+	  SQuarkContent[3]->SetDefaultSumw2(); SQuarkContent[3]= (TH1F*)gDirectory->Get("SQC15");
+	  CQuarkContent[3]->SetDefaultSumw2(); CQuarkContent[3]= (TH1F*)gDirectory->Get("CQC15");
+	  BQuarkContent[3]->SetDefaultSumw2(); BQuarkContent[3]= (TH1F*)gDirectory->Get("BQC15");
 	}
       //CurrentFile[i]->Close();
     }
 
   //Calculation of Estimator
-  double bkg[3]={0,0,0};
+  double bkg[11][3]; //={0,0,0};
   double sig=0;
+  float massStep=50;
+  float IntegrationSigma=20;
 
   sig=TprimeHistos[3]->Integral(TprimeHistos[3]->GetXaxis()->FindBin(710),TprimeHistos[3]->GetXaxis()->FindBin(750));
-  for (int k=0; k<3; k++) bkg[k]=TprimeHistos[k]->Integral(TprimeHistos[k]->GetXaxis()->FindBin(710),TprimeHistos[k]->GetXaxis()->FindBin(750));
-  
-  cout << "Estimator under the peak!" << endl;
-  cout << "Number of signal events: " << sig << ", Number of BKG events: " << bkg[0]+bkg[1]+bkg[2] << ", S/sqrt(S+B)=" << sig/sqrt(sig+bkg[0]+bkg[1]+bkg[2]) << endl;
+  for (int i=0; i<10; i++)
+    {
+      for (int k=0; k<3; k++)
+	{
+	  bkg[i][k]=0;
+	  bkg[i][k]=TprimeHistos[k]->Integral(TprimeHistos[k]->GetXaxis()->FindBin(550+(i*massStep)-IntegrationSigma),TprimeHistos[k]->GetXaxis()->FindBin(550+(i*massStep)+IntegrationSigma));
+	}
+    }
+  for (int k=0; k<3; k++)
+    {
+      bkg[10][k]=0;
+      bkg[10][k]=TprimeHistos[k]->Integral(TprimeHistos[k]->GetXaxis()->FindBin(734-IntegrationSigma),TprimeHistos[k]->GetXaxis()->FindBin(734+IntegrationSigma));
+    }
 
+  cout << "Estimator under the peak!" << endl;
+  cout << "Number of signal events: " << sig << ", Number of BKG events: " << bkg[10][0]+bkg[10][1]+bkg[10][2] << ", S/sqrt(S+B)=" << sig/sqrt(sig+bkg[10][0]+bkg[10][1]+bkg[10][2]) << endl;
+  double estimatedSig[10]={0,0,0,0,0,0,0,0,0,0};
+  double principalXs=150;
+  double Xsections[10]={280,225,179,144,120,98,84,70,61,52};
+  double LostEfficiency[4]={0.9*0.9*0.9*0.9,0.9*0.9*0.9,0.9*0.9,0.9};
+  for (int i=0; i<10; i++)
+    {
+      if (Xsections[i]<principalXs) estimatedSig[i]=sig*Xsections[i]/principalXs;
+      else estimatedSig[i]=sig*LostEfficiency[i]*Xsections[i]/principalXs;
+      cout << "Number of signal events: " << estimatedSig[i] <<  ", and Number of BKG events for " << i << " mass point: " << bkg[i][0]+bkg[i][1]+bkg[i][2] << ", S/sqrt(S+B)=" << estimatedSig[i]/sqrt(estimatedSig[i]+bkg[i][0]+bkg[i][1]+bkg[i][2]) << endl;
+    }  
+  
   double bkgFR[3]={0,0,0};
   double sigFR=0;
 
@@ -233,7 +282,12 @@ void AllVariablesPlotter2()
   THStack *BKGHTAsym= new THStack("BKGHTAsym", "BKG for Higgs-Top Assymetry; (H_{PT}/M_{H}-t_{PT}/M_{t})/(H_{PT}/M_{H}+t_{PT}/M_{t}); Events");
   THStack *BKGTLBT= new THStack("BKGTLBT", "BKG for Third loose b-tag; n^{CSVLnotCSVM}_b; Events");
   THStack *BKGTopMass= new THStack("BKGTopMass", "BKG for TopMass; M_{t} GeV; Events");  
-  THStack *BKGChi2= new THStack("BKGChi2", "BKG for Chi2; #Chi^{2}; Events");
+  THStack *BKGChi2= new THStack("BKGChi2", "BKG for Chi2; #Chi^{2}; Events"); 
+  THStack *BKGUQC= new THStack("BKGUQC", "BKG for UQC; N_{u}; Events");
+  THStack *BKGDQC= new THStack("BKGDQC", "BKG for DQC; N_{d}; Events");
+  THStack *BKGSQC= new THStack("BKGSQC", "BKG for SQC; N_{s}; Events");
+  THStack *BKGCQC= new THStack("BKGCQC", "BKG for CQC; N_{c}; Events");
+  THStack *BKGBQC= new THStack("BKGBQC", "BKG for BQC; N_{b}; Events");
   cout << "1 Marker" << endl;
   for (int i=0; i<NOS; i++)
     {
@@ -269,6 +323,11 @@ void AllVariablesPlotter2()
 	  BKGTLBT->Add(ThirdLooseBtag[i]);
 	  BKGTopMass->Add(TopMass[i]);
 	  BKGChi2->Add(Chi2[i]);
+	  BKGUQC->Add(UQuarkContent[i]);
+	  BKGDQC->Add(DQuarkContent[i]);
+	  BKGSQC->Add(SQuarkContent[i]);
+	  BKGCQC->Add(CQuarkContent[i]);
+	  BKGBQC->Add(BQuarkContent[i]);
 	}
     }
   cout << "2 Marker" << endl;
@@ -665,13 +724,83 @@ void AllVariablesPlotter2()
   //////////////
   //////////////
   //////////////
-  MyPlot->Clear();
+  /*MyPlot->Clear();
   MyPlot->cd(1);
   ps->NewPage();
   BKGChi2->Draw("hist");
   Chi2[3]->Draw("histsame");
   gPad->SetLogy();
   BKGChi2->SetMinimum(0.1);
+  BKGandSignallegend->Draw();
+  gPad->RedrawAxis("");
+  gPad->Update();
+  MyPlot->Update();*/
+  //////////////
+  //////////////
+  //////////////
+  MyPlot->Clear();
+  MyPlot->cd(1);
+  ps->NewPage();
+  BKGUQC->Draw("hist");
+  UQuarkContent[3]->Draw("histsame");
+  gPad->SetLogy();
+  BKGUQC->SetMinimum(0.1);
+  BKGandSignallegend->Draw();
+  gPad->RedrawAxis("");
+  gPad->Update();
+  MyPlot->Update();
+  //////////////
+  //////////////
+  //////////////
+  MyPlot->Clear();
+  MyPlot->cd(1);
+  ps->NewPage();
+  BKGDQC->Draw("hist");
+  DQuarkContent[3]->Draw("histsame");
+  gPad->SetLogy();
+  BKGDQC->SetMinimum(0.1);
+  BKGandSignallegend->Draw();
+  gPad->RedrawAxis("");
+  gPad->Update();
+  MyPlot->Update();
+  //////////////
+  //////////////
+  //////////////
+  MyPlot->Clear();
+  MyPlot->cd(1);
+  ps->NewPage();
+  BKGSQC->Draw("hist");
+  SQuarkContent[3]->Draw("histsame");
+  gPad->SetLogy();
+  BKGSQC->SetMinimum(0.1);
+  BKGandSignallegend->Draw();
+  gPad->RedrawAxis("");
+  gPad->Update();
+  MyPlot->Update();
+  //////////////
+  //////////////
+  //////////////
+  MyPlot->Clear();
+  MyPlot->cd(1);
+  ps->NewPage();
+  BKGCQC->Draw("hist");
+  CQuarkContent[3]->Draw("histsame");
+  gPad->SetLogy();
+  BKGCQC->SetMinimum(0.1);
+  BKGandSignallegend->Draw();
+  gPad->RedrawAxis("");
+  gPad->Update();
+  MyPlot->Update();
+  //////////////
+  //////////////
+  //////////////
+  MyPlot->Clear();
+  MyPlot->cd(1);
+  ps->NewPage();
+  BKGBQC->Draw("hist");
+  BQuarkContent[3]->Draw("histsame");
+  gPad->SetLogy();
+  BKGBQC->SetMinimum(0.1);
   BKGandSignallegend->Draw();
   gPad->RedrawAxis("");
   gPad->Update();

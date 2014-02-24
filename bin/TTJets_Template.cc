@@ -89,6 +89,11 @@ void TTJets()
   TH1F *ThirdLooseBtag;
   TH1F *TopMass;
   TH1F *Chi2;
+  TH1F *UQuarkContent;
+  TH1F *DQuarkContent;
+  TH1F *SQuarkContent;
+  TH1F *CQuarkContent;
+  TH1F *BQuarkContent;
   int EntriePerSample;
   bool SurvivalMarker;
 
@@ -287,6 +292,36 @@ void TTJets()
       AnalysisChain.Draw(C21.c_str());
       Chi2 = (TH1F*)gDirectory->Get(C22.c_str());
       gPad->Close();
+      //
+      string UQ1 = Form("U Quark Content >> UQC%i(10,0,10)",9);
+      string UQ2 = Form("UQC%i",9);
+      AnalysisChain.Draw(UQ1.c_str());
+      UQuarkContent = (TH1F*)gDirectory->Get(UQ2.c_str());
+      gPad->Close();
+      //
+      string DQ1 = Form("D Quark Content >> DQC%i(10,0,10)",9);
+      string DQ2 = Form("DQC%i",9);
+      AnalysisChain.Draw(DQ1.c_str());
+      DQuarkContent = (TH1F*)gDirectory->Get(DQ2.c_str());
+      gPad->Close();
+      //
+      string SQ1 = Form("S Quark Content >> SQC%i(10,0,10)",9);
+      string SQ2 = Form("SQC%i",9);
+      AnalysisChain.Draw(SQ1.c_str());
+      SQuarkContent = (TH1F*)gDirectory->Get(SQ2.c_str());
+      gPad->Close();
+      //
+      string CQ1 = Form("C Quark Content >> CQC%i(10,0,10)",9);
+      string CQ2 = Form("CQC%i",9);
+      AnalysisChain.Draw(CQ1.c_str());
+      CQuarkContent = (TH1F*)gDirectory->Get(CQ2.c_str());
+      gPad->Close();
+      //
+      string BQ1 = Form("B Quark Content >> BQC%i(10,0,10)",9);
+      string BQ2 = Form("BQC%i",9);
+      AnalysisChain.Draw(BQ1.c_str());
+      BQuarkContent = (TH1F*)gDirectory->Get(BQ2.c_str());
+      gPad->Close();
     }
     
   FiveJetsMass->Scale(Lumi*XS/EntriePerSample);
@@ -317,6 +352,11 @@ void TTJets()
   ThirdLooseBtag->Scale(Lumi*XS/EntriePerSample);
   TopMass->Scale(Lumi*XS/EntriePerSample);
   Chi2->Scale(Lumi*XS/EntriePerSample);
+  UQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  DQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  SQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  CQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  BQuarkContent->Scale(Lumi*XS/EntriePerSample);
   
   if (SurvivalMarker) 
     {
@@ -377,6 +417,16 @@ void TTJets()
       TopMass->SetFillStyle(3345);
       Chi2->SetFillColor(kRed);
       Chi2->SetFillStyle(3345);
+      UQuarkContent->SetFillColor(kRed);
+      UQuarkContent->SetFillStyle(3345);
+      DQuarkContent->SetFillColor(kRed);
+      DQuarkContent->SetFillStyle(3345);
+      SQuarkContent->SetFillColor(kRed);
+      SQuarkContent->SetFillStyle(3345);
+      CQuarkContent->SetFillColor(kRed);
+      CQuarkContent->SetFillStyle(3345);
+      BQuarkContent->SetFillColor(kRed);
+      BQuarkContent->SetFillStyle(3345);
       TFile f("TTJets.root", "RECREATE");
       FiveJetsMass->Write();
       LeadingJetPT->Write();
@@ -406,6 +456,11 @@ void TTJets()
       ThirdLooseBtag->Write();
       TopMass->Write();
       Chi2->Write();
+      UQuarkContent->Write();
+      DQuarkContent->Write();
+      SQuarkContent->Write();
+      CQuarkContent->Write();
+      BQuarkContent->Write();
     }
 
   exit(0);

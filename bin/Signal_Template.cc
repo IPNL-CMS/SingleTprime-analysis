@@ -87,6 +87,11 @@ void Signal()
   TH2F *HptTpt;
   TH1F *TopMass;
   TH1F *Chi2;
+  TH1F *UQuarkContent;
+  TH1F *DQuarkContent;
+  TH1F *SQuarkContent;
+  TH1F *CQuarkContent;
+  TH1F *BQuarkContent;
   
   int EntriePerSample;
   bool SurvivalMarker;
@@ -319,8 +324,38 @@ void Signal()
       AnalysisChain.Draw(C21.c_str());
       Chi2 = (TH1F*)gDirectory->Get(C22.c_str());
       gPad->Close();
+      //
+      string UQ1 = Form("U Quark Content >> UQC%i(10,0,10)",15);
+      string UQ2 = Form("UQC%i",15);
+      AnalysisChain.Draw(UQ1.c_str());
+      UQuarkContent = (TH1F*)gDirectory->Get(UQ2.c_str());
+      gPad->Close();
+      //
+      string DQ1 = Form("D Quark Content >> DQC%i(10,0,10)",15);
+      string DQ2 = Form("DQC%i",15);
+      AnalysisChain.Draw(DQ1.c_str());
+      DQuarkContent = (TH1F*)gDirectory->Get(DQ2.c_str());
+      gPad->Close();
+      //
+      string SQ1 = Form("S Quark Content >> SQC%i(10,0,10)",15);
+      string SQ2 = Form("SQC%i",15);
+      AnalysisChain.Draw(SQ1.c_str());
+      SQuarkContent = (TH1F*)gDirectory->Get(SQ2.c_str());
+      gPad->Close();
+      //
+      string CQ1 = Form("C Quark Content >> CQC%i(10,0,10)",15);
+      string CQ2 = Form("CQC%i",15);
+      AnalysisChain.Draw(CQ1.c_str());
+      CQuarkContent = (TH1F*)gDirectory->Get(CQ2.c_str());
+      gPad->Close();
+      //
+      string BQ1 = Form("B Quark Content >> BQC%i(10,0,10)",15);
+      string BQ2 = Form("BQC%i",15);
+      AnalysisChain.Draw(BQ1.c_str());
+      BQuarkContent = (TH1F*)gDirectory->Get(BQ2.c_str());
+      gPad->Close();
     }
-    
+  
   FiveJetsMass->Scale(Lumi*XS/EntriePerSample);
   LeadingJetPT->Scale(Lumi*XS/EntriePerSample);
   Leading2JetPT->Scale(Lumi*XS/EntriePerSample);
@@ -350,6 +385,11 @@ void Signal()
   ThirdLooseBtag->Scale(Lumi*XS/EntriePerSample);
   TopMass->Scale(Lumi*XS/EntriePerSample);
   Chi2->Scale(Lumi*XS/EntriePerSample);
+  UQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  DQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  SQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  CQuarkContent->Scale(Lumi*XS/EntriePerSample);
+  BQuarkContent->Scale(Lumi*XS/EntriePerSample);
   
   //Settings for signal
   if (SurvivalMarker)
@@ -495,6 +535,31 @@ void Signal()
       Chi2->SetFillStyle(3444);
       Chi2->SetLineWidth(3);
       Chi2->Write();
+      //
+      UQuarkContent->SetFillColor(kSpring);
+      UQuarkContent->SetFillStyle(3444);
+      UQuarkContent->SetLineWidth(3);
+      UQuarkContent->Write();
+      //
+      DQuarkContent->SetFillColor(kSpring);
+      DQuarkContent->SetFillStyle(3444);
+      DQuarkContent->SetLineWidth(3);
+      DQuarkContent->Write();
+      //
+      SQuarkContent->SetFillColor(kSpring);
+      SQuarkContent->SetFillStyle(3444);
+      SQuarkContent->SetLineWidth(3);
+      SQuarkContent->Write();
+      //
+      CQuarkContent->SetFillColor(kSpring);
+      CQuarkContent->SetFillStyle(3444);
+      CQuarkContent->SetLineWidth(3);
+      CQuarkContent->Write();
+      //
+      BQuarkContent->SetFillColor(kSpring);
+      BQuarkContent->SetFillStyle(3444);
+      BQuarkContent->SetLineWidth(3);
+      BQuarkContent->Write();
     }
 
   exit(0);
