@@ -39,22 +39,29 @@ namespace patextractor {
     bool isJetAccepSel(TLorentzVector *jet);
     bool isJetForwSel(TLorentzVector *jet);
     int  SingleTprime_Sel();
+    int  SingleTprime_Sel2M1L();
     int patIndexToExtractorIndex(int patIndex) const;
 
     void MCidentification();
     void reset();
     void fillTree();
-    
+    void fillTree2M1L();
+
   private:
-    int j;
+    //int j;
 
     TTree* m_tree_stp;
     TTree* m_tree_cuts;
-    
+    TTree* m_tree_stp2M1L;
+    //TTree* m_tree_cuts2M1L;    
+
     int m_evt;
     int m_nPU; //PileUp
     int evt_num;
-    
+    int n_vtx;
+    int n_TrueInteractions;
+
+    int n_jets;    
     float m_THT;
     float m_jet1pt;
     float m_jet2pt;
@@ -80,10 +87,14 @@ namespace patextractor {
     float m_DRTrueTopJetRecoJet;   
     float m_DP2LeadingJets;
 
+    float DRWjetsFromHiggsChi2;
+    float DRWbFromHiggsChi2;
+
     float RelMass;
     float PTNormalizedMass;
     float MotherPTNormalizedMass;
     int NumberOfTops;
+    int NumberOfHiggses;
     int LooseNoMedBtags;
     float chi2;
 
@@ -92,6 +103,15 @@ namespace patextractor {
     int SQuarkContent;
     int CQuarkContent;
     int BQuarkContent;
+    int RealLB_tag_ToB;
+    int FakeLB_tag_ToLight;
+    int FakeLB_tag_ToC;
+    int RealMB_tag_ToB;
+    int FakeMB_tag_ToLight;
+    int FakeMB_tag_ToC;
+    int RealTB_tag_ToB;
+    int FakeTB_tag_ToLight;
+    int FakeTB_tag_ToC;
 
     float PtTTbarDifference;
 
@@ -110,6 +130,16 @@ namespace patextractor {
     float m_DRMatchedWJets;
     float m_DPhiTrueWJets;   
     float m_DPhiMatchedWJets;
+
+    float CSV3MMinimum;
+    float CSV3MSum;
+    float CSV3MAverage;
+
+    float DeltaEtaTpMaxEtaJet;
+
+    //float WFromHiggs;
+    //float TopFromHiggs;
+    int LeadingAfterRecoJetMother;
 
     //bool isMC;
     float m_jet_Ptcut;
@@ -145,6 +175,7 @@ namespace patextractor {
     bool Cut19; //Third loose b-tag
     bool Cut20; //Delta Phi between two leading jets
     bool Cut21; //HMass over TMass
+    bool Cut22; //WMass from Higgs with Chi2
 
     int NumberOfGoodJets; //////////////////////////////////////////
     int NumberOfBadJets;                                          //
@@ -152,6 +183,7 @@ namespace patextractor {
     float THTcut;                                                 //
     int MinB_tags;
     int MinLooseB_tags;
+    int MinTightB_tags;
     float MaxChi2;
     float DeltaRHiggsJets;                                        //
     float DeltaRWJets;                                            //
@@ -177,6 +209,8 @@ namespace patextractor {
     float NumberofLooseBtag;                                      //
     float DeltaPhiLeadingJets;                                    //
     float HMoverTM;                /////////////////////////////////
+    float Wchi2Min;
+    float Wchi2Max;
  
     bool DoMCMatching;
     bool DoChi2Sorting;
@@ -206,6 +240,7 @@ namespace patextractor {
     int m_Cut19;
     int m_Cut20;
     int m_Cut21;
+    int m_Cut22;
  
     //Reconstructed particles
     TLorentzVector* ReconstructedHiggs;
@@ -228,6 +263,21 @@ namespace patextractor {
     TLorentzVector* SecondTrueWJet;
     TLorentzVector* TopTrueJet;
     TLorentzVector* TprimeFromMatching;
+    TLorentzVector* WFromHiggs;
+    TLorentzVector* TopFromHiggs;
+    TLorentzVector* WFromHiggsChi2;
+    TLorentzVector* TopFromHiggsChi2;
+    TLorentzVector* ReconstructedHiggs2M1L;
+    TLorentzVector* ReconstructedW2M1L;
+    TLorentzVector* ReconstructedTop2M1L;
+    TLorentzVector* ReconstructedTprime2M1L;
+    TLorentzVector* FirstHiggsJet2M1L;
+    TLorentzVector* SecondHiggsJet2M1L;
+    TLorentzVector* FirstWJet2M1L;
+    TLorentzVector* SecondWJet2M1L;
+    TLorentzVector* TopJet2M1L;
+    TLorentzVector* WFromHiggsChi22M1L;
+    TLorentzVector* TopFromHiggsChi22M1L;
 
     //Matching with MC truth
     int CorrectTprime;
@@ -240,6 +290,7 @@ namespace patextractor {
     int NumbMatchedHiggsJets;
     int NumbMatchedWJets;
     int NumbMatchedTopJets;
+    int HiggsTTbarReco;
 
     //Linking extractors
     std::shared_ptr<EventExtractor> m_event;
@@ -267,6 +318,8 @@ namespace patextractor {
 
     float m_VBF_M;
 
-  };
+    float PU_weight;
 
+  };
+  
 }
