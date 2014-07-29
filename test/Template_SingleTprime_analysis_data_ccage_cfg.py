@@ -31,17 +31,17 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
     process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
   else:
     process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1))
-    process.PATextraction.n_events=100000
+    process.PATextraction.n_events=cms.untracked.int32(100000000)
     process.source = cms.Source("EmptySource")  
     process.PATextraction.fillTree   = False
-    process.PATextraction.inputRootFile=cms.string('Signal_extracted_mc.root')
+    process.PATextraction.inputRootFile=cms.string('FILEIN')
 
   #Output extracted file name
   if isMC:
     if not OnlyAnalysis: process.PATextraction.extractedRootFile = cms.string('extracted_mc.root')
-    else: process.PATextraction.extractedRootFile = cms.string('analyzed.root')
+    else: process.PATextraction.extractedRootFile = cms.string('FILEOUT')
   else:
-    process.PATextraction.extractedRootFile = cms.string('extracted.root')
+    process.PATextraction.extractedRootFile = cms.string('FILEOUT')
 
   #########################################
   #
@@ -68,23 +68,23 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           cutChi2 = cms.bool(False), #Chi2
           cut4 = cms.bool(True), #Higgs jets DR (Do not deactivate)
           cut5 = cms.bool(True), #W jets DR (Do not deactivate)
-          cut6 = cms.bool(False), #H pt and Top pt
-          cut7 = cms.bool(False), #DR(WH)
-          cut8 = cms.bool(False), #DPH and DPT
+          cut6 = cms.bool(True), #H pt and Top pt
+          cut7 = cms.bool(True), #DR(WH)
+          cut8 = cms.bool(True), #DPH and DPT
           cut9 = cms.bool(False), #Jet multiplicity
-          cut10 = cms.bool(False), #DPH and DPW
+          cut10 = cms.bool(True), #DPH and DPW
           cut11 = cms.bool(False), #MH
-          cut12 = cms.bool(False), #RelHT
+          cut12 = cms.bool(True), #RelHT
           cut13 = cms.bool(False), #Aplanarity
           cut14 = cms.bool(False), #DR(TH)
-          cut15 = cms.bool(False),  #RelMass
+          cut15 = cms.bool(True),  #RelMass
           cut16 = cms.bool(False), #PTNormlaizedMass
           cut17 = cms.bool(False), #PTNormalizedMotherMass
           cut18 = cms.bool(False), #One Top
           cut19 = cms.bool(False),  #Third Loose B-tag
-          cut20 = cms.bool(False),  #DeltaPhi 2 Leading Jets
+          cut20 = cms.bool(False),   #DeltaPhi 2 Leading Jets
 	  cut21 = cms.bool(False),   #Higgs Mass over Top Mass
-	  cut22 = cms.bool(False)   #W Mass from higgs with chi2
+          cut22 = cms.bool(False)   #W Mass from higgs with chi2
           ),
         selection = cms.PSet(
           NumberOfGoodJets = cms.double(5.0),
@@ -120,7 +120,7 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
           DeltaPhiLeadingJets = cms.double(2.8),
           HMoverTM = cms.double(0.6),
           Wchi2Min = cms.double(60.0),
-          Wchi2Max = cms.double(150.0),          
+          Wchi2Max = cms.double(150.0),
           ),
         DoMatching = cms.bool(False),
         DoChi2 = cms.bool(False) #When active will do chi2 sorting algorithm, instead of default reconstruction
@@ -140,7 +140,7 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
   else:
     process.PATextraction.jet_PF.jetCorrectorLabel = "ak5PFchsL1FastL2L3Residual"
 
-  process.PATextraction.jet_PF.doJER = True # Disable automatically on data
+  process.PATextraction.jet_PF.doJER = False # Disable automatically on data
 
   process.PATextraction.doJet      = True
   process.PATextraction.doMET      = True
@@ -178,7 +178,7 @@ def createExtractorProcess(isMC, isSemiMu, useShiftCorrectedMET, globalTag):
 
 if __name__ == "__main__":
 
-  process = createExtractorProcess(True, False, useShiftCorrectedMET = False, globalTag = "START53_V27")
+  process = createExtractorProcess(False, False, useShiftCorrectedMET = False, globalTag = "FT53_V21A_AN6")
   
   # To build Transient Tracks
   process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")

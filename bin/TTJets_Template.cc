@@ -25,9 +25,9 @@ using namespace std;
 // Global Parameters
 // Location of root files
 
-const int NumberOfProcesses=16;
+//const int NumberOfProcesses=16;
 
-const TString MainFolder = "file:/afs/cern.ch/work/j/jruizalv/private/Analysis/CMSSW_5_3_9_patch3/src/Extractors/PatExtractor/bin/WithTrigger/SUFFIX/";
+const TString MainFolder = "file:/sps/cms/ruizalva/CMSSW_5_3_9_patch3/src/Extractors/PatExtractor/bin/WithTrigger/SUFFIX/";
 
 const TString StorageDirPrefix = MainFolder + "TTJets/";
 
@@ -36,7 +36,7 @@ const TString Histos[NumberOfHistos] = {"Cut_0", "Cut_1", "Cut_2", "Cut_3", "Cut
 "Cut_14", "Cut_15", "Cut_16", "Cut_17", "Cut_18", "Cut_19", "Cut_20", "Cut_21"};
 
 //Computing weights (Everything in pb)
-const float XS= 234.0;
+const float Xs= XS[9];
  
 /*float T_s_xs=2.82;
 float T_t_xs=47;
@@ -104,9 +104,15 @@ float PUR_function(int TI) //function with input the Number of True Interactions
 
 }
 
+double ABs(double X, double Y)
+{
+  return TMath::Abs(X-Y);
+}
+
 void TTJets()
 {
   TH1F *FiveJetsMass;
+  TH1F *FiveJetsMass3L;
   TH1F *LeadingJetPT;
   TH1F *Leading2JetPT;
   TH1F *Leading3JetPT;
@@ -165,14 +171,68 @@ void TTJets()
   TH1F *TopMassFromHiggs;
   TH1F *TopMassFromHiggsLC;
   TH1F *FiveJetsMassLCoverBE; //5 jets mass ratio plot in vs out the cut
+  TH1F *HMBE;
+  TH1F *HMLC;
+  TH1F *HMLCoverBE;
+  TH1F *FJLC_QCDBE;
+  TH1F *FJLC_QCDLC;
+  TH1F *FJLC_QCDLCoverBE;
+
+  //Checking uncorrelated sector of higgs mass and top from higgs mass
+  TH1F *FiveJetsMassBE_HHM; //5 jets mass inside the last cut with Higgs mass >140 GeV
+  TH1F *FiveJetsMassLC_HHM; //5 jets mass outside last cut with Higgs mass >140 GeV
+  TH1F *TopMassFromHiggs_HHM; //Top mass from Higgs with Higgs mass >140
+  TH1F *TopMassFromHiggs_HHMoverFHM; //Ratio of the Top mass from Higgs with Higgs mass >140 over Top mass from Higgs with Higgs mass in full range
+  TH1F *FiveJetsMassLCoverBE_HHM; //5 jets mass ratio plot in vs out the cut with Higgs mass >140 GeV
+  //Checking correlation sector of low higgs mass
+  TH1F *FiveJetsMassBE_LHM; 
+  TH1F *FiveJetsMassLC_LHM;
+  TH1F *FiveJetsMassLCoverBE_LHM;
+  TH1F *FiveJetsMassLC_LHMoverHHM;
+
+  //First top study for estimation of overall QCD
+  TH1F *TM_LC; TH1F *TM_BE; TH1F *TM_LCoverBE;
+  TH1F *TM_LC_HMW; //Top mass after ttbar estimation cut inside the Higgs mass window
+  TH1F *TM_BE_HMW;
+  TH1F *TM_LCoverBE_HMW;
+
+  //Study on Correlation of Higgs mass and second W mass
+  TH1F *HM_W_BE; TH1F *HM_W_LC; TH1F *HM_W_LCoverBE;
+  TH1F *FJM_W_BE; TH1F *FJM_W_LC; TH1F *FJM_W_LCoverBE;
+
+  //RM or RHT sideband estimations
+  TH1F *FiveJetsMassLC_LRHT; TH1F *FiveJetsMassLC_HRHT;
+  TH1F *FiveJetsMassLC_LRM; TH1F *FiveJetsMassLC_HRM; TH1F *FiveJetsMassLC_WRM;
+  
+  //HT estimation
+  TH2F *DPWJ_HT;
+  TH2F *DPWJ_HT_BE;
+
+  //ADDITIONAL INFO ON JETS  
+  TH1F *JET1ETA;   
+  TH1F *JET2ETA; 
+  TH1F *JET3ETA; 
+  TH1F *JET4ETA;
+  TH1F *JET5ETA;
+  TH1F *JET6ETA;
+  TH1F *JET1PHI;   
+  TH1F *JET2PHI; 
+  TH1F *JET3PHI; 
+  TH1F *JET4PHI;
+  TH1F *JET5PHI;
+  TH1F *JET6PHI;
+  TH1F *JETMULTI;
+
   int EntriePerSample;
   bool SurvivalMarker;
 
   TChain CutsChain("cuts");
   TChain AnalysisChain("stp");
+  TChain AnalysisChain3L("stp3L");
   TH1F *ALLCuts[NumberOfHistos];
   CutsChain.Add(MainFolder + "TTJets_Full_analyzed.root");
   AnalysisChain.Add(MainFolder + "TTJets_Full_analyzed.root");
+  AnalysisChain3L.Add(MainFolder + "TTJets_Full_analyzed.root");
         
   int EntriesPerCut[NumberOfHistos];
   float PassedPerCut[NumberOfHistos];
@@ -197,33 +257,72 @@ void TTJets()
       /////////////////////
       string A1 = Form("Reconstructed_Tprime.M() >> TprimeMass%i(60,400,1600)",9);
       string A2 = Form("TprimeMass%i",9);
-      AnalysisChain.Draw(A1.c_str());
+      AnalysisChain.Draw(A1.c_str(),finalcut);
       FiveJetsMass = (TH1F*)gDirectory->Get(A2.c_str());
       gPad->Close();
       SurvivalMarker=true;
       //
       A1 = Form("Reconstructed_Tprime.M() >> TprimeMassBkgE%i(60,400,1600)",9);
       A2 = Form("TprimeMassBkgE%i",9);
-      AnalysisChain.Draw(A1.c_str(),"Top_From_Higgs_Chi2.M()>=140 && Top_From_Higgs_Chi2.M()<=230");
+      AnalysisChain.Draw(A1.c_str(),"(PUR_function(Number_True_Interactions))*weight*((Top_From_Higgs_Chi2.M()>=140 && Top_From_Higgs_Chi2.M()<=230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140))");
       FiveJetsMassBE = (TH1F*)gDirectory->Get(A2.c_str());
       gPad->Close();
       //
       A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC%i(60,400,1600)",9);
       A2 = Form("TprimeMassLC%i",9);
-      AnalysisChain.Draw(A1.c_str(),"Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230");
+      AnalysisChain.Draw(A1.c_str(),"(PUR_function(Number_True_Interactions))*weight*((Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140))");
       FiveJetsMassLC = (TH1F*)gDirectory->Get(A2.c_str());
       gPad->Close();
       //
-      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLCoverBE%i(60,400,1600)",9);
-      A2 = Form("TprimeMassLCoverBE%i",9);
-      AnalysisChain.Draw(A1.c_str(),"Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230");
-      FiveJetsMassLCoverBE = (TH1F*)gDirectory->Get(A2.c_str());
+      FiveJetsMassLCoverBE=(TH1F*)FiveJetsMassLC->Clone("FiveJetsMass_LCoverBE");
+      //A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLCoverBE%i(60,400,1600)",9);
+      //A2 = Form("TprimeMassLCoverBE%i",9);
+      //AnalysisChain.Draw(A1.c_str(),"Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230");
+      //FiveJetsMassLCoverBE = (TH1F*)gDirectory->Get(A2.c_str());
+      //gPad->Close();
+      //
+      string HMBEstim1 = Form("Reconstructed_Higgs.M() >> HiggsMassBE%i(36,60,180)",9);
+      string HMBEstim2 = Form("HiggsMassBE%i",9);
+      AnalysisChain.Draw(HMBEstim1.c_str(),"Top_From_Higgs_Chi2.M()>=140 && Top_From_Higgs_Chi2.M()<=230");
+      HMBE = (TH1F*)gDirectory->Get(HMBEstim2.c_str());
       gPad->Close();
+      //
+      HMBEstim1 = Form("Reconstructed_Higgs.M() >> HiggsMassLC%i(36,60,180)",9);
+      HMBEstim2 = Form("HiggsMassLC%i",9);
+      AnalysisChain.Draw(HMBEstim1.c_str(),"Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230");
+      HMLC = (TH1F*)gDirectory->Get(HMBEstim2.c_str());
+      gPad->Close();
+      //
+      HMLCoverBE=(TH1F*)HMLC->Clone("HM_LCoverBE");
+      //HMBEstim1 = Form("Reconstructed_Higgs.M() >> HiggsMassLCoverBE%i(36,60,180)",9);
+      //HMBEstim2 = Form("HiggsMassLCoverBE%i",9);
+      //AnalysisChain.Draw(HMBEstim1.c_str(),"Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230");
+      //HMLCoverBE = (TH1F*)gDirectory->Get(HMBEstim2.c_str());
+      //gPad->Close();
+      //
+      HMBEstim1 = Form("Reconstructed_Tprime.M() >> FJLCQCDBE%i(60,400,1600)",9);
+      HMBEstim2 = Form("FJLCQCDBE%i",9);
+      AnalysisChain.Draw(HMBEstim1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()<110 || Reconstructed_Higgs.M()>140)");
+      FJLC_QCDBE = (TH1F*)gDirectory->Get(HMBEstim2.c_str());
+      gPad->Close();
+      //
+      HMBEstim1 = Form("Reconstructed_Tprime.M() >> FJLCQCDLC%i(60,400,1600)",9);
+      HMBEstim2 = Form("FJLCQCDLC%i",9);
+      AnalysisChain.Draw(HMBEstim1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
+      FJLC_QCDLC = (TH1F*)gDirectory->Get(HMBEstim2.c_str());
+      gPad->Close();
+      //
+      FJLC_QCDLCoverBE=(TH1F*)FJLC_QCDLC->Clone("FJLC_QCDLCoverBE");
+      //HMBEstim1 = Form("Reconstructed_Tprime.M() >> FJLCQCDLCoverBE%i(60,400,1600)",9);
+      //HMBEstim2 = Form("FJLCQCDLCoverBE%i",9);
+      //AnalysisChain.Draw(HMBEstim1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
+      //FJLC_QCDLCoverBE = (TH1F*)gDirectory->Get(HMBEstim2.c_str());
+      //gPad->Close();
       //////////
       //////////
-      A1 = Form("Top_From_Higgs_Chi2.M() >> TopFromHiggsChi2Mass%i(75,50,800)",9);
+      A1 = Form("Top_From_Higgs_Chi2.M() >> TopFromHiggsChi2Mass%i(95,50,1000)",9);
       A2 = Form("TopFromHiggsChi2Mass%i",9);
-      AnalysisChain.Draw(A1.c_str());
+      AnalysisChain.Draw(A1.c_str(),"(PUR_function(Number_True_Interactions))*weight*(Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
       TopMassFromHiggs = (TH1F*)gDirectory->Get(A2.c_str());
       gPad->Close();
       //
@@ -234,279 +333,437 @@ void TTJets()
       gPad->Close();      
       //////////
       //////////
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassBkgE_HHM%i(60,400,1600)",9);
+      A2 = Form("TprimeMassBkgE_HHM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Top_From_Higgs_Chi2.M()>=140 && Top_From_Higgs_Chi2.M()<=230) && Reconstructed_Higgs.M()>140");
+      FiveJetsMassBE_HHM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_HHM%i(60,400,1600)",9);
+      A2 = Form("TprimeMassLC_HHM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Reconstructed_Higgs.M()>140");
+      FiveJetsMassLC_HHM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      FiveJetsMassLCoverBE_HHM=(TH1F*)FiveJetsMassLC_HHM->Clone("FiveJetsMass_LCoverBE_HHM");
+      //A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLCoverBE_HHM%i(60,400,1600)",9);
+      //A2 = Form("TprimeMassLCoverBE_HHM%i",9);
+      //AnalysisChain.Draw(A1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Reconstructed_Higgs.M()>140");
+      //FiveJetsMassLCoverBE_HHM = (TH1F*)gDirectory->Get(A2.c_str());
+      //gPad->Close();
+      //
+      A1 = Form("Top_From_Higgs_Chi2.M() >> TopFromHiggsChi2Mass_HHM%i(75,50,800)",9);
+      A2 = Form("TopFromHiggsChi2Mass_HHM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"Reconstructed_Higgs.M()>140");
+      TopMassFromHiggs_HHM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //17
+      A1 = Form("Top_From_Higgs_Chi2.M() >> TopFromHiggsChi2Mass_HHMoverFHM%i(75,50,800)",9);
+      A2 = Form("TopFromHiggsChi2Mass_HHMoverFHM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"Reconstructed_Higgs.M()>140");
+      TopMassFromHiggs_HHMoverFHM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassBE_LHM%i(60,400,1600)",9);
+      A2 = Form("TprimeMassBE_LHM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Top_From_Higgs_Chi2.M()>=140 && Top_From_Higgs_Chi2.M()<=230) && Reconstructed_Higgs.M()<110");
+      FiveJetsMassBE_LHM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_LHM%i(60,400,1600)",9);
+      A2 = Form("TprimeMassLC_LHM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Reconstructed_Higgs.M()<110");
+      FiveJetsMassLC_LHM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      FiveJetsMassLCoverBE_LHM=(TH1F*)FiveJetsMassLC_LHM->Clone("FiveJetsMass_LCoverBE_LHM");
+      //A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLCoverBE_LHM%i(60,400,1600)",9);
+      //A2 = Form("TprimeMassLCoverBE_LHM%i",9);
+      //AnalysisChain.Draw(A1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Reconstructed_Higgs.M()<110");
+      //FiveJetsMassLCoverBE_LHM = (TH1F*)gDirectory->Get(A2.c_str());
+      //gPad->Close();
+      //
+      FiveJetsMassLC_LHMoverHHM=(TH1F*)FiveJetsMassLC_LHM->Clone("FiveJetsMass_LC_LHMoverHHM");
+      //A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_LHMoverHHM%i(60,400,1600)",9);
+      //A2 = Form("TprimeMassLCoverLC_LHMoverHHM%i",9);
+      //AnalysisChain.Draw(A1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Reconstructed_Higgs.M()<110");
+      //FiveJetsMassLC_LHMoverHHM = (TH1F*)gDirectory->Get(A2.c_str());
+      //gPad->Close();      
+      ///////////////////////////////////////////////
+      ///////////////////////////////////////////////
+      ///////////////////////////////////////////////
+      string TM1_LC = Form("Reconstructed_Top.M() >> TMass_LC%i(60,100,700)",9);
+      string TM2_LC = Form("TMass_LC%i",9);
+      AnalysisChain.Draw(TM1_LC.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
+      TM_LC = (TH1F*)gDirectory->Get(TM2_LC.c_str());
+      gPad->Close();
+      //
+      string TM1_BE = Form("Reconstructed_Top.M() >> TMass_BE%i(60,100,700)",9);
+      string TM2_BE = Form("TMass_BE%i",9);
+      AnalysisChain.Draw(TM1_BE.c_str(),"(Top_From_Higgs_Chi2.M()>=140 && Top_From_Higgs_Chi2.M()<=230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
+      TM_BE = (TH1F*)gDirectory->Get(TM2_BE.c_str());
+      gPad->Close();
+      //
+      TM_LCoverBE=(TH1F*)TM_LC->Clone("TM__LCoverBE");
+      //TM1_LC = Form("Reconstructed_Top.M() >> TMass_LCoverBE%i(60,100,700)",9);
+      //TM2_LC = Form("TMass_LCoverBE%i",9);
+      //AnalysisChain.Draw(TM1_LC.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230)");
+      //TM_LCoverBE = (TH1F*)gDirectory->Get(TM2_LC.c_str());
+      //gPad->Close();
+      //
+      TM1_LC = Form("Reconstructed_Top.M() >> TMass_LC_HMW%i(60,100,700)",9);
+      TM2_LC = Form("TMass_LC_HMW%i",9);
+      AnalysisChain.Draw(TM1_LC.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
+      TM_LC_HMW = (TH1F*)gDirectory->Get(TM2_LC.c_str());
+      gPad->Close();
+      ///////////////////////////////////////////////
+      ////////////////2nd W study////////////////////
+      ///////////////////////////////////////////////      
+      string WBE1 = Form("Reconstructed_Higgs.M() >> HM_W_LC%i(36,60,180)",9);
+      string WBE2 = Form("HM_W_LC%i",9);
+      AnalysisChain.Draw(WBE1.c_str(),"(W_From_Higgs_Chi2.M()<60 || W_From_Higgs_Chi2.M()>120)");
+      HM_W_LC = (TH1F*)gDirectory->Get(WBE2.c_str());
+      gPad->Close();
+      //
+      HM_W_LCoverBE =(TH1F*)HM_W_LC->Clone("HM_WE_LCoverBE");
+      //WBE1 = Form("Reconstructed_Higgs.M() >> HM_W_LCoverBE%i(36,60,180)",9);
+      //WBE2 = Form("HM_W_BE%i",9);
+      //AnalysisChain.Draw(WBE1.c_str(),"(W_From_Higgs_Chi2.M()<60 || W_From_Higgs_Chi2.M()>120)");
+      //HM_W_LCoverBE = (TH1F*)gDirectory->Get(WBE2.c_str());
+      //gPad->Close();
+      //
+      WBE1 = Form("Reconstructed_Higgs.M() >> HM_W_BE%i(36,60,180)",9);
+      WBE2 = Form("HM_W_BE%i",9);
+      AnalysisChain.Draw(WBE1.c_str(),"(W_From_Higgs_Chi2.M()>60 && W_From_Higgs_Chi2.M()<120)");
+      HM_W_BE = (TH1F*)gDirectory->Get(WBE2.c_str());
+      gPad->Close();
+      //
+      WBE1 = Form("Reconstructed_Tprime.M() >> FJM_W_BE%i(60,400,1600)",9);
+      WBE2 = Form("FJM_W_BE%i",9);
+      AnalysisChain.Draw(WBE1.c_str(),"(W_From_Higgs_Chi2.M()>60 && W_From_Higgs_Chi2.M()<120)");
+      FJM_W_BE = (TH1F*)gDirectory->Get(WBE2.c_str());
+      gPad->Close();
+      //
+      WBE1 = Form("Reconstructed_Tprime.M() >> FJM_W_LC%i(60,400,1600)",9);
+      WBE2 = Form("FJM_W_LC%i",9);
+      AnalysisChain.Draw(WBE1.c_str(),"(W_From_Higgs_Chi2.M()<60 || W_From_Higgs_Chi2.M()>120)");
+      FJM_W_LC = (TH1F*)gDirectory->Get(WBE2.c_str());
+      gPad->Close();
+      //
+      FJM_W_LCoverBE =(TH1F*)FJM_W_LC->Clone("FJM_WE_LCoverBE");
+      //WBE1 = Form("Reconstructed_Tprime.M() >> FJM_W_LCoverBE%i(60,400,1600)",9);
+      //WBE2 = Form("FJM_W_LCoverBE%i",9);
+      //AnalysisChain.Draw(WBE1.c_str(),"(W_From_Higgs_Chi2.M()<60 || W_From_Higgs_Chi2.M()>120)");
+      //FJM_W_LCoverBE = (TH1F*)gDirectory->Get(WBE2.c_str());
+      //gPad->Close();      
+      ///////////////////////////////////////////////
+      ///////////////////////////////////////////////
+      ///////////////////////////////////////////////
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_LRHT%i(60,400,1600)",9);
+      A2 = Form("TprimeMassLC_LRHT%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && (Relative_Mass>=0.3 && Relative_Mass<=0.5) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140) && (Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Relative_THT<0.65");
+      FiveJetsMassLC_LRHT = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_HRHT%i(60,400,1600)",9);
+      A2 = Form("TprimeMassLC_HRHT%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && (Relative_Mass>=0.3 && Relative_Mass<=0.5) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140) && (Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Relative_THT>=0.65");
+      FiveJetsMassLC_HRHT = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_LRM%i(60,400,1600)",9);
+      A2 = Form("TprimeMassLC_LRM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && Relative_THT>=0.65 && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140) && (Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Relative_Mass<0.3");
+      FiveJetsMassLC_LRM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_HRM%i(60,400,1600)",9);
+      A2 = Form("TprimeMassLC_HRM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && Relative_THT>=0.65 && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140) && (Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && Relative_Mass>0.5");
+      FiveJetsMassLC_HRM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Reconstructed_Tprime.M() >> TprimeMassLC_WRM%i(60,400,1600)",9);
+      A2 = Form("TprimeMassLC_WRM%i",9);
+      AnalysisChain.Draw(A1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && Relative_THT>=0.65 && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140) && (Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Relative_Mass>=0.3 && Relative_Mass<=0.5)");
+      FiveJetsMassLC_WRM = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();      
+      ///////////////////////////////////////////////
+      ///////////////////////////////////////////////
+      ///////////////////////////////////////////////
       string LJPT1 = Form("jet1_pt >> jet1_pt%i(50,20,1000)",9);
       string LJPT2 = Form("jet1_pt%i",9);
-      AnalysisChain.Draw(LJPT1.c_str());
+      AnalysisChain.Draw(LJPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       LeadingJetPT = (TH1F*)gDirectory->Get(LJPT2.c_str());
       gPad->Close();
       //
       string SLJPT1 = Form("jet2_pt >> jet2_pt%i(50,20,1000)",9);
       string SLJPT2 = Form("jet2_pt%i",9);
-      AnalysisChain.Draw(SLJPT1.c_str());
+      AnalysisChain.Draw(SLJPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Leading2JetPT = (TH1F*)gDirectory->Get(SLJPT2.c_str());
       gPad->Close();
       //
       string SSLJPT1 = Form("jet3_pt >> jet3_pt%i(35,20,700)",9);
       string SSLJPT2 = Form("jet3_pt%i",9);
-      AnalysisChain.Draw(SSLJPT1.c_str());
+      AnalysisChain.Draw(SSLJPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Leading3JetPT = (TH1F*)gDirectory->Get(SSLJPT2.c_str());
       gPad->Close();
       //
       string SSSLJPT1 = Form("jet4_pt >> jet4_pt%i(20,20,400)",9);
       string SSSLJPT2 = Form("jet4_pt%i",9);
-      AnalysisChain.Draw(SSSLJPT1.c_str());
+      AnalysisChain.Draw(SSSLJPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Leading4JetPT = (TH1F*)gDirectory->Get(SSSLJPT2.c_str());
       gPad->Close();
       //
       string SSSSLJPT1 = Form("jet5_pt >> jet5_pt%i(15,20,300)",9);
       string SSSSLJPT2 = Form("jet5_pt%i",9);
-      AnalysisChain.Draw(SSSSLJPT1.c_str());
+      AnalysisChain.Draw(SSSSLJPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Leading5JetPT = (TH1F*)gDirectory->Get(SSSSLJPT2.c_str());
       gPad->Close();
       //
       string SSSSSLJPT1 = Form("jet6_pt >> jet6_pt%i(10,20,200)",9);
       string SSSSSLJPT2 = Form("jet6_pt%i",9);
-      AnalysisChain.Draw(SSSSSLJPT1.c_str());
+      AnalysisChain.Draw(SSSSSLJPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Leading6JetPT = (TH1F*)gDirectory->Get(SSSSSLJPT2.c_str());
       gPad->Close();
       //
       string THT1 = Form("THT >> THT%i(65,300,1600)",9);
       string THT2 = Form("THT%i",9);
-      AnalysisChain.Draw(THT1.c_str(),"(PUR_function(Number_True_Interactions))*(THT>630)"); //PUR_function(Number_True_Interactions)*(THT>630)");
+      AnalysisChain.Draw(THT1.c_str(),"(PUR_function(Number_True_Interactions))*weight","(PUR_function(Number_True_Interactions))*weight*(THT>630)"); //PUR_function(Number_True_Interactions)*(THT>630)");
       THT = (TH1F*)gDirectory->Get(THT2.c_str());
       gPad->Close(); 
       //
       string DRHJ1 = Form("DeltaR_of_Higgs_Jets >> DeltaR_of_Higgs_Jets%i(65,0.5,7)",9);
       string DRHJ2 = Form("DeltaR_of_Higgs_Jets%i",9);
-      AnalysisChain.Draw(DRHJ1.c_str());
+      AnalysisChain.Draw(DRHJ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DRHjets = (TH1F*)gDirectory->Get(DRHJ2.c_str());
       gPad->Close();
       //
       string DRWJ1 = Form("DeltaR_of_W_Jets >> DeltaR_of_W_Jets%i(65,0.5,7)",9);
       string DRWJ2 = Form("DeltaR_of_W_Jets%i",9);
-      AnalysisChain.Draw(DRWJ1.c_str());
+      AnalysisChain.Draw(DRWJ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DRWjets = (TH1F*)gDirectory->Get(DRWJ2.c_str());
       gPad->Close();
       //
       string HPT1 = Form("Reconstructed_Higgs.Pt() >> HPt%i(40,10,800)",9);
       string HPT2 = Form("HPt%i",9);
-      AnalysisChain.Draw(HPT1.c_str());
+      AnalysisChain.Draw(HPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Hpt = (TH1F*)gDirectory->Get(HPT2.c_str());
       gPad->Close();
       //
       string TPT1 = Form("Reconstructed_Top.Pt() >> TPt%i(40,10,800)",9);
       string TPT2 = Form("TPt%i",9);
-      AnalysisChain.Draw(TPT1.c_str());
+      AnalysisChain.Draw(TPT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Tpt = (TH1F*)gDirectory->Get(TPT2.c_str());
       gPad->Close();
       //
       string DRWH1 = Form("DeltaR_of_W_Higgs >> DeltaR_of_W_Higgs%i(65,0.5,7)",9);
       string DRWH2 = Form("DeltaR_of_W_Higgs%i",9);
-      AnalysisChain.Draw(DRWH1.c_str());
+      AnalysisChain.Draw(DRWH1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DRWH = (TH1F*)gDirectory->Get(DRWH2.c_str());
       gPad->Close();
       //
       string DPHJ1 = Form("TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi()) >> DeltaPhi_of_Higgs_jets%i(30,0.0,3.0)",9);
       string DPHJ2 = Form("DeltaPhi_of_Higgs_jets%i",9);
-      AnalysisChain.Draw(DPHJ1.c_str());
+      AnalysisChain.Draw(DPHJ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DPHjets = (TH1F*)gDirectory->Get(DPHJ2.c_str());
       gPad->Close();
       //
       string DPWJ1 = Form("TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi()) >> DeltaPhi_of_W_jets%i(30,0.0,3.0)",9);
       string DPWJ2 = Form("DeltaPhi_of_W_jets%i",9);
-      AnalysisChain.Draw(DPWJ1.c_str());
+      AnalysisChain.Draw(DPWJ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DPWjets = (TH1F*)gDirectory->Get(DPWJ2.c_str());
       gPad->Close();
       //
       string DPTJ1 = Form("TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi()) >> DeltaPhi_of_T_jet%i(30,0.0,3.0)",9);
       string DPTJ2 = Form("DeltaPhi_of_T_jet%i",9);
-      AnalysisChain.Draw(DPTJ1.c_str());
+      AnalysisChain.Draw(DPTJ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DPTjets = (TH1F*)gDirectory->Get(DPTJ2.c_str());
       gPad->Close();
       //
       string HM1 = Form("Reconstructed_Higgs.M() >> HM%i(36,60,180)",9);
       string HM2 = Form("HM%i",9);
-      AnalysisChain.Draw(HM1.c_str());
+      AnalysisChain.Draw(HM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       HiggsMass = (TH1F*)gDirectory->Get(HM2.c_str());
       gPad->Close();
       //
       string RHT1 = Form("Relative_THT >> RelHT%i(30,0,1)",9);
       string RHT2 = Form("RelHT%i",9);
-      AnalysisChain.Draw(RHT1.c_str());
+      AnalysisChain.Draw(RHT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       RelHT = (TH1F*)gDirectory->Get(RHT2.c_str());
       gPad->Close();
       //
       string DRTH1 = Form("DeltaR_of_Top_Higgs >> DeltaR_of_Top_Higgs%i(65,0.5,7)",9);
       string DRTH2 = Form("DeltaR_of_Top_Higgs%i",9);
-      AnalysisChain.Draw(DRTH1.c_str());
+      AnalysisChain.Draw(DRTH1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DRTH = (TH1F*)gDirectory->Get(DRTH2.c_str());
       gPad->Close();
       //
       string PTNM1 = Form("PT_Normalized_Mass >> PT_Normalized_Mass%i(70,0.4,5)",9);
       string PTNM2 = Form("PT_Normalized_Mass%i",9);
-      AnalysisChain.Draw(PTNM1.c_str());
+      AnalysisChain.Draw(PTNM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       PtNormalizedMass = (TH1F*)gDirectory->Get(PTNM2.c_str());
       gPad->Close();
       //
       string RM1 = Form("Relative_Mass >> Relative_Mass%i(30,0.0,1)",9);
       string RM2 = Form("Relative_Mass%i",9);
-      AnalysisChain.Draw(RM1.c_str());
+      AnalysisChain.Draw(RM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       RelativeMass = (TH1F*)gDirectory->Get(RM2.c_str());
       gPad->Close();
       //
       string MPTNM1 = Form("Mother_PT_Normalized_Mass >> Mother_PT_Normalized_Mass%i(25,0.0,50)",9);
       string MPTNM2 = Form("Mother_PT_Normalized_Mass%i",9);
-      AnalysisChain.Draw(MPTNM1.c_str());
+      AnalysisChain.Draw(MPTNM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       MotherPtNormalizedMass = (TH1F*)gDirectory->Get(MPTNM2.c_str());
       gPad->Close();
       //
       string NTops1 = Form("Number_of_Tops >> Number_of_Tops%i(8,0.0,8)",9);
       string NTops2 = Form("Number_of_Tops%i",9);
-      AnalysisChain.Draw(NTops1.c_str());
+      AnalysisChain.Draw(NTops1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       NumberOfTops = (TH1F*)gDirectory->Get(NTops2.c_str());
       gPad->Close();
       ///////////NEW VARIABLES//////////////////
       string HMTM1 = Form("Reconstructed_Higgs.M()/Reconstructed_Top.M() >> HMoverTM%i(30,0,1.)",9);
       string HMTM2 = Form("HMoverTM%i",9);
-      AnalysisChain.Draw(HMTM1.c_str());
+      AnalysisChain.Draw(HMTM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       HiggsMassOverTopMass = (TH1F*)gDirectory->Get(HMTM2.c_str());
       gPad->Close();
       //
       string HTA1 = Form("((Reconstructed_Higgs.Pt()/Reconstructed_Higgs.M())-(Reconstructed_Top.Pt()/Reconstructed_Top.M()))/((Reconstructed_Higgs.Pt()/Reconstructed_Higgs.M())+(Reconstructed_Top.Pt()/Reconstructed_Top.M())) >> HTAsym%i(12,0,1.)",9);
       string HTA2 = Form("HTAsym%i",9);
-      AnalysisChain.Draw(HTA1.c_str());
+      AnalysisChain.Draw(HTA1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       HiggsTopAsymmetry = (TH1F*)gDirectory->Get(HTA2.c_str());
       gPad->Close();
       //
       string TLBT1 = Form("Number_of_Loose_and_non_med_b_tags >> TLBTag%i(10,0,10)",9);
       string TLBT2 = Form("TLBTag%i",9);
-      AnalysisChain.Draw(TLBT1.c_str());
+      AnalysisChain.Draw(TLBT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       ThirdLooseBtag = (TH1F*)gDirectory->Get(TLBT2.c_str());
       gPad->Close();
       //
-      string TM1 = Form("Reconstructed_Top.M() >> TMass%i(40,100,300)",9);
+      string TM1 = Form("Reconstructed_Top.M() >> TMass%i(60,100,700)",9);
       string TM2 = Form("TMass%i",9);
-      AnalysisChain.Draw(TM1.c_str());
+      AnalysisChain.Draw(TM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       TopMass = (TH1F*)gDirectory->Get(TM2.c_str());
       gPad->Close();
       //
       string C21 = Form("ChiSquaredSorting >> ChiSq%i(100,0,1000)",9);
       string C22 = Form("ChiSq%i",9);
-      AnalysisChain.Draw(C21.c_str());
+      AnalysisChain.Draw(C21.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       Chi2 = (TH1F*)gDirectory->Get(C22.c_str());
       gPad->Close();
       //
       string UQ1 = Form("U Quark Content >> UQC%i(10,0,10)",9);
       string UQ2 = Form("UQC%i",9);
-      AnalysisChain.Draw(UQ1.c_str());
+      AnalysisChain.Draw(UQ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       UQuarkContent = (TH1F*)gDirectory->Get(UQ2.c_str());
       gPad->Close();
       //
       string DQ1 = Form("D Quark Content >> DQC%i(10,0,10)",9);
       string DQ2 = Form("DQC%i",9);
-      AnalysisChain.Draw(DQ1.c_str());
+      AnalysisChain.Draw(DQ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       DQuarkContent = (TH1F*)gDirectory->Get(DQ2.c_str());
       gPad->Close();
       //
       string SQ1 = Form("S Quark Content >> SQC%i(10,0,10)",9);
       string SQ2 = Form("SQC%i",9);
-      AnalysisChain.Draw(SQ1.c_str());
+      AnalysisChain.Draw(SQ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       SQuarkContent = (TH1F*)gDirectory->Get(SQ2.c_str());
       gPad->Close();
       //
       string CQ1 = Form("C Quark Content >> CQC%i(10,0,10)",9);
       string CQ2 = Form("CQC%i",9);
-      AnalysisChain.Draw(CQ1.c_str());
+      AnalysisChain.Draw(CQ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       CQuarkContent = (TH1F*)gDirectory->Get(CQ2.c_str());
       gPad->Close();
       //
       string BQ1 = Form("B Quark Content >> BQC%i(10,0,10)",9);
       string BQ2 = Form("BQC%i",9);
-      AnalysisChain.Draw(BQ1.c_str());
+      AnalysisChain.Draw(BQ1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       BQuarkContent = (TH1F*)gDirectory->Get(BQ2.c_str());
       gPad->Close();
       //B-tagging Working point	  
       string BTL1 = Form("Number_CSVLbtagged_jets >> CSVL%i(10,0,10)",9);
       string BTL2 = Form("CSVL%i",9);
-      AnalysisChain.Draw(BTL1.c_str());
+      AnalysisChain.Draw(BTL1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       CSVLB = (TH1F*)gDirectory->Get(BTL2.c_str());
       gPad->Close();
       //	  
       string BTM1 = Form("Number_CSVMbtagged_jets >> CSVM%i(10,0,10)",9);
       string BTM2 = Form("CSVM%i",9);
-      AnalysisChain.Draw(BTM1.c_str());
+      AnalysisChain.Draw(BTM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       CSVMB = (TH1F*)gDirectory->Get(BTM2.c_str());
       gPad->Close();
       //	  
       string BTT1 = Form("Number_CSVTbtagged_jets >> CSVT%i(10,0,10)",9);
       string BTT2 = Form("CSVT%i",9);
-      AnalysisChain.Draw(BTT1.c_str());
+      AnalysisChain.Draw(BTT1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       CSVTB = (TH1F*)gDirectory->Get(BTT2.c_str());
       gPad->Close();
       //	  
       string VT1 = Form("Vertices >> VTX%i(40,1,41)",9);
       string VT2 = Form("VTX%i",9);
-      AnalysisChain.Draw(VT1.c_str(),"(PUR_function(Number_True_Interactions))*(THT>630)"); //PUR_function(Number_True_Interactions)*(THT>630)");
+      AnalysisChain.Draw(VT1.c_str(),"(PUR_function(Number_True_Interactions))*weight*(THT>630)"); //PUR_function(Number_True_Interactions)*(THT>630)");
       Vtcs = (TH1F*)gDirectory->Get(VT2.c_str());
       gPad->Close();
       //
       /*string CLB1 = Form("CorrectLB_tag >> CLooseB%i(6,0,6)",9);
       string CLB2 = Form("CLooseB%i",9);
-      AnalysisChain.Draw(CLB1.c_str());
+      AnalysisChain.Draw(CLB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       CLBT = (TH1F*)gDirectory->Get(CLB2.c_str());
       gPad->Close();
       //
       string CMB1 = Form("CorrectMB_tag >> CMedB%i(6,0,6)",9);
       string CMB2 = Form("CMedB%i",9);
-      AnalysisChain.Draw(CMB1.c_str());
+      AnalysisChain.Draw(CMB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       CMBT = (TH1F*)gDirectory->Get(CMB2.c_str());
       gPad->Close();
       //
       string CTB1 = Form("CorrectTB_tag >> CTightB%i(6,0,6)",9);
       string CTB2 = Form("CTightB%i",9);
-      AnalysisChain.Draw(CTB1.c_str());
+      AnalysisChain.Draw(CTB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       CTBT = (TH1F*)gDirectory->Get(CTB2.c_str());
       gPad->Close();
       //
       string FLLB1 = Form("FakeLB_tag_Light >> FLLooseB%i(6,0,6)",9);
       string FLLB2 = Form("FLLooseB%i",9);
-      AnalysisChain.Draw(FLLB1.c_str());
+      AnalysisChain.Draw(FLLB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       FLLBT = (TH1F*)gDirectory->Get(FLLB2.c_str());
       gPad->Close();
       //
       string FLMB1 = Form("FakeMB_tag_Light >> FLMedB%i(6,0,6)",9);
       string FLMB2 = Form("FLMedB%i",9);
-      AnalysisChain.Draw(FLMB1.c_str());
+      AnalysisChain.Draw(FLMB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       FLMBT = (TH1F*)gDirectory->Get(FLMB2.c_str());
       gPad->Close();
       //
       string FLTB1 = Form("FakeTB_tag_Light >> FLTightB%i(6,0,6)",9);
       string FLTB2 = Form("FLTightB%i",9);
-      AnalysisChain.Draw(FLTB1.c_str());
+      AnalysisChain.Draw(FLTB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       FLTBT = (TH1F*)gDirectory->Get(FLTB2.c_str());
       gPad->Close();
       //
       string FCLB1 = Form("FakeLB_tag_C >> FCLooseB%i(6,0,6)",9);
       string FCLB2 = Form("FCLooseB%i",9);
-      AnalysisChain.Draw(FCLB1.c_str());
+      AnalysisChain.Draw(FCLB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       FCLBT = (TH1F*)gDirectory->Get(FCLB2.c_str());
       gPad->Close();
       //
       string FCMB1 = Form("FakeMB_tag_C >> FCMedB%i(6,0,6)",9);
       string FCMB2 = Form("FCMedB%i",9);
-      AnalysisChain.Draw(FCMB1.c_str());
+      AnalysisChain.Draw(FCMB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       FCMBT = (TH1F*)gDirectory->Get(FCMB2.c_str());
       gPad->Close();
       //
       string FCTB1 = Form("FakeTB_tag_C >> FCTightB%i(6,0,6)",9);
       string FCTB2 = Form("FCTightB%i",9);
-      AnalysisChain.Draw(FCTB1.c_str());
+      AnalysisChain.Draw(FCTB1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       FCTBT = (TH1F*)gDirectory->Get(FCTB2.c_str());
       gPad->Close();*/
       //
       string HTCSVM1 = Form("Number_CSVMbtagged_jets : THT >> HT_CSVM%i(65,300,1600,10)",9);
       string HTCSVM2 = Form("HT_CSVM%i",9);
-      AnalysisChain.Draw(HTCSVM1.c_str());
+      AnalysisChain.Draw(HTCSVM1.c_str(),"(PUR_function(Number_True_Interactions))*weight");
       HTCSVM = (TH2F*)gDirectory->Get(HTCSVM2.c_str());
       cout << "Correlation Factor: " << HTCSVM->GetCorrelationFactor() << endl;
       gPad->Close();
@@ -741,72 +998,227 @@ void TTJets()
       AnalysisChain.Draw(TPNWH1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && Relative_THT>=0.65 && (Relative_Mass>=0.3 && Relative_Mass<=0.5) && Number_of_Tops<2"); //(W_From_Higgs.M()<70 || W_From_Higgs.M()>110)");
       TprimeNotWFromHiggs = (TH1F*)gDirectory->Get(TPNWH2.c_str());
       gPad->Close();
+      //
+      string D1 = Form("ABs(First_W_Jet.Phi(),Second_W_Jet.Phi()):THT >> DPWJ_HT_%i(65,300,1600,60,0.5,3.5)",18);
+      string D2 = Form("DPWJ_HT_%i",18);
+      AnalysisChain.Draw(D1.c_str(),"(Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230)"); //,"(Reconstructed_Higgs.Pt()<200 || Reconstructed_Top.Pt()<200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && Relative_THT>=0.65 && (Relative_Mass>=0.3 && Relative_Mass<=0.5) && (Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
+      DPWJ_HT = (TH2F*)gDirectory->Get(D2.c_str());
+      cout << "Correlation Factor DPWJ and HT: " << DPWJ_HT->GetCorrelationFactor() << " Integral->" << DPWJ_HT->Integral() << endl;
+      gPad->Close();
+      //
+      D1 = Form("ABs(First_W_Jet.Phi(),Second_W_Jet.Phi()):THT >> DPWJ_HT_BE_%i(65,300,1600,60,0.5,3.5)",18);
+      D2 = Form("DPWJ_HT_BE_%i",18);
+      AnalysisChain.Draw(D1.c_str(),"(Top_From_Higgs_Chi2.M()>=140 && Top_From_Higgs_Chi2.M()<=230)"); //,"(Reconstructed_Higgs.Pt()<200 || Reconstructed_Top.Pt()<200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && Relative_THT>=0.65 && (Relative_Mass>=0.3 && Relative_Mass<=0.5) && (Top_From_Higgs_Chi2.M()<140 || Top_From_Higgs_Chi2.M()>230) && (Reconstructed_Higgs.M()>=110 && Reconstructed_Higgs.M()<=140)");
+      DPWJ_HT_BE = (TH2F*)gDirectory->Get(D2.c_str());
+      cout << "Correlation Factor DPWJ and HT: " << DPWJ_HT->GetCorrelationFactor() << " Integral->" << DPWJ_HT->Integral() << endl;
+      gPad->Close();
+      //////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////
+      A1 = Form("Reconstructed_Tprime3L.M() >> TprimeMass3L%i(60,400,1600)",9);
+      A2 = Form("TprimeMass3L%i",9);
+      AnalysisChain3L.Draw(A1.c_str());
+      FiveJetsMass3L = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      /////////////////////
+      ///////////////////// ADDTIONAL INFO ON JETS
+      /////////////////////
+      A1 = Form("JET1.Eta() >> jet1_eta%i(100,-5,5)",9);
+      A2 = Form("jet1_eta%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET1ETA = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET2.Eta() >> jet2_eta%i(100,-5,5)",9);
+      A2 = Form("jet2_eta%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET2ETA = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET3.Eta() >> jet3_eta%i(100,-5,5)",9);
+      A2 = Form("jet3_eta%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET3ETA = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET4.Eta() >> jet4_eta%i(100,-5,5)",9);
+      A2 = Form("jet4_eta%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET4ETA = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET5.Eta() >> jet5_eta%i(100,-5,5)",9);
+      A2 = Form("jet5_eta%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET5ETA = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET6.Eta() >> jet6_eta%i(100,-5,5)",9);
+      A2 = Form("jet6_eta%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET6ETA = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET1.Phi() >> jet1_phi%i(60,-3,3)",9);
+      A2 = Form("jet1_phi%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET1PHI = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET2.Phi() >> jet2_phi%i(60,-3,3)",9);
+      A2 = Form("jet2_phi%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET2PHI = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET3.Phi() >> jet3_phi%i(60,-3,3)",9);
+      A2 = Form("jet3_phi%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET3PHI = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET4.Phi() >> jet4_phi%i(60,-3,3)",9);
+      A2 = Form("jet4_phi%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET4PHI = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET5.Phi() >> jet5_phi%i(60,-3,3)",9);
+      A2 = Form("jet5_phi%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET5PHI = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("JET6.Phi() >> jet6_phi%i(60,-3,3)",9);
+      A2 = Form("jet6_phi%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JET6PHI = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
+      //
+      A1 = Form("Number_Jets >> Num_jets%i(20,0,20)",9);
+      A2 = Form("Num_jets%i",9);
+      AnalysisChain.Draw(A1.c_str(),finalcut);
+      JETMULTI = (TH1F*)gDirectory->Get(A2.c_str());
+      gPad->Close();
     }
     
-  FiveJetsMass->Scale(Lumi*XS/ProcessedEvents[9]);
-  LeadingJetPT->Scale(Lumi*XS/ProcessedEvents[9]);
-  Leading2JetPT->Scale(Lumi*XS/ProcessedEvents[9]);
-  Leading3JetPT->Scale(Lumi*XS/ProcessedEvents[9]);
-  Leading4JetPT->Scale(Lumi*XS/ProcessedEvents[9]);
-  Leading5JetPT->Scale(Lumi*XS/ProcessedEvents[9]);
-  Leading6JetPT->Scale(Lumi*XS/ProcessedEvents[9]);
-  THT->Scale(Lumi*XS/ProcessedEvents[9]);
-  DRHjets->Scale(Lumi*XS/ProcessedEvents[9]);
-  DRWjets->Scale(Lumi*XS/ProcessedEvents[9]);
-  Hpt->Scale(Lumi*XS/ProcessedEvents[9]);
-  Tpt->Scale(Lumi*XS/ProcessedEvents[9]);
-  DRWH->Scale(Lumi*XS/ProcessedEvents[9]);
-  DPHjets->Scale(Lumi*XS/ProcessedEvents[9]);
-  DPWjets->Scale(Lumi*XS/ProcessedEvents[9]);
-  DPTjets->Scale(Lumi*XS/ProcessedEvents[9]);
-  HiggsMass->Scale(Lumi*XS/ProcessedEvents[9]);
-  RelHT->Scale(Lumi*XS/ProcessedEvents[9]);
-  DRTH->Scale(Lumi*XS/ProcessedEvents[9]);
-  PtNormalizedMass->Scale(Lumi*XS/ProcessedEvents[9]);
-  RelativeMass->Scale(Lumi*XS/ProcessedEvents[9]);
-  MotherPtNormalizedMass->Scale(Lumi*XS/ProcessedEvents[9]);  
-  NumberOfTops->Scale(Lumi*XS/ProcessedEvents[9]);
-  HiggsMassOverTopMass->Scale(Lumi*XS/ProcessedEvents[9]);
-  HiggsTopAsymmetry->Scale(Lumi*XS/ProcessedEvents[9]);
-  ThirdLooseBtag->Scale(Lumi*XS/ProcessedEvents[9]);
-  TopMass->Scale(Lumi*XS/ProcessedEvents[9]);
-  Chi2->Scale(Lumi*XS/ProcessedEvents[9]);
-  UQuarkContent->Scale(Lumi*XS/ProcessedEvents[9]);
-  DQuarkContent->Scale(Lumi*XS/ProcessedEvents[9]);
-  SQuarkContent->Scale(Lumi*XS/ProcessedEvents[9]);
-  CQuarkContent->Scale(Lumi*XS/ProcessedEvents[9]);
-  BQuarkContent->Scale(Lumi*XS/ProcessedEvents[9]);
-  CSVLB->Scale(Lumi*XS/ProcessedEvents[9]);
-  CSVMB->Scale(Lumi*XS/ProcessedEvents[9]);
-  CSVTB->Scale(Lumi*XS/ProcessedEvents[9]);
-  Vtcs->Scale(Lumi*XS/ProcessedEvents[9]);	 
-  for (int i=0; i<6; i++) HptTpt[i]->Scale(Lumi*XS/ProcessedEvents[9]); 
-  /*CLBT->Scale(Lumi*XS/ProcessedEvents[9]); 
-  CMBT->Scale(Lumi*XS/ProcessedEvents[9]); 
-  CTBT->Scale(Lumi*XS/ProcessedEvents[9]);  
-  FLLBT->Scale(Lumi*XS/ProcessedEvents[9]); 
-  FLMBT->Scale(Lumi*XS/ProcessedEvents[9]); 
-  FLTBT->Scale(Lumi*XS/ProcessedEvents[9]); 
-  FCLBT->Scale(Lumi*XS/ProcessedEvents[9]); 
-  FCMBT->Scale(Lumi*XS/ProcessedEvents[9]); 
-  FCTBT->Scale(Lumi*XS/ProcessedEvents[9]); */
-  HTCSVM->Scale(Lumi*XS/ProcessedEvents[9]);
-  for (int i=0; i<6; i++) HiggsMassReversedHptTpt[i]->Scale(Lumi*XS/ProcessedEvents[9]);
-  for (int i=0; i<6; i++) TprimeMassReversedHptTpt[i]->Scale(Lumi*XS/ProcessedEvents[9]);    
-  for (int i=0; i<6; i++) HiggsMassCuts[i]->Scale(Lumi*XS/ProcessedEvents[9]);
-  for (int i=0; i<6; i++) WMassFromHiggs[i]->Scale(Lumi*XS/ProcessedEvents[9]);
-  for (int i=0; i<6; i++) WMassFromHiggsChi2[i]->Scale(Lumi*XS/ProcessedEvents[9]);
-  TprimeNotWFromHiggs->Scale(Lumi*XS/ProcessedEvents[9]);
-  FiveJetsMassBE->Scale(Lumi*XS/ProcessedEvents[9]); FiveJetsMassBE->Scale((TopMassFromHiggs->Integral(TopMassFromHiggs->GetXaxis()->FindBin(0.0),TopMassFromHiggs->GetXaxis()->FindBin(140.0))+TopMassFromHiggs->Integral(TopMassFromHiggs->GetXaxis()->FindBin(230.0),TopMassFromHiggs->GetXaxis()->FindBin(10000.0)))/TopMassFromHiggs->Integral(TopMassFromHiggs->GetXaxis()->FindBin(140.0),TopMassFromHiggs->GetXaxis()->FindBin(230.0)));
-  FiveJetsMassLC->Scale(Lumi*XS/ProcessedEvents[9]);
-  TopMassFromHiggs->Scale(Lumi*XS/ProcessedEvents[9]);
-  TopMassFromHiggsLC->Scale(Lumi*XS/ProcessedEvents[9]);
-  /*FiveJetsMassBEoverLC=FiveJetsMassBE->DrawCopy("e hist"); FiveJetsMassBEoverLC->Sumw2();*/ FiveJetsMassLCoverBE->Scale(Lumi*XS/ProcessedEvents[9]); FiveJetsMassLCoverBE->Divide(FiveJetsMassBE);
+  FiveJetsMass->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMass3L->Scale(Lumi*Xs/ProcessedEvents[9]);
+  LeadingJetPT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Leading2JetPT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Leading3JetPT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Leading4JetPT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Leading5JetPT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Leading6JetPT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  THT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DRHjets->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DRWjets->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Hpt->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Tpt->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DRWH->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DPHjets->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DPWjets->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DPTjets->Scale(Lumi*Xs/ProcessedEvents[9]);
+  HiggsMass->Scale(Lumi*Xs/ProcessedEvents[9]);
+  RelHT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DRTH->Scale(Lumi*Xs/ProcessedEvents[9]);
+  PtNormalizedMass->Scale(Lumi*Xs/ProcessedEvents[9]);
+  RelativeMass->Scale(Lumi*Xs/ProcessedEvents[9]);
+  MotherPtNormalizedMass->Scale(Lumi*Xs/ProcessedEvents[9]);  
+  NumberOfTops->Scale(Lumi*Xs/ProcessedEvents[9]);
+  HiggsMassOverTopMass->Scale(Lumi*Xs/ProcessedEvents[9]);
+  HiggsTopAsymmetry->Scale(Lumi*Xs/ProcessedEvents[9]);
+  ThirdLooseBtag->Scale(Lumi*Xs/ProcessedEvents[9]);
+  TopMass->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Chi2->Scale(Lumi*Xs/ProcessedEvents[9]);
+  UQuarkContent->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DQuarkContent->Scale(Lumi*Xs/ProcessedEvents[9]);
+  SQuarkContent->Scale(Lumi*Xs/ProcessedEvents[9]);
+  CQuarkContent->Scale(Lumi*Xs/ProcessedEvents[9]);
+  BQuarkContent->Scale(Lumi*Xs/ProcessedEvents[9]);
+  CSVLB->Scale(Lumi*Xs/ProcessedEvents[9]);
+  CSVMB->Scale(Lumi*Xs/ProcessedEvents[9]);
+  CSVTB->Scale(Lumi*Xs/ProcessedEvents[9]);
+  Vtcs->Scale(Lumi*Xs/ProcessedEvents[9]);	 
+  for (int i=0; i<6; i++) HptTpt[i]->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  /*CLBT->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  CMBT->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  CTBT->Scale(Lumi*Xs/ProcessedEvents[9]);  
+  FLLBT->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  FLMBT->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  FLTBT->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  FCLBT->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  FCMBT->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  FCTBT->Scale(Lumi*Xs/ProcessedEvents[9]); */
+  HTCSVM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  for (int i=0; i<6; i++) HiggsMassReversedHptTpt[i]->Scale(Lumi*Xs/ProcessedEvents[9]);
+  for (int i=0; i<6; i++) TprimeMassReversedHptTpt[i]->Scale(Lumi*Xs/ProcessedEvents[9]);    
+  for (int i=0; i<6; i++) HiggsMassCuts[i]->Scale(Lumi*Xs/ProcessedEvents[9]);
+  for (int i=0; i<6; i++) WMassFromHiggs[i]->Scale(Lumi*Xs/ProcessedEvents[9]);
+  for (int i=0; i<6; i++) WMassFromHiggsChi2[i]->Scale(Lumi*Xs/ProcessedEvents[9]);
+  TprimeNotWFromHiggs->Scale(Lumi*Xs/ProcessedEvents[9]);
+  //
+  FiveJetsMassBE->Scale(Lumi*Xs/ProcessedEvents[9]); FiveJetsMassBE->Scale((TopMassFromHiggs->Integral(TopMassFromHiggs->GetXaxis()->FindBin(0.0),TopMassFromHiggs->GetXaxis()->FindBin(140.0))+TopMassFromHiggs->Integral(TopMassFromHiggs->GetXaxis()->FindBin(230.0),TopMassFromHiggs->GetXaxis()->FindBin(10000.0)))/TopMassFromHiggs->Integral(TopMassFromHiggs->GetXaxis()->FindBin(140.0),TopMassFromHiggs->GetXaxis()->FindBin(230.0)));
+  FiveJetsMassLC->Scale(Lumi*Xs/ProcessedEvents[9]);
+  TopMassFromHiggs->Scale(Lumi*Xs/ProcessedEvents[9]);
+  TopMassFromHiggsLC->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMassLCoverBE->Scale(Lumi*Xs/ProcessedEvents[9]); FiveJetsMassLCoverBE->Scale(FiveJetsMassBE->Integral()/FiveJetsMassLCoverBE->Integral()); FiveJetsMassLCoverBE->Divide(FiveJetsMassBE);
+  //
+  HMBE->Scale(Lumi*Xs/ProcessedEvents[9]);
+  HMLC->Scale(Lumi*Xs/ProcessedEvents[9]);
+  HMLCoverBE->Scale(Lumi*Xs/ProcessedEvents[9]); HMLCoverBE->Scale(HMBE->Integral()/HMLCoverBE->Integral()); HMLCoverBE->Divide(HMBE);
+  FJLC_QCDBE->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FJLC_QCDLC->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FJLC_QCDLCoverBE->Scale(Lumi*Xs/ProcessedEvents[9]); FJLC_QCDLCoverBE->Scale(FJLC_QCDBE->Integral()/FJLC_QCDLCoverBE->Integral()); FJLC_QCDLCoverBE->Divide(FJLC_QCDBE);
+  //
+  FiveJetsMassBE_HHM->Scale(Lumi*Xs/ProcessedEvents[9]); //FiveJetsMassBE_HHM->Scale((TopMassFromHiggs_HHM->Integral(TopMassFromHiggs_HHM->GetXaxis()->FindBin(0.0),TopMassFromHiggs_HHM->GetXaxis()->FindBin(140.0))+TopMassFromHiggs_HHM->Integral(TopMassFromHiggs_HHM->GetXaxis()->FindBin(230.0),TopMassFromHiggs_HHM->GetXaxis()->FindBin(10000.0)))/TopMassFromHiggs_HHM->Integral(TopMassFromHiggs_HHM->GetXaxis()->FindBin(140.0),TopMassFromHiggs_HHM->GetXaxis()->FindBin(230.0)));
+  FiveJetsMassLC_HHM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  TopMassFromHiggs_HHM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  TopMassFromHiggs_HHMoverFHM->Scale(Lumi*Xs/ProcessedEvents[9]); TopMassFromHiggs_HHMoverFHM->Scale(TopMassFromHiggs->Integral()/TopMassFromHiggs_HHMoverFHM->Integral()); TopMassFromHiggs_HHMoverFHM->Divide(TopMassFromHiggs);
+  FiveJetsMassLCoverBE_HHM->Scale(Lumi*Xs/ProcessedEvents[9]); FiveJetsMassLCoverBE_HHM->Scale(FiveJetsMassBE_HHM->Integral()/FiveJetsMassLCoverBE_HHM->Integral()); FiveJetsMassLCoverBE_HHM->Divide(FiveJetsMassBE_HHM);
+  FiveJetsMassBE_LHM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMassLC_LHM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMassLCoverBE_LHM->Scale(Lumi*Xs/ProcessedEvents[9]); FiveJetsMassLCoverBE_LHM->Scale(FiveJetsMassBE_LHM->Integral()/FiveJetsMassLCoverBE_LHM->Integral()); FiveJetsMassLCoverBE_LHM->Divide(FiveJetsMassBE_LHM);
+  FiveJetsMassLC_LHMoverHHM->Scale(Lumi*Xs/ProcessedEvents[9]); FiveJetsMassLC_LHMoverHHM->Scale(FiveJetsMassLC_HHM->Integral()/FiveJetsMassLC_LHMoverHHM->Integral()); FiveJetsMassLC_LHMoverHHM->Divide(FiveJetsMassLC_HHM);
+  //
+  TM_LC->Scale(Lumi*Xs/ProcessedEvents[9]); TM_BE->Scale(Lumi*Xs/ProcessedEvents[9]); 
+  TM_LCoverBE->Scale(Lumi*Xs/ProcessedEvents[9]); TM_LCoverBE->Scale(TM_BE->Integral()/TM_LCoverBE->Integral()); TM_LCoverBE->Divide(TM_BE);
+  TM_LC_HMW->Scale(Lumi*Xs/ProcessedEvents[9]);
+  //
+  HM_W_BE->Scale(Lumi*Xs/ProcessedEvents[9]); HM_W_LC->Scale(Lumi*Xs/ProcessedEvents[9]);
+  HM_W_LCoverBE->Scale(Lumi*Xs/ProcessedEvents[9]); HM_W_LCoverBE->Scale(HM_W_BE->Integral()/HM_W_LCoverBE->Integral()); HM_W_LCoverBE->Divide(HM_W_BE);
+  FJM_W_BE->Scale(Lumi*Xs/ProcessedEvents[9]); FJM_W_LC->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FJM_W_LCoverBE->Scale(Lumi*Xs/ProcessedEvents[9]); FJM_W_LCoverBE->Scale(FJM_W_BE->Integral()/FJM_W_LCoverBE->Integral()); FJM_W_LCoverBE->Divide(FJM_W_BE);
+  //
+  FiveJetsMassLC_LRHT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMassLC_HRHT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMassLC_LRM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMassLC_HRM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  FiveJetsMassLC_WRM->Scale(Lumi*Xs/ProcessedEvents[9]);
+  //
+  DPWJ_HT->Scale(Lumi*Xs/ProcessedEvents[9]);
+  DPWJ_HT_BE->Scale(Lumi*Xs/ProcessedEvents[9]);
+  //cout << "KKKKKKKKKKKKKKKKKKKKKGHGHGHGHGHGHGHG" << endl;
+  JET1ETA->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET2ETA->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET3ETA->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET4ETA->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET5ETA->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET6ETA->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET1PHI->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET2PHI->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET3PHI->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET4PHI->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET5PHI->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JET6PHI->Scale(Lumi*Xs/ProcessedEvents[9]);
+  JETMULTI->Scale(Lumi*Xs/ProcessedEvents[9]);
   if (SurvivalMarker) 
     {
       //Settings for TTbar
       FiveJetsMass->SetFillColor(kRed);
       FiveJetsMass->SetFillStyle(3345);
+      FiveJetsMass3L->SetFillColor(kRed);
+      FiveJetsMass3L->SetFillStyle(3345);
       LeadingJetPT->SetFillColor(kRed);
       LeadingJetPT->SetFillStyle(3345);
       Leading2JetPT->SetFillColor(kRed);
@@ -907,8 +1319,48 @@ void TTJets()
       FiveJetsMassBE->SetFillColor(kRed); FiveJetsMassBE->SetFillStyle(3345);
       TopMassFromHiggs->SetFillColor(kRed); TopMassFromHiggs->SetFillStyle(3345);
       TopMassFromHiggsLC->SetFillColor(kRed); TopMassFromHiggsLC->SetFillStyle(3345);
+      HMBE->SetFillColor(kRed); HMBE->SetFillStyle(3345);
+      HMLC->SetFillColor(kRed); HMLC->SetFillStyle(3345);
+      FJLC_QCDBE->SetFillColor(kRed); FJLC_QCDBE->SetFillStyle(3345);
+      FJLC_QCDLC->SetFillColor(kRed); FJLC_QCDLC->SetFillStyle(3345);
+      //
+      FiveJetsMassBE_HHM->SetFillColor(kRed); FiveJetsMassBE_HHM->SetFillStyle(3345);
+      FiveJetsMassLC_HHM->SetFillColor(kRed); FiveJetsMassLC_HHM->SetFillStyle(3345);
+      TopMassFromHiggs_HHM->SetFillColor(kRed); TopMassFromHiggs_HHM->SetFillStyle(3345);
+      FiveJetsMassBE_LHM->SetFillColor(kRed); FiveJetsMassBE_LHM->SetFillStyle(3345); 
+      FiveJetsMassLC_LHM->SetFillColor(kRed); FiveJetsMassLC_LHM->SetFillStyle(3345);
+      TM_LC->SetFillColor(kRed); TM_LC->SetFillStyle(3345);
+      TM_BE->SetFillColor(kRed); TM_BE->SetFillStyle(3345);
+      TM_LC_HMW->SetFillColor(kRed); TM_LC_HMW->SetFillStyle(3345);
+      //
+      HM_W_BE->SetFillColor(kRed); HM_W_BE->SetFillStyle(3345);
+      HM_W_LC->SetFillColor(kRed); HM_W_LC->SetFillStyle(3345);
+      FJM_W_BE->SetFillColor(kRed); FJM_W_BE->SetFillStyle(3345);
+      FJM_W_LC->SetFillColor(kRed); FJM_W_LC->SetFillStyle(3345);
+      //
+      FiveJetsMassLC_LRHT->SetFillColor(kRed); FiveJetsMassLC_LRHT->SetFillStyle(3345);
+      FiveJetsMassLC_HRHT->SetFillColor(kRed); FiveJetsMassLC_HRHT->SetFillStyle(3345);
+      FiveJetsMassLC_LRM->SetFillColor(kRed); FiveJetsMassLC_LRM->SetFillStyle(3345);
+      FiveJetsMassLC_HRM->SetFillColor(kRed); FiveJetsMassLC_HRM->SetFillStyle(3345);
+      FiveJetsMassLC_WRM->SetFillColor(kRed); FiveJetsMassLC_WRM->SetFillStyle(3345);
+      //
+      JET1ETA->SetFillColor(kRed); JET1ETA->SetFillStyle(3345);
+      JET2ETA->SetFillColor(kRed); JET2ETA->SetFillStyle(3345);
+      JET3ETA->SetFillColor(kRed); JET3ETA->SetFillStyle(3345);
+      JET4ETA->SetFillColor(kRed); JET4ETA->SetFillStyle(3345);
+      JET5ETA->SetFillColor(kRed); JET5ETA->SetFillStyle(3345);
+      JET6ETA->SetFillColor(kRed); JET6ETA->SetFillStyle(3345);
+      JET1PHI->SetFillColor(kRed); JET1PHI->SetFillStyle(3345);
+      JET2PHI->SetFillColor(kRed); JET2PHI->SetFillStyle(3345);
+      JET3PHI->SetFillColor(kRed); JET3PHI->SetFillStyle(3345);
+      JET4PHI->SetFillColor(kRed); JET4PHI->SetFillStyle(3345);
+      JET5PHI->SetFillColor(kRed); JET5PHI->SetFillStyle(3345);
+      JET6PHI->SetFillColor(kRed); JET6PHI->SetFillStyle(3345);
+      JETMULTI->SetFillColor(kRed); JETMULTI->SetFillStyle(3345);
+      //   
       TFile f("TTJets.root", "RECREATE");
       FiveJetsMass->Write();
+      FiveJetsMass3L->Write();
       LeadingJetPT->Write();
       Leading2JetPT->Write();
       Leading3JetPT->Write();
@@ -981,6 +1433,48 @@ void TTJets()
       TopMassFromHiggs->Write();
       TopMassFromHiggsLC->Write();
       FiveJetsMassLCoverBE->Write();
+      HMBE->Write();
+      HMLC->Write();
+      HMLCoverBE->Write();
+      FJLC_QCDBE->Write();
+      FJLC_QCDLC->Write();
+      FJLC_QCDLCoverBE->Write();
+      //
+      FiveJetsMassBE_HHM->Write(); FiveJetsMassLC_HHM->Write(); FiveJetsMassLCoverBE_HHM->Write(); TopMassFromHiggs_HHM->Write(); TopMassFromHiggs_HHMoverFHM->Write();
+      TM_LC->Write(); TM_BE->Write(); TM_LCoverBE->Write();
+      TM_LC_HMW->Write();
+      //
+      cout << "GHGHGHGHGHGHGHG" << endl;
+      HM_W_BE->Write(); HM_W_LC->Write(); 
+      HM_W_LCoverBE->Write();
+      FJM_W_BE->Write(); FJM_W_LC->Write(); 
+      FJM_W_LCoverBE->Write();
+      FiveJetsMassBE_LHM->Write(); FiveJetsMassLC_LHM->Write();
+      FiveJetsMassLCoverBE_LHM->Write();
+      FiveJetsMassLC_LHMoverHHM->Write();
+      //
+      FiveJetsMassLC_LRHT->Write();
+      FiveJetsMassLC_HRHT->Write();
+      FiveJetsMassLC_LRM->Write();
+      FiveJetsMassLC_HRM->Write();
+      FiveJetsMassLC_WRM->Write();
+      //
+      DPWJ_HT->Write();
+      DPWJ_HT_BE->Write();
+      //
+      JET1ETA->Write();
+      JET2ETA->Write();
+      JET3ETA->Write();
+      JET4ETA->Write();
+      JET5ETA->Write();
+      JET6ETA->Write();
+      JET1PHI->Write();
+      JET2PHI->Write();
+      JET3PHI->Write();
+      JET4PHI->Write();
+      JET5PHI->Write();
+      JET6PHI->Write();
+      JETMULTI->Write();
     }  
 
   double RegionA=0; double RegionB=0; double RegionC=0; double RegionD=0;

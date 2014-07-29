@@ -39,12 +39,19 @@ namespace patextractor {
     bool isJetAccepSel(TLorentzVector *jet);
     bool isJetForwSel(TLorentzVector *jet);
     int  SingleTprime_Sel();
+    int  SingleTprime_Sel_InvHptTpt(); //Changed for PT-based reconstruction of objects
+    int  SingleTprime_Sel_3L(); //Reconstruction from loose b-tagged jets
+    int  SingleTprime_Sel_3T(); //Reconstruction from 3 b-tagged jets with highest CSV
     int  SingleTprime_Sel2M1L();
     int patIndexToExtractorIndex(int patIndex) const;
 
     void MCidentification();
     void reset();
+    void reset_common();
     void fillTree();
+    void fillTreeInvHptTpt();
+    void fillTree3L();
+    void fillTree3T();
     void fillTree2M1L();
 
   private:
@@ -52,6 +59,12 @@ namespace patextractor {
 
     TTree* m_tree_stp;
     TTree* m_tree_cuts;
+    TTree* m_tree_stp_InvHptTpt;
+    TTree* m_tree_cutsInvHptTpt;
+    TTree* m_tree_stp_3L;
+    TTree* m_tree_cuts3L;
+    TTree* m_tree_stp_3T;
+    TTree* m_tree_cuts3T;
     TTree* m_tree_stp2M1L;
     //TTree* m_tree_cuts2M1L;    
 
@@ -69,6 +82,24 @@ namespace patextractor {
     float m_jet4pt;
     float m_jet5pt;
     float m_jet6pt;
+    float m_bjet1pt;
+    float m_bjet2pt;
+    float m_bjet3pt;
+    float m_AvBJ_pt;
+    float m_Diff2LeadBJets_pt;
+    float m_ExpDiff2LeadBJets_pt;
+    float m_jet1_nemEfrac;
+    float m_jet2_nemEfrac;
+    float m_jet3_nemEfrac;
+    float m_jet4_nemEfrac;
+    float m_jet5_nemEfrac;
+    float m_jet6_nemEfrac;
+    float m_jet1_nhadEfrac;
+    float m_jet2_nhadEfrac;
+    float m_jet3_nhadEfrac;
+    float m_jet4_nhadEfrac;
+    float m_jet5_nhadEfrac;
+    float m_jet6_nhadEfrac;
     float m_DRHiggsJets;
     float m_DRWJets;
     float m_DRTopHiggs;
@@ -86,6 +117,7 @@ namespace patextractor {
     float m_DRTrueSecondWJetRecoJet; 
     float m_DRTrueTopJetRecoJet;   
     float m_DP2LeadingJets;
+    float m_DY2LeadingJets;
 
     float DRWjetsFromHiggsChi2;
     float DRWbFromHiggsChi2;
@@ -278,6 +310,48 @@ namespace patextractor {
     TLorentzVector* TopJet2M1L;
     TLorentzVector* WFromHiggsChi22M1L;
     TLorentzVector* TopFromHiggsChi22M1L;
+    TLorentzVector* JET1;
+    TLorentzVector* JET2;
+    TLorentzVector* JET3;
+    TLorentzVector* JET4;
+    TLorentzVector* JET5;
+    TLorentzVector* JET6;
+
+    TLorentzVector* ReconstructedHiggsInvHptTpt;
+    TLorentzVector* ReconstructedWInvHptTpt;
+    TLorentzVector* ReconstructedTopInvHptTpt;
+    TLorentzVector* ReconstructedTprimeInvHptTpt;
+    TLorentzVector* FirstHiggsJetInvHptTpt;
+    TLorentzVector* SecondHiggsJetInvHptTpt;
+    TLorentzVector* FirstWJetInvHptTpt;
+    TLorentzVector* SecondWJetInvHptTpt;
+    TLorentzVector* TopJetInvHptTpt;
+    TLorentzVector* WFromHiggsChi2InvHptTpt;
+    TLorentzVector* TopFromHiggsChi2InvHptTpt;
+
+    TLorentzVector* ReconstructedHiggs3L;
+    TLorentzVector* ReconstructedW3L;
+    TLorentzVector* ReconstructedTop3L;
+    TLorentzVector* ReconstructedTprime3L;
+    TLorentzVector* FirstHiggsJet3L;
+    TLorentzVector* SecondHiggsJet3L;
+    TLorentzVector* FirstWJet3L;
+    TLorentzVector* SecondWJet3L;
+    TLorentzVector* TopJet3L;
+    TLorentzVector* WFromHiggsChi23L;
+    TLorentzVector* TopFromHiggsChi23L;
+
+    TLorentzVector* ReconstructedHiggs3T;
+    TLorentzVector* ReconstructedW3T;
+    TLorentzVector* ReconstructedTop3T;
+    TLorentzVector* ReconstructedTprime3T;
+    TLorentzVector* FirstHiggsJet3T;
+    TLorentzVector* SecondHiggsJet3T;
+    TLorentzVector* FirstWJet3T;
+    TLorentzVector* SecondWJet3T;
+    TLorentzVector* TopJet3T;
+    TLorentzVector* WFromHiggsChi23T;
+    TLorentzVector* TopFromHiggsChi23T;
 
     //Matching with MC truth
     int CorrectTprime;

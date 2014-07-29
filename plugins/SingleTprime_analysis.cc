@@ -253,11 +253,59 @@ namespace patextractor {
   TopJet2M1L = new TLorentzVector(0., 0., 0., 0.);
   WFromHiggsChi22M1L = new TLorentzVector(0., 0., 0., 0.);
   TopFromHiggsChi22M1L = new TLorentzVector(0., 0., 0., 0.);
+  JET1 = new TLorentzVector(0., 0., 0., 0.);
+  JET2 = new TLorentzVector(0., 0., 0., 0.);
+  JET3 = new TLorentzVector(0., 0., 0., 0.);
+  JET4 = new TLorentzVector(0., 0., 0., 0.);
+  JET5 = new TLorentzVector(0., 0., 0., 0.);
+  JET6 = new TLorentzVector(0., 0., 0., 0.);
+
+  ReconstructedHiggsInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedWInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedTopInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedTprimeInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  FirstHiggsJetInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  SecondHiggsJetInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  FirstWJetInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  SecondWJetInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  TopJetInvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  WFromHiggsChi2InvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  TopFromHiggsChi2InvHptTpt = new TLorentzVector(0., 0., 0., 0.);
+  
+  ReconstructedHiggs3L = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedW3L = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedTop3L = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedTprime3L = new TLorentzVector(0., 0., 0., 0.);
+  FirstHiggsJet3L = new TLorentzVector(0., 0., 0., 0.);
+  SecondHiggsJet3L = new TLorentzVector(0., 0., 0., 0.);
+  FirstWJet3L = new TLorentzVector(0., 0., 0., 0.);
+  SecondWJet3L = new TLorentzVector(0., 0., 0., 0.);
+  TopJet3L = new TLorentzVector(0., 0., 0., 0.);
+  WFromHiggsChi23L = new TLorentzVector(0., 0., 0., 0.);
+  TopFromHiggsChi23L = new TLorentzVector(0., 0., 0., 0.);
+
+  ReconstructedHiggs3T = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedW3T = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedTop3T = new TLorentzVector(0., 0., 0., 0.);
+  ReconstructedTprime3T = new TLorentzVector(0., 0., 0., 0.);
+  FirstHiggsJet3T = new TLorentzVector(0., 0., 0., 0.);
+  SecondHiggsJet3T = new TLorentzVector(0., 0., 0., 0.);
+  FirstWJet3T = new TLorentzVector(0., 0., 0., 0.);
+  SecondWJet3T = new TLorentzVector(0., 0., 0., 0.);
+  TopJet3T = new TLorentzVector(0., 0., 0., 0.);
+  WFromHiggsChi23T = new TLorentzVector(0., 0., 0., 0.);
+  TopFromHiggsChi23T = new TLorentzVector(0., 0., 0., 0.);
 
   /// Tree definition containing your analysis results
 
   m_tree_stp = new TTree("stp","Single Analysis info");  
   m_tree_cuts = new TTree("cuts","Cuts efficiencies");
+  m_tree_stp_InvHptTpt = new TTree("stpInvHptTpt","Single Analysis info"); 
+  m_tree_cutsInvHptTpt = new TTree("cutsInvHptTpt","Cuts efficiencies");
+  m_tree_stp_3L = new TTree("stp3L","Single Analysis info"); 
+  m_tree_cuts3L = new TTree("cuts3L","Cuts efficiencies");
+  m_tree_stp_3T = new TTree("stp3T","Single Analysis info");  
+  m_tree_cuts3T = new TTree("cuts3T","Cuts efficiencies"); 
   m_tree_stp2M1L = new TTree("stp2M1L","Single Analysis info");  
   //m_tree_cuts2M1L = new TTree("cuts2M1L","Cuts efficiencies");
   
@@ -287,6 +335,12 @@ namespace patextractor {
   m_tree_stp->Branch("Top_From_Higgs", &TopFromHiggs);
   m_tree_stp->Branch("W_From_Higgs_Chi2", &WFromHiggsChi2);
   m_tree_stp->Branch("Top_From_Higgs_Chi2", &TopFromHiggsChi2);
+  m_tree_stp->Branch("JET1", &JET1);
+  m_tree_stp->Branch("JET2", &JET2);
+  m_tree_stp->Branch("JET3", &JET3);
+  m_tree_stp->Branch("JET4", &JET4);
+  m_tree_stp->Branch("JET5", &JET5);
+  m_tree_stp->Branch("JET6", &JET6);
 
   m_tree_stp2M1L->Branch("Reconstructed_Higgs2M1L", &ReconstructedHiggs2M1L);
   m_tree_stp2M1L->Branch("Reconstructed_W2M1L", &ReconstructedW2M1L);
@@ -300,6 +354,42 @@ namespace patextractor {
   m_tree_stp2M1L->Branch("W_From_Higgs_Chi22M1L", &WFromHiggsChi22M1L);
   m_tree_stp2M1L->Branch("Top_From_Higgs_Chi22M1L", &TopFromHiggsChi22M1L);
 
+  m_tree_stp_InvHptTpt->Branch("Reconstructed_HiggsInvHptTpt", &ReconstructedHiggsInvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("Reconstructed_WInvHptTpt", &ReconstructedWInvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("Reconstructed_TopInvHptTpt", &ReconstructedTopInvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("Reconstructed_TprimeInvHptTpt", &ReconstructedTprimeInvHptTpt);  
+  m_tree_stp_InvHptTpt->Branch("First_Higgs_JetInvHptTpt", &FirstHiggsJetInvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("Second_Higgs_JetInvHptTpt", &SecondHiggsJetInvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("First_W_JetInvHptTpt", &FirstWJetInvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("Second_W_JetInvHptTpt", &SecondWJetInvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("Top_JetInvHptTpt", &TopJetInvHptTpt);  
+  m_tree_stp_InvHptTpt->Branch("W_From_Higgs_Chi2InvHptTpt", &WFromHiggsChi2InvHptTpt);
+  m_tree_stp_InvHptTpt->Branch("Top_From_Higgs_Chi2InvHptTpt", &TopFromHiggsChi2InvHptTpt);
+
+  m_tree_stp_3L->Branch("Reconstructed_Higgs3L", &ReconstructedHiggs3L);
+  m_tree_stp_3L->Branch("Reconstructed_W3L", &ReconstructedW3L);
+  m_tree_stp_3L->Branch("Reconstructed_Top3L", &ReconstructedTop3L);
+  m_tree_stp_3L->Branch("Reconstructed_Tprime3L", &ReconstructedTprime3L);  
+  m_tree_stp_3L->Branch("First_Higgs_Jet3L", &FirstHiggsJet3L);
+  m_tree_stp_3L->Branch("Second_Higgs_Jet3L", &SecondHiggsJet3L);
+  m_tree_stp_3L->Branch("First_W_Jet3L", &FirstWJet3L);
+  m_tree_stp_3L->Branch("Second_W_Jet3L", &SecondWJet3L);
+  m_tree_stp_3L->Branch("Top_Jet3L", &TopJet3L);  
+  m_tree_stp_3L->Branch("W_From_Higgs_Chi23L", &WFromHiggsChi23L);
+  m_tree_stp_3L->Branch("Top_From_Higgs_Chi23L", &TopFromHiggsChi23L);
+
+  m_tree_stp_3T->Branch("Reconstructed_Higgs3T", &ReconstructedHiggs3T);
+  m_tree_stp_3T->Branch("Reconstructed_W3T", &ReconstructedW3T);
+  m_tree_stp_3T->Branch("Reconstructed_Top3T", &ReconstructedTop3T);
+  m_tree_stp_3T->Branch("Reconstructed_Tprime3T", &ReconstructedTprime3T);  
+  m_tree_stp_3T->Branch("First_Higgs_Jet3T", &FirstHiggsJet3T);
+  m_tree_stp_3T->Branch("Second_Higgs_Jet3T", &SecondHiggsJet3T);
+  m_tree_stp_3T->Branch("First_W_Jet3T", &FirstWJet3T);
+  m_tree_stp_3T->Branch("Second_W_Jet3T", &SecondWJet3T);
+  m_tree_stp_3T->Branch("Top_Jet3T", &TopJet3T);  
+  m_tree_stp_3T->Branch("W_From_Higgs_Chi23T", &WFromHiggsChi23T);
+  m_tree_stp_3T->Branch("Top_From_Higgs_Chi23T", &TopFromHiggsChi23T);
+
   m_tree_stp->Branch("evt",         &m_evt    ,"evt/I");      // Simple evt number or event ID
   m_tree_stp->Branch("PU",         &m_nPU    ,"m_nPU/I");
   m_tree_stp->Branch("Vertices",         &n_vtx    ,"n_vtx/I");
@@ -312,6 +402,24 @@ namespace patextractor {
   m_tree_stp->Branch("jet4_pt",  &m_jet4pt   ,"jet4_pt/F");
   m_tree_stp->Branch("jet5_pt",  &m_jet5pt   ,"jet5_pt/F");
   m_tree_stp->Branch("jet6_pt",  &m_jet6pt   ,"jet6_pt/F");
+  m_tree_stp->Branch("bjet1_pt",  &m_bjet1pt   ,"bjet1_pt/F");
+  m_tree_stp->Branch("bjet2_pt",  &m_bjet2pt   ,"bjet2_pt/F");
+  m_tree_stp->Branch("bjet3_pt",  &m_bjet3pt   ,"bjet3_pt/F");
+  m_tree_stp->Branch("AvBJ_pt",  &m_AvBJ_pt   ,"AvBJ_pt/F");
+  m_tree_stp->Branch("Diff2LeadBJets_pt",  &m_Diff2LeadBJets_pt  ,"Diff2LeadBJets_pt/F");
+  m_tree_stp->Branch("ExpDiff2LeadBJets_pt",  &m_ExpDiff2LeadBJets_pt  ,"ExpDiff2LeadBJets_pt/F");
+  m_tree_stp->Branch("jet1_nemEfrac",  &m_jet1_nemEfrac   ,"jet1_nemEfrac/F");
+  m_tree_stp->Branch("jet2_nemEfrac",  &m_jet2_nemEfrac   ,"jet2_nemEfrac/F");
+  m_tree_stp->Branch("jet3_nemEfrac",  &m_jet3_nemEfrac   ,"jet3_nemEfrac/F");
+  m_tree_stp->Branch("jet4_nemEfrac",  &m_jet4_nemEfrac   ,"jet4_nemEfrac/F");
+  m_tree_stp->Branch("jet5_nemEfrac",  &m_jet5_nemEfrac   ,"jet5_nemEfrac/F");
+  m_tree_stp->Branch("jet6_nemEfrac",  &m_jet6_nemEfrac   ,"jet6_nemEfrac/F");
+  m_tree_stp->Branch("jet1_nhadEfrac",  &m_jet1_nhadEfrac   ,"jet1_nhadEfrac/F");
+  m_tree_stp->Branch("jet2_nhadEfrac",  &m_jet2_nhadEfrac   ,"jet2_nhadEfrac/F");
+  m_tree_stp->Branch("jet3_nhadEfrac",  &m_jet3_nhadEfrac   ,"jet3_nhadEfrac/F");
+  m_tree_stp->Branch("jet4_nhadEfrac",  &m_jet4_nhadEfrac   ,"jet4_nhadEfrac/F");
+  m_tree_stp->Branch("jet5_nhadEfrac",  &m_jet5_nhadEfrac   ,"jet5_nhadEfrac/F");
+  m_tree_stp->Branch("jet6_nhadEfrac",  &m_jet6_nhadEfrac   ,"jet6_nhadEfrac/F");
   m_tree_stp->Branch("Number_CSVLbtagged_jets",  &m_NBtaggedJets_CSVL   ,"m_NBtaggedJets_CSVL/I");
   m_tree_stp->Branch("Number_CSVMbtagged_jets",  &m_NBtaggedJets_CSVM   ,"m_NBtaggedJets_CSVM/I");
   m_tree_stp->Branch("Number_CSVTbtagged_jets",  &m_NBtaggedJets_CSVT   ,"m_NBtaggedJets_CSVT/I");
@@ -357,6 +465,7 @@ namespace patextractor {
   m_tree_stp->Branch("Number_of_Loose_and_non_med_b_tags",  &LooseNoMedBtags   ,"LooseNoMedBtags/I");
   m_tree_stp->Branch("Number_of_Loose_and_non_med_b_tags",  &LooseNoMedBtags   ,"LooseNoMedBtags/I");
   m_tree_stp->Branch("DeltaPTwoLeadingJets",  &m_DP2LeadingJets   ,"DP2LeadingJets/F");
+  m_tree_stp->Branch("DeltaYTwoLeadingJets",  &m_DY2LeadingJets   ,"DY2LeadingJets/F");
   m_tree_stp->Branch("ChiSquaredSorting",  &chi2   ,"chi2/F");
 
   // Weights and errors from differents scale factors
@@ -365,7 +474,16 @@ namespace patextractor {
   m_tree_stp->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");
   m_tree_stp2M1L->Branch("weight", &m_weight, "weight/F");
   m_tree_stp2M1L->Branch("weight_error_low", &m_weight_error_low, "weight_error_low/F");
-  m_tree_stp2M1L->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");
+  m_tree_stp2M1L->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");    
+  m_tree_stp_InvHptTpt->Branch("weight", &m_weight, "weight/F");
+  m_tree_stp_InvHptTpt->Branch("weight_error_low", &m_weight_error_low, "weight_error_low/F");
+  m_tree_stp_InvHptTpt->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");
+  m_tree_stp_3L->Branch("weight", &m_weight, "weight/F");
+  m_tree_stp_3L->Branch("weight_error_low", &m_weight_error_low, "weight_error_low/F");
+  m_tree_stp_3L->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");
+  m_tree_stp_3T->Branch("weight", &m_weight, "weight/F");
+  m_tree_stp_3T->Branch("weight_error_low", &m_weight_error_low, "weight_error_low/F");
+  m_tree_stp_3T->Branch("weight_error_high", &m_weight_error_high, "weight_error_high/F");
   m_tree_stp->Branch("PU_weight", &PU_weight, "PU_weight/F");
 
   //Proving non-boosted regime
@@ -441,6 +559,84 @@ namespace patextractor {
   m_tree_cuts->Branch("Cut_20", &m_Cut20, "Cut20_passed/I");
   m_tree_cuts->Branch("Cut_21", &m_Cut21, "Cut21_passed/I");
   m_tree_cuts->Branch("Cut_22", &m_Cut22, "Cut22_passed/I");
+
+  m_tree_cutsInvHptTpt->Branch("Trigger_cut", &m_triggercut, "Trigger_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_0", &m_Cut0, "Cut0_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_1", &m_Cut1, "Cut1_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_2", &m_Cut2, "Cut2_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_3", &m_Cut3, "Cut3_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_chi2", &m_CutChi2, "CutChi2_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_4", &m_Cut4, "Cut4_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_5", &m_Cut5, "Cut5_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_6", &m_Cut6, "Cut6_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_7", &m_Cut7, "Cut7_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_8", &m_Cut8, "Cut8_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_9", &m_Cut9, "Cut9_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_10", &m_Cut10, "Cut10_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_11", &m_Cut11, "Cut11_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_12", &m_Cut12, "Cut12_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_13", &m_Cut13, "Cut13_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_14", &m_Cut14, "Cut14_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_15", &m_Cut15, "Cut15_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_16", &m_Cut16, "Cut16_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_17", &m_Cut17, "Cut17_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_18", &m_Cut18, "Cut18_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_19", &m_Cut19, "Cut19_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_20", &m_Cut20, "Cut20_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_21", &m_Cut21, "Cut21_passed/I");
+  m_tree_cutsInvHptTpt->Branch("Cut_22", &m_Cut22, "Cut22_passed/I");
+
+  m_tree_cuts3L->Branch("Trigger_cut", &m_triggercut, "Trigger_passed/I");
+  m_tree_cuts3L->Branch("Cut_0", &m_Cut0, "Cut0_passed/I");
+  m_tree_cuts3L->Branch("Cut_1", &m_Cut1, "Cut1_passed/I");
+  m_tree_cuts3L->Branch("Cut_2", &m_Cut2, "Cut2_passed/I");
+  m_tree_cuts3L->Branch("Cut_3", &m_Cut3, "Cut3_passed/I");
+  m_tree_cuts3L->Branch("Cut_chi2", &m_CutChi2, "CutChi2_passed/I");
+  m_tree_cuts3L->Branch("Cut_4", &m_Cut4, "Cut4_passed/I");
+  m_tree_cuts3L->Branch("Cut_5", &m_Cut5, "Cut5_passed/I");
+  m_tree_cuts3L->Branch("Cut_6", &m_Cut6, "Cut6_passed/I");
+  m_tree_cuts3L->Branch("Cut_7", &m_Cut7, "Cut7_passed/I");
+  m_tree_cuts3L->Branch("Cut_8", &m_Cut8, "Cut8_passed/I");
+  m_tree_cuts3L->Branch("Cut_9", &m_Cut9, "Cut9_passed/I");
+  m_tree_cuts3L->Branch("Cut_10", &m_Cut10, "Cut10_passed/I");
+  m_tree_cuts3L->Branch("Cut_11", &m_Cut11, "Cut11_passed/I");
+  m_tree_cuts3L->Branch("Cut_12", &m_Cut12, "Cut12_passed/I");
+  m_tree_cuts3L->Branch("Cut_13", &m_Cut13, "Cut13_passed/I");
+  m_tree_cuts3L->Branch("Cut_14", &m_Cut14, "Cut14_passed/I");
+  m_tree_cuts3L->Branch("Cut_15", &m_Cut15, "Cut15_passed/I");
+  m_tree_cuts3L->Branch("Cut_16", &m_Cut16, "Cut16_passed/I");
+  m_tree_cuts3L->Branch("Cut_17", &m_Cut17, "Cut17_passed/I");
+  m_tree_cuts3L->Branch("Cut_18", &m_Cut18, "Cut18_passed/I");
+  m_tree_cuts3L->Branch("Cut_19", &m_Cut19, "Cut19_passed/I");
+  m_tree_cuts3L->Branch("Cut_20", &m_Cut20, "Cut20_passed/I");
+  m_tree_cuts3L->Branch("Cut_21", &m_Cut21, "Cut21_passed/I");
+  m_tree_cuts3L->Branch("Cut_22", &m_Cut22, "Cut22_passed/I");
+
+  m_tree_cuts3T->Branch("Trigger_cut", &m_triggercut, "Trigger_passed/I");
+  m_tree_cuts3T->Branch("Cut_0", &m_Cut0, "Cut0_passed/I");
+  m_tree_cuts3T->Branch("Cut_1", &m_Cut1, "Cut1_passed/I");
+  m_tree_cuts3T->Branch("Cut_2", &m_Cut2, "Cut2_passed/I");
+  m_tree_cuts3T->Branch("Cut_3", &m_Cut3, "Cut3_passed/I");
+  m_tree_cuts3T->Branch("Cut_chi2", &m_CutChi2, "CutChi2_passed/I");
+  m_tree_cuts3T->Branch("Cut_4", &m_Cut4, "Cut4_passed/I");
+  m_tree_cuts3T->Branch("Cut_5", &m_Cut5, "Cut5_passed/I");
+  m_tree_cuts3T->Branch("Cut_6", &m_Cut6, "Cut6_passed/I");
+  m_tree_cuts3T->Branch("Cut_7", &m_Cut7, "Cut7_passed/I");
+  m_tree_cuts3T->Branch("Cut_8", &m_Cut8, "Cut8_passed/I");
+  m_tree_cuts3T->Branch("Cut_9", &m_Cut9, "Cut9_passed/I");
+  m_tree_cuts3T->Branch("Cut_10", &m_Cut10, "Cut10_passed/I");
+  m_tree_cuts3T->Branch("Cut_11", &m_Cut11, "Cut11_passed/I");
+  m_tree_cuts3T->Branch("Cut_12", &m_Cut12, "Cut12_passed/I");
+  m_tree_cuts3T->Branch("Cut_13", &m_Cut13, "Cut13_passed/I");
+  m_tree_cuts3T->Branch("Cut_14", &m_Cut14, "Cut14_passed/I");
+  m_tree_cuts3T->Branch("Cut_15", &m_Cut15, "Cut15_passed/I");
+  m_tree_cuts3T->Branch("Cut_16", &m_Cut16, "Cut16_passed/I");
+  m_tree_cuts3T->Branch("Cut_17", &m_Cut17, "Cut17_passed/I");
+  m_tree_cuts3T->Branch("Cut_18", &m_Cut18, "Cut18_passed/I");
+  m_tree_cuts3T->Branch("Cut_19", &m_Cut19, "Cut19_passed/I");
+  m_tree_cuts3T->Branch("Cut_20", &m_Cut20, "Cut20_passed/I");
+  m_tree_cuts3T->Branch("Cut_21", &m_Cut21, "Cut21_passed/I");
+  m_tree_cuts3T->Branch("Cut_22", &m_Cut22, "Cut22_passed/I");
 
   // Initialize the analysis parameters using the ParameterSet iConfig
   //int an_option = iConfig.getUntrackedParameter<int>("an_option", 0);
@@ -549,7 +745,7 @@ namespace patextractor {
     }
 
   n_jets = m_jetMet->getSize();
-  //cout << "Number of jets " << n_jets << endl;
+  //cout << "Analysis Number of jets " << n_jets << endl;
   bool JetsInAcceptance[n_jets]; //Mas for keeping track of jets inside acceptance
   bool jetIsBTagged[n_jets]; //Mask for keeping track of b-tagged jets
   bool jetIsLooseBTagged[n_jets]; //Mask for keeping track of loose b-tagged jets
@@ -599,6 +795,7 @@ namespace patextractor {
   for (int i=0;i<n_jets;++i)
     {
       TLorentzVector *jeti = m_jetMet->getP4(i);
+      //cout << m_jetMet->vx(i) << endl;
       
       //cout << "Pt of jet " << i << " is " << jeti->Pt() << endl;
 
@@ -707,9 +904,10 @@ namespace patextractor {
   //Cut 0//
   /////////
 
-  if(Cut0) {
-    if (CountingGoodJets>=NumberOfGoodJets && CountingBadJets>=NumberOfBadJets) cout << "Good Event" << endl;
-    else return 0; }
+  if(Cut0) { if (CountingGoodJets<NumberOfGoodJets || CountingBadJets<NumberOfBadJets) return 0;}
+    //if (CountingGoodJets>=NumberOfGoodJets && CountingBadJets>=NumberOfBadJets) cout << "Good Event" << endl;
+    //else return 0; }
+  //cout << "Ana: Cut0 " << CountingGoodJets << " " << CountingBadJets << endl;
   m_Cut0=1;
   
   /////////
@@ -718,23 +916,52 @@ namespace patextractor {
 
   if(Cut1) {if (LeadingJet.Pt()<LeadingJetPt) return 0;}
   m_Cut1=1;
+  //cout << "Ana: Cut1 " << LeadingJet.Pt() << endl;
 
   //cout << "The HT of the event is " << TotalHT << endl;
   m_THT = TotalHT;
-  if (n_jets>0) m_jet1pt = AllJets[0].Pt();
-  if (n_jets>1) m_jet2pt = AllJets[1].Pt();
-  if (n_jets>2) m_jet3pt = AllJets[2].Pt();
-  if (n_jets>3) m_jet4pt = AllJets[3].Pt();
-  if (n_jets>4) m_jet5pt = AllJets[4].Pt();
-  if (n_jets>5) m_jet6pt = AllJets[5].Pt();
+  if (n_jets>0) 
+    {
+      m_jet1pt = AllJets[0].Pt();
+      JET1->SetPxPyPzE(AllJets[0].Px(),AllJets[0].Py(),AllJets[0].Pz(),AllJets[0].E());
+      //m_jet1_nemEfrac;
+      //m_jet1_nhadEfrac;
+    }
+  if (n_jets>1) 
+    {
+      m_jet2pt = AllJets[1].Pt();
+      JET2->SetPxPyPzE(AllJets[1].Px(),AllJets[1].Py(),AllJets[1].Pz(),AllJets[1].E());
+    }
+  if (n_jets>2) 
+    {
+      m_jet3pt = AllJets[2].Pt();
+      JET3->SetPxPyPzE(AllJets[2].Px(),AllJets[2].Py(),AllJets[2].Pz(),AllJets[2].E());
+    }
+  if (n_jets>3) 
+    {
+      m_jet4pt = AllJets[3].Pt();
+      JET4->SetPxPyPzE(AllJets[3].Px(),AllJets[3].Py(),AllJets[3].Pz(),AllJets[3].E());
+    }
+  if (n_jets>4) 
+    {
+      m_jet5pt = AllJets[4].Pt();
+      JET5->SetPxPyPzE(AllJets[4].Px(),AllJets[4].Py(),AllJets[4].Pz(),AllJets[4].E());
+    }
+  if (n_jets>5)
+    {
+      m_jet6pt = AllJets[5].Pt();
+      JET6->SetPxPyPzE(AllJets[5].Px(),AllJets[5].Py(),AllJets[5].Pz(),AllJets[5].E());
+    }
 
   m_DP2LeadingJets=fabs(AllJets[1].Phi()-AllJets[0].Phi());
+  m_DY2LeadingJets=fabs(AllJets[1].Rapidity()-AllJets[0].Rapidity());
 
   /////////
   //Cut 2//
   /////////
 
   if (Cut2) {if (TotalHT<THTcut) return 0;}
+  //cout << "Ana: Cut2 " << TotalHT << endl;
   m_Cut2=1;
 
   /////////
@@ -743,7 +970,7 @@ namespace patextractor {
 
   CSV3MAverage=CSV3MSum/n_jets; //CSV3MMinimum=MinimalCSVM;
   //cout << "Exclusive loose b-tags " << LooseBtagCounter-BtagCounter << endl;
-  //cout << "CSVL: " << LooseBtagCounter << ", CSVM: " << BtagCounter << ", CSVT: " << TightBtagCounter << endl;
+  //cout << "Ana: Cut3 " << "CSVL: " << LooseBtagCounter << ", CSVM: " << BtagCounter << ", CSVT: " << TightBtagCounter << endl;
   if (MinLooseB_tags!=0 && MinB_tags!=0)
     {
       if (Cut3) {if (BtagCounter<MinB_tags || LooseBtagCounter<MinLooseB_tags+MinB_tags) return 0;}
@@ -767,6 +994,22 @@ namespace patextractor {
 
   m_Cut3=1;
 
+  //Obtaining pt for b-tagged jets
+  int b_tag_counter=0;
+  float AveragePT_Bjets=0.0;
+  float DiffTwoLeadBJets=0.0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (!JetsInAcceptance[i]) continue; 
+      if (!jetIsBTagged[i]) continue;
+      if (b_tag_counter==0) {m_bjet1pt=AllJets[i].Pt(); b_tag_counter++; AveragePT_Bjets+=AllJets[i].Pt();}
+      else if (b_tag_counter==1) {m_bjet2pt=AllJets[i].Pt(); b_tag_counter++; DiffTwoLeadBJets=AveragePT_Bjets-AllJets[i].Pt(); AveragePT_Bjets+=AllJets[i].Pt();}
+      else if (b_tag_counter==2) {m_bjet3pt=AllJets[i].Pt(); b_tag_counter++; AveragePT_Bjets+=AllJets[i].Pt();}
+      else {cout << "Event with more than 3 b-tagged jets" << endl; break;}
+    }
+  m_AvBJ_pt=AveragePT_Bjets/3;
+  m_Diff2LeadBJets_pt=DiffTwoLeadBJets;
+  m_ExpDiff2LeadBJets_pt=TMath::Log(DiffTwoLeadBJets);
 
   //////////////////////////
   //Chi2 Sorting algorithm//
@@ -955,6 +1198,7 @@ namespace patextractor {
 
   if (Cut4) {if (!EventWithHiggs) return 0;}
   m_Cut4=1;
+  //cout << "Ana: Cut4 " << IndexHiggsJets[0] << " " << IndexHiggsJets[1] << endl;
 
   ////////////////////////////////////
 
@@ -1043,6 +1287,7 @@ namespace patextractor {
 
   if (Cut5) {if (!EventWithW) return 0;}
   m_Cut5=1;
+  //cout << "Ana: Cut5 " << IndexWJets[0] << " " << IndexWJets[1] << endl;
 
   //////////////////////////////////////
 
@@ -1098,6 +1343,13 @@ namespace patextractor {
     }
 
   if (!EventWithTop) return 0;
+  //cout << "Ana: CutTop " << IndexTopJet << endl;
+  /*cout << "Vertices of jets of 5 jets system: " << endl;
+  cout << "Higgs 1: " <<  AllJets[IndexHiggsJets[0]].X() << " " << AllJets[IndexHiggsJets[0]].Y() << " " << AllJets[IndexHiggsJets[0]].Z() << endl;
+  cout << "Higgs 2: " <<  AllJets[IndexHiggsJets[1]].X() << " " << AllJets[IndexHiggsJets[1]].Y() << " " << AllJets[IndexHiggsJets[1]].Z() << endl;
+  cout << "W 1: " <<  AllJets[IndexWJets[0]].X() << " " << AllJets[IndexWJets[0]].Y() << " " << AllJets[IndexWJets[0]].Z() << endl;
+  cout << "W 2: " <<  AllJets[IndexWJets[1]].X() << " " << AllJets[IndexWJets[1]].Y() << " " << AllJets[IndexWJets[1]].Z() << endl;
+  cout << "Top: " <<  AllJets[IndexTopJet].X() << " " << AllJets[IndexTopJet].Y() << " " << AllJets[IndexTopJet].Z() << endl;*/
     }
   //cout << "Higgs Jets are: " << IndexHiggsJets[0] << IndexHiggsJets[1] << " W Jets are: " << IndexWJets[0] << IndexWJets[1] << " Top jet is: " << IndexTopJet << endl;
   TLorentzVector HJ; 
@@ -1207,6 +1459,7 @@ namespace patextractor {
   /////////
   
   if (Cut6) {if (HJ.Pt()<HiggsPt || TJ.Pt()<TopPt) return 0;}
+  //cout << "Ana cut6: " << HJ.Pt() << " " << TJ.Pt() << endl;
   m_Cut6=1;
 
   /////////
@@ -1382,7 +1635,7 @@ namespace patextractor {
 
   WFromHiggsChi2->SetPxPyPzE(W2JChi2.Px(), W2JChi2.Py(), W2JChi2.Pz(), W2JChi2.E());
   if (WhichHiggsJetMarker==0) DRWjetsFromHiggsChi2=AllJets[IndexWFromH].DeltaR(FHJ);
-  else if (WhichHiggsJetMarker>=1 && IndexWFromH!=-1) {cout << IndexWFromH << " " << IndexHiggsJets[1] << endl; DRWjetsFromHiggsChi2=AllJets[IndexWFromH].DeltaR(SHJ);}
+  else if (WhichHiggsJetMarker>=1 && IndexWFromH!=-1) {/*cout << IndexWFromH << " " << IndexHiggsJets[1] << endl;*/ DRWjetsFromHiggsChi2=AllJets[IndexWFromH].DeltaR(SHJ);}
   TopFromHiggsChi2->SetPxPyPzE(T2JChi2.Px(), T2JChi2.Py(), T2JChi2.Pz(), T2JChi2.E()); 
   if (WhichHiggsJetMarker==0) DRWbFromHiggsChi2=W2JChi2.DeltaR(SHJ);
   else if (WhichHiggsJetMarker>=1 && IndexWFromH!=-1) DRWbFromHiggsChi2=W2JChi2.DeltaR(FHJ);
@@ -1415,7 +1668,7 @@ namespace patextractor {
 	}
     }
 
-  cout << NewTopsCounter << " " << NumberOfBs << endl;
+  //cout << NewTopsCounter << " " << NumberOfBs << endl;
 
   float MinimalPtTTbar=0;
   bool MarkerToDoCut=false;
@@ -1660,9 +1913,9 @@ namespace patextractor {
       }
 
       sf = sf_jet1.getValue() * sf_jet2.getValue() * sf_jet3.getValue();
-      sf_error = sf*sqrt((sf_jet1.getValue()*sf_jet1.getValue()/(sf_jet1.getErrorHigh()*sf_jet1.getErrorHigh()))+
-			 (sf_jet2.getValue()*sf_jet2.getValue()/(sf_jet2.getErrorHigh()*sf_jet2.getErrorHigh()))+
-			 (sf_jet3.getValue()*sf_jet3.getValue()/(sf_jet3.getErrorHigh()*sf_jet3.getErrorHigh())));
+      sf_error = (sf_jet1.getValue()*sf_jet1.getValue()*sf_jet1.getErrorHigh()*sf_jet1.getErrorHigh())+
+	(sf_jet2.getValue()*sf_jet2.getValue()*sf_jet2.getErrorHigh()*sf_jet2.getErrorHigh())+
+	(sf_jet3.getValue()*sf_jet3.getValue()*sf_jet3.getErrorHigh()*sf_jet3.getErrorHigh());
       //sf_jet2.getValue() * sf_jet2.getValue() * sf_jet1.getErrorHigh() * sf_jet1.getErrorHigh() +
       //sf_jet1.getValue() * sf_jet1.getValue() * sf_jet2.getErrorHigh() * sf_jet2.getErrorHigh();
     }
@@ -1734,6 +1987,1582 @@ namespace patextractor {
 	    }
 	}
     }
+  }
+
+  return 1;
+}
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  int SingleTprime_analysis::SingleTprime_Sel_InvHptTpt() 
+{
+  if (!DoMCMatching)
+    {
+      if (!m_trigger_passed) return 0;
+      m_triggercut=1;
+      
+      //Correction of trigger//
+      TLorentzVector *jetTriggerInvHptTpt[6];
+      
+      if (m_jetMet->getSize()>=6)
+	{
+	  jetTriggerInvHptTpt[0] = m_jetMet->getP4(0);
+	  jetTriggerInvHptTpt[1] = m_jetMet->getP4(1);
+	  jetTriggerInvHptTpt[2] = m_jetMet->getP4(2);
+	  jetTriggerInvHptTpt[3] = m_jetMet->getP4(3);
+	  jetTriggerInvHptTpt[4] = m_jetMet->getP4(4);
+	  jetTriggerInvHptTpt[5] = m_jetMet->getP4(5);
+	}
+      
+      if (m_jetMet->getSize()<6 || jetTriggerInvHptTpt[0]->Pt()<TriggerDiJet1_2 ||jetTriggerInvHptTpt[1]->Pt()<TriggerDiJet1_2 || jetTriggerInvHptTpt[2]->Pt()<TriggerDiJet3_4 || jetTriggerInvHptTpt[3]->Pt()<TriggerDiJet3_4 || jetTriggerInvHptTpt[4]->Pt()<TriggerDiJet5_6 || jetTriggerInvHptTpt[5]->Pt()<TriggerDiJet5_6) return 0;  
+      /////////////////////////
+    }
+
+  n_jets = m_jetMet->getSize();
+  //cout << "InvHptTpt Njets: " << n_jets << endl;
+  bool JetsInAcceptance[n_jets]; //Mas for keeping track of jets inside acceptance
+  bool jetIsBTagged[n_jets]; //Mask for keeping track of b-tagged jets
+  bool jetIsLooseBTagged[n_jets]; //Mask for keeping track of loose b-tagged jets
+  bool jetIsTightBTagged[n_jets];
+  int CountingGoodJets=0;
+  int CountingBadJets=0;
+  float TotalHT=0;
+  TLorentzVector LeadingJet={0,0,0,0};
+  int BtagCounter=0;
+  int LooseBtagCounter=0;
+  int TightBtagCounter=0;
+
+  ScaleFactor jetSF[n_jets];
+
+  TLorentzVector AllJets[n_jets];
+
+  //Loop over jets
+
+  //float MinimalCSVM=0.0; int CSVM_M_Marker=0;
+	  
+  for (int i=0;i<n_jets;++i)
+    {
+      TLorentzVector *jeti = m_jetMet->getP4(i);
+
+      TotalHT+=fabs(jeti->Pt());
+      AllJets[i].SetPxPyPzE(jeti->Px(),jeti->Py(),jeti->Pz(),jeti->E());
+      if (m_isMC) jetSF[i] = m_jetMet->getScaleFactor(i);
+
+      if (isJetForwSel(jeti)) CountingBadJets++;
+      jetIsBTagged[i] = false; jetIsLooseBTagged[i] = false; JetsInAcceptance[i]=false; jetIsTightBTagged[i] = false;
+      if (isJetAccepSel(jeti)) 
+	{
+	  if (CountingGoodJets==0) LeadingJet=AllJets[i];
+	  JetsInAcceptance[i]=true; CountingGoodJets++;
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVT)
+	    {
+	      ++m_NBtaggedJets_CSVT;
+	      ++TightBtagCounter;
+	      jetIsTightBTagged[i] = true;
+	    }
+	  
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVM)
+	    {
+	      ++m_NBtaggedJets_CSVM;
+	      ++m_NBtaggedJets_CSVL;
+	      jetIsBTagged[i] = true;
+	      ++BtagCounter;
+	      jetIsLooseBTagged[i] = true;
+	      ++LooseBtagCounter;
+	    }
+	  else
+	    {
+	      jetIsBTagged[i] = false;
+	      if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVL)
+		{
+		  ++m_NBtaggedJets_CSVL;
+		  jetIsLooseBTagged[i] = true;
+		  ++LooseBtagCounter;
+		}
+	      else
+		{
+		  jetIsLooseBTagged[i] = false;
+		}
+	    }	  
+	}
+      else {JetsInAcceptance[i]=false;}
+    }
+
+  /////////
+  //Cut 0//
+  /////////
+
+  if(Cut0) { if (CountingGoodJets<NumberOfGoodJets || CountingBadJets<NumberOfBadJets) return 0;}
+    //if (CountingGoodJets>=NumberOfGoodJets && CountingBadJets>=NumberOfBadJets) cout << "" << endl; //cout << "Good Event 2M1L" << endl;
+    //else return 0; }
+  m_Cut0=1;
+  //cout << "AnaInvHptTpt: Cut0 " << CountingGoodJets << " " << CountingBadJets << endl;
+  
+  /////////
+  //Cut 1//
+  /////////
+
+  if(Cut1) {if (LeadingJet.Pt()<LeadingJetPt) return 0;}
+  m_Cut1=1;
+  //cout << "AnaInvHptTpt: Cut1 " << LeadingJet.Pt() << endl;
+
+  //cout << "The HT of the event is " << TotalHT << endl;
+  m_THT = TotalHT;
+
+  /////////
+  //Cut 2//
+  /////////
+
+  if (Cut2) {if (TotalHT<THTcut) return 0;}
+  m_Cut2=1;
+  //cout << "AnaInvHptTpt: Cut2 " << TotalHT << endl;
+
+  /////////
+  //Cut 3//
+  /////////
+
+  //if (Cut3) {if (BtagCounter<3) return 0;}
+  //cout << "InHptTpt -> " << "CSVL: " << LooseBtagCounter << ", CSVM: " << BtagCounter << ", CSVT: " << TightBtagCounter << endl;
+  if (MinLooseB_tags!=0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags || LooseBtagCounter<MinLooseB_tags+MinB_tags) return 0;}
+    }
+  else if (MinTightB_tags!=0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (TightBtagCounter<MinTightB_tags || BtagCounter<MinB_tags+MinTightB_tags) return 0;}
+    }
+  else if (MinLooseB_tags==0 && MinTightB_tags==0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags) return 0;}
+    }
+  else if (MinLooseB_tags!=0 && MinB_tags==0)
+    {
+      if (Cut3) {if (LooseBtagCounter<MinLooseB_tags+MinB_tags) return 0;}
+    }
+  else if (MinTightB_tags!=0 && MinB_tags==0)
+    {
+      if (Cut3) {if (TightBtagCounter<MinTightB_tags) return 0;}
+    }
+  m_Cut3=1;
+
+  /////////////########///////////////////////
+  //////////HIGGS RECONSTRUCTION//////////////
+  /////////////########///////////////////////
+
+  
+  TLorentzVector FHJInvHptTpt;				
+  TLorentzVector SHJInvHptTpt; 
+  TLorentzVector FWJInvHptTpt; 
+  TLorentzVector SWJInvHptTpt; 
+  int IndexHiggsJetsInvHptTpt[2]={0,0};
+  int IndexWJetsInvHptTpt[2]={0,0};
+  int IndexTopJetInvHptTpt=0;  
+
+  bool EventWithHiggsInvHptTpt=false;
+  int HiggsCounterInvHptTpt=0;
+  float DiffWithHiggMassInvHptTpt=0;
+  for (int i=0;i<n_jets;++i)
+    {
+      //if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;
+      if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      for (int j=i+1;j<n_jets;++j)
+	{
+	  //if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;
+	  if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	  TLorentzVector DiBjet = jeti+jetj;
+	  if (fabs(DiBjet.M()-HiggsMass)>HiggsMassWindow) continue;
+	  if (jeti.DeltaR(jetj)>DeltaRHiggsJets) continue;
+	  EventWithHiggsInvHptTpt=true;
+	  if (HiggsCounterInvHptTpt==0)
+	    {
+	      ++HiggsCounterInvHptTpt; DiffWithHiggMassInvHptTpt=DiBjet.Pt(); //DiffWithHiggMassInvHptTpt=fabs(DiBjet.M()-HiggsMass);
+	      IndexHiggsJetsInvHptTpt[0]=i; IndexHiggsJetsInvHptTpt[1]=j; ReconstructedHiggsInvHptTpt->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
+	      FirstHiggsJetInvHptTpt->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondHiggsJetInvHptTpt->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+	    }
+	  else
+	    {
+	      ++HiggsCounterInvHptTpt;
+	      if (DiffWithHiggMassInvHptTpt<DiBjet.Pt()) 
+		{
+		  IndexHiggsJetsInvHptTpt[0]=i; IndexHiggsJetsInvHptTpt[1]=j; 
+		  DiffWithHiggMassInvHptTpt=DiBjet.Pt(); ReconstructedHiggsInvHptTpt->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E()); 
+		  FirstHiggsJetInvHptTpt->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondHiggsJetInvHptTpt->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+		}
+	    }
+	}
+    }
+
+  /////////
+  //Cut 4//
+  /////////
+
+  if (Cut4) {if (!EventWithHiggsInvHptTpt) return 0;}
+  m_Cut4=1;
+
+  FHJInvHptTpt.SetPxPyPzE(FirstHiggsJetInvHptTpt->Px(), FirstHiggsJetInvHptTpt->Py(), FirstHiggsJetInvHptTpt->Pz(), FirstHiggsJetInvHptTpt->E());
+  SHJInvHptTpt.SetPxPyPzE(SecondHiggsJetInvHptTpt->Px(), SecondHiggsJetInvHptTpt->Py(), SecondHiggsJetInvHptTpt->Pz(), SecondHiggsJetInvHptTpt->E());
+
+  //cout << "AnaInvHptTpt: Cut4 " << IndexHiggsJetsInvHptTpt[0] << " " << IndexHiggsJetsInvHptTpt[1] << " " << FHJInvHptTpt.DeltaR(SHJInvHptTpt) << endl;
+
+  //////////////////////////////////////////////////////////////////
+  //Reconstruction of W from full jets collection minus Higgs jets//
+  //////////////////////////////////////////////////////////////////
+  //cout << "Entering W reconstruction" << endl;
+  bool EventWithWInvHptTpt=false;
+  int WCounterInvHptTpt=0;
+  float DiffWithWMassInvHptTpt=0;  
+  for (int i=0;i<n_jets;++i)
+    {
+      if (IndexHiggsJetsInvHptTpt[0]==i || IndexHiggsJetsInvHptTpt[1]==i || !JetsInAcceptance[i]) continue;
+      //Enforcing third b for the top
+      //if (jetIsBTagged[i] || !JetsInAcceptance[i]) continue;
+      if (MinLooseB_tags!=0 && MinB_tags!=0) {if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}
+      /////////////////////////////////////////////////
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      for (int j=i+1;j<n_jets;++j)
+	{
+	  if (IndexHiggsJetsInvHptTpt[0]==j || IndexHiggsJetsInvHptTpt[1]==j || !JetsInAcceptance[j]) continue;
+	  //Enforcing third b for the top
+	  //if (jetIsBTagged[j] || !JetsInAcceptance[j]) continue;
+	  if (MinLooseB_tags!=0 && MinB_tags!=0) {if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags!=0) {if (jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinLooseB_tags!=0 && MinB_tags==0) {if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags==0) {if (jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  /////////////////////////////////////////////////
+	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	  TLorentzVector Dijet = jeti+jetj;
+	  if (fabs(Dijet.M()-WMass)>WMassWindow) continue;
+	  if (jeti.DeltaR(jetj)>DeltaRWJets) continue;
+	  EventWithWInvHptTpt=true;
+	  if (WCounterInvHptTpt==0)
+	    {
+	      ++WCounterInvHptTpt; DiffWithWMassInvHptTpt=Dijet.Pt(); //DiffWithWMassInvHptTpt=fabs(Dijet.M()-WMass);
+	      IndexWJetsInvHptTpt[0]=i; IndexWJetsInvHptTpt[1]=j; ReconstructedWInvHptTpt->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
+	      FirstWJetInvHptTpt->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondWJetInvHptTpt->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+	    }
+	  else
+	    {
+	      ++WCounterInvHptTpt;
+	      if (DiffWithWMassInvHptTpt<Dijet.Pt()) 
+		{
+		  IndexWJetsInvHptTpt[0]=i; IndexWJetsInvHptTpt[1]=j; 
+		  DiffWithWMassInvHptTpt=fabs(Dijet.M()-WMass); ReconstructedWInvHptTpt->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E()); 
+		  FirstWJetInvHptTpt->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondWJetInvHptTpt->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+		}
+	    }
+	}
+    }
+  
+  /////////
+  //Cut 5//
+  /////////
+
+  if (Cut5) {if (!EventWithWInvHptTpt) return 0;}
+  m_Cut5=1;
+  //cout << "AnaInvHptTpt: Cut5 " << IndexWJetsInvHptTpt[0] << " " << IndexWJetsInvHptTpt[1] << endl;
+
+  FWJInvHptTpt.SetPxPyPzE(FirstWJetInvHptTpt->Px(), FirstWJetInvHptTpt->Py(), FirstWJetInvHptTpt->Pz(), FirstWJetInvHptTpt->E());
+  SWJInvHptTpt.SetPxPyPzE(SecondWJetInvHptTpt->Px(), SecondWJetInvHptTpt->Py(), SecondWJetInvHptTpt->Pz(), SecondWJetInvHptTpt->E());
+
+  /////////////////////////
+  //Reconstruction of Top//
+  /////////////////////////
+  //cout << "Entering Top reconstruction" << endl;
+  bool EventWithTopInvHptTpt=false;
+  int TopCounterInvHptTpt=0;
+  float DiffWithTopMassInvHptTpt=0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (IndexHiggsJetsInvHptTpt[0]==i || IndexHiggsJetsInvHptTpt[1]==i || IndexWJetsInvHptTpt[0]==i || IndexWJetsInvHptTpt[1]==i || !JetsInAcceptance[i]) continue;
+      //if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;
+      if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      TLorentzVector wjet; wjet.SetPxPyPzE(ReconstructedW->Px(),ReconstructedW->Py(),ReconstructedW->Pz(),ReconstructedW->E());
+      TLorentzVector Trijet = jeti+wjet;
+      if (fabs(Trijet.M()-TopMass)>TopMassWindow) continue;
+      //cout << "Mass of jet i: " << jeti.M() << " and j: " << jetj.M() << endl;
+      //cout << "Mass of the b-tagged jets couple " << i << j << " is " << DiBjet.M() << endl;
+      EventWithTopInvHptTpt=true;
+      if (TopCounterInvHptTpt==0)
+	{
+	  ++TopCounterInvHptTpt; DiffWithTopMassInvHptTpt=Trijet.Pt(); //DiffWithTopMassInvHptTpt=fabs(Trijet.M()-TopMass);
+	  IndexTopJetInvHptTpt=i; ReconstructedTopInvHptTpt->SetPxPyPzE(jeti.Px()+wjet.Px(),jeti.Py()+wjet.Py(),jeti.Pz()+wjet.Pz(),jeti.E()+wjet.E());
+	  TopJetInvHptTpt->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E());
+	}
+      else
+	{
+	  ++TopCounterInvHptTpt;
+	  if (DiffWithTopMassInvHptTpt<Trijet.Pt()) 
+	    {
+		  IndexTopJetInvHptTpt=i;
+		  DiffWithTopMassInvHptTpt=fabs(Trijet.M()-TopMass); ReconstructedTopInvHptTpt->SetPxPyPzE(jeti.Px()+wjet.Px(),jeti.Py()+wjet.Py(),jeti.Pz()+wjet.Pz(),jeti.E()+wjet.E()); 
+		  TopJetInvHptTpt->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E());
+	    }
+	}
+    }
+
+  if (!EventWithTopInvHptTpt) return 0;
+  //cout << "AnaInvHptTpt: CutTop " << IndexTopJetInvHptTpt << endl;
+
+  TLorentzVector HJInvHptTpt; 
+  HJInvHptTpt.SetPxPyPzE(ReconstructedHiggsInvHptTpt->Px(), ReconstructedHiggsInvHptTpt->Py(), ReconstructedHiggsInvHptTpt->Pz(), ReconstructedHiggsInvHptTpt->E());
+  TLorentzVector TJInvHptTpt; 
+  TJInvHptTpt.SetPxPyPzE(ReconstructedTopInvHptTpt->Px(), ReconstructedTopInvHptTpt->Py(), ReconstructedTopInvHptTpt->Pz(), ReconstructedTopInvHptTpt->E());
+  TLorentzVector WJInvHptTpt; 
+  WJInvHptTpt.SetPxPyPzE(ReconstructedWInvHptTpt->Px(), ReconstructedWInvHptTpt->Py(), ReconstructedWInvHptTpt->Pz(), ReconstructedWInvHptTpt->E());
+  float DRWHiggsInvHptTpt=HJInvHptTpt.DeltaR(WJInvHptTpt);
+  float RelTHTInvHptTpt=(ReconstructedHiggsInvHptTpt->Pt()+ReconstructedTopInvHptTpt->Pt())/TotalHT; //Relative total hadronic energy
+
+  ReconstructedTprimeInvHptTpt->SetPxPyPzE(ReconstructedHiggsInvHptTpt->Px()+ReconstructedTopInvHptTpt->Px(),ReconstructedHiggsInvHptTpt->Py()+ReconstructedTopInvHptTpt->Py(),ReconstructedHiggsInvHptTpt->Pz()+ReconstructedTopInvHptTpt->Pz(),ReconstructedHiggsInvHptTpt->E()+ReconstructedTopInvHptTpt->E());
+
+  float RelMassInvHptTpt=(HJInvHptTpt.M()+TJInvHptTpt.M())/ReconstructedTprimeInvHptTpt->M();
+
+  ////////////////////////////////////////////////
+  //Reconstructing a W and a Top from Higgs jets//
+  ////////////////////////////////////////////////
+  //Using chi2 algorithm to reconstruct W and top from Higgs
+
+  float WHCurrentChi2=-1;
+  int IndexWFromH=-1;
+  int WhichHiggsJetMarker=-1;
+  float Tchi2=0;
+  float Wchi2=0;
+
+  for (int i=0;i<n_jets;++i)
+    {
+      if (IndexHiggsJetsInvHptTpt[0]==i || IndexHiggsJetsInvHptTpt[1]==i || IndexWJetsInvHptTpt[0]==i || IndexWJetsInvHptTpt[1]==i || IndexTopJetInvHptTpt==i || !JetsInAcceptance[i]) continue;
+      for (int j=0;j<2;++j)
+	{
+	  TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+	  if (j==0)
+	    {
+	      TLorentzVector Dijet = jeti+FHJInvHptTpt; //Constructing W from first Higgs jet
+	      Wchi2=fabs((Dijet.M()-WMassChi2)*(Dijet.M()-WMassChi2))/((WHadrWidth)*(WHadrWidth));
+	      TLorentzVector Trijet = Dijet+SHJInvHptTpt; //Constructing top from two Higgs lets
+	      Tchi2=fabs((Trijet.M()-TopMassChi2)*(Trijet.M()-TopMassChi2))/((TopHadrWidth)*(TopHadrWidth));
+	      if (IndexWFromH==-1) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+	      else
+		{
+		  if (WHCurrentChi2>(Wchi2+Tchi2)) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+		}
+	    }
+	  else
+	    {
+	      TLorentzVector Dijet = jeti+SHJInvHptTpt; //Constructing W from second Higgs jet
+	      Wchi2=fabs((Dijet.M()-WMassChi2)*(Dijet.M()-WMassChi2))/((WHadrWidth)*(WHadrWidth));
+	      TLorentzVector Trijet = Dijet+FHJInvHptTpt; //Constructing top from two Higgs lets
+	      Tchi2=fabs((Trijet.M()-TopMassChi2)*(Trijet.M()-TopMassChi2))/((TopHadrWidth)*(TopHadrWidth));
+	      if (WHCurrentChi2>(Wchi2+Tchi2)) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+	    }
+	}
+    }
+  TLorentzVector W2JChi2;
+  if ( WhichHiggsJetMarker==0 && IndexWFromH>=0) W2JChi2=FHJInvHptTpt+AllJets[IndexWFromH];
+  else if (WhichHiggsJetMarker==1 && IndexWFromH>=0) W2JChi2=SHJInvHptTpt+AllJets[IndexWFromH];
+  TLorentzVector T2JChi2;
+  if (IndexWFromH<=-1 || WhichHiggsJetMarker<0 ||  WhichHiggsJetMarker>1) T2JChi2.SetPxPyPzE(0.,0.,0.,0.);
+  else T2JChi2=FHJInvHptTpt+SHJInvHptTpt+AllJets[IndexWFromH];
+  ////////////////////////////////////////////////////////////
+
+  /////////
+  //Cut 6//
+  /////////
+  
+  //if (Cut6) {if (HJInvHptTpt.Pt()>=HiggsPt && TJInvHptTpt.Pt()>=TopPt) return 0;}
+  if (Cut6) {if (HJInvHptTpt.Pt()<HiggsPt || TJInvHptTpt.Pt()<TopPt) return 0;}
+  //cout << "AnaInvHptTpt cut6: " << HJInvHptTpt.Pt() << " " << TJInvHptTpt.Pt() << endl;
+  m_Cut6=1;
+
+  /////////
+  //Cut 7//
+  /////////
+
+  if (Cut7) {if (HJInvHptTpt.DeltaR(WJInvHptTpt)<MinDeltaRWH || HJInvHptTpt.DeltaR(WJInvHptTpt)>MaxDeltaRWH) return 0;}
+  m_Cut7=1;
+
+  /////////
+  //Cut 8//
+  /////////
+
+  if (Cut8) {if (fabs(FHJInvHptTpt.Phi()-SHJInvHptTpt.Phi())>DeltaPhiHiggsJets || fabs(TopJetInvHptTpt->Phi()-WJInvHptTpt.Phi())>DeltaPhiTopJetW) return 0;}
+  m_Cut8=1;
+
+
+  //////////
+  //Cut 10//
+  //////////
+
+  if (Cut10) {if (fabs(FHJInvHptTpt.Phi()-SHJInvHptTpt.Phi())>DeltaPhiHiggsJets || fabs(FWJInvHptTpt.Phi()-SWJInvHptTpt.Phi())>DeltaPhiWjets) return 0;}
+  m_Cut10=1;
+
+  //////////
+  //Cut 11//
+  //////////
+
+  if (Cut11) {if (HJInvHptTpt.M()>MaxHiggsMass || HJInvHptTpt.M()<MinHiggsMass) return 0;}
+  m_Cut11=1;
+
+  //////////
+  //Cut 12//
+  //////////
+
+  if (Cut12) {if (RelTHTInvHptTpt<RelHT) return 0;}
+  m_Cut12=1;
+
+  //////////
+  //Cut 14//
+  //////////
+
+  if (Cut14) {if (HJInvHptTpt.DeltaR(TJInvHptTpt)<MinDeltaRTH || HJInvHptTpt.DeltaR(TJInvHptTpt)>MaxDeltaRTH) return 0;}
+  m_Cut14=1;
+
+  //////////
+  //Cut 15//
+  //////////
+
+  if (Cut15) {if (RelMassInvHptTpt>RelMassMaxCut || RelMassInvHptTpt<RelMassMinCut) return 0;}
+  m_Cut15=1;
+
+  //////////
+  //Cut 22//
+  //////////
+  
+  if (Cut22) {if (W2JChi2.M()>Wchi2Min && W2JChi2.M()<Wchi2Max) return 0;}
+  m_Cut22=1;
+
+  WFromHiggsChi2InvHptTpt->SetPxPyPzE(W2JChi2.Px(), W2JChi2.Py(), W2JChi2.Pz(), W2JChi2.E());
+  //if (WhichHiggsJetMarker==0) DRWjetsFromHiggsChi2InvHptTpt=AllJets[IndexWFromH].DeltaR(FHJInvHptTpt);
+  //else if (WhichHiggsJetMarker>=1 && IndexWFromH!=-1) {DRWjetsFromHiggsChi2InvHptTpt=AllJets[IndexWFromH].DeltaR(SHJInvHptTpt); /*cout << IndexWFromH << " " << IndexHiggsJets[1] << endl;*/}
+  TopFromHiggsChi2InvHptTpt->SetPxPyPzE(T2JChi2.Px(), T2JChi2.Py(), T2JChi2.Pz(), T2JChi2.E());
+
+  if (m_isMC) {
+    // Get scale factors
+    double sf = 1;
+    double sf_error = 0;
+
+    if (m_NBtaggedJets_CSVL >= 3 && MinB_tags>=3) {
+
+      ScaleFactor sf_jet1 = {1, 0, 0};
+      ScaleFactor sf_jet2 = {1, 0, 0};
+      ScaleFactor sf_jet3 = {1, 0, 0};
+      
+      bool gotJet1 = false;
+      bool gotJet2 = false;
+
+      for (int i = 0; i < n_jets; i++)
+      {
+        if (jetIsLooseBTagged[i]) {
+          if (!gotJet1) {
+            gotJet1 = true;
+            sf_jet1 = jetSF[i];
+          } 
+	  else if (!gotJet2 && gotJet1) {
+	    gotJet2 = true;
+            sf_jet2 = jetSF[i];
+          }
+	  else if (gotJet2 && gotJet1) {
+            sf_jet3 = jetSF[i];
+            break;
+          }
+        }
+      }
+
+      sf = sf_jet1.getValue() * sf_jet2.getValue() * sf_jet3.getValue();
+      sf_error = sf*sqrt((sf_jet1.getValue()*sf_jet1.getValue()/(sf_jet1.getErrorHigh()*sf_jet1.getErrorHigh()))+
+			 (sf_jet2.getValue()*sf_jet2.getValue()/(sf_jet2.getErrorHigh()*sf_jet2.getErrorHigh()))+
+			 (sf_jet3.getValue()*sf_jet3.getValue()/(sf_jet3.getErrorHigh()*sf_jet3.getErrorHigh())));
+      //sf_jet2.getValue() * sf_jet2.getValue() * sf_jet1.getErrorHigh() * sf_jet1.getErrorHigh() +
+      //sf_jet1.getValue() * sf_jet1.getValue() * sf_jet2.getErrorHigh() * sf_jet2.getErrorHigh();
+    }
+
+    m_weight *= sf;
+
+    double squared_sf_error = sf_error * sf_error;
+    m_weight_error_low += squared_sf_error;
+    m_weight_error_high += squared_sf_error;
+  }
+
+  return 1;
+}
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  int SingleTprime_analysis::SingleTprime_Sel_3L() 
+{
+  if (!DoMCMatching)
+    {
+      if (!m_trigger_passed) return 0;
+      m_triggercut=1;
+      
+      //Correction of trigger//
+      TLorentzVector *jetTrigger3L[6];
+      
+      if (m_jetMet->getSize()>=6)
+	{
+	  jetTrigger3L[0] = m_jetMet->getP4(0);
+	  jetTrigger3L[1] = m_jetMet->getP4(1);
+	  jetTrigger3L[2] = m_jetMet->getP4(2);
+	  jetTrigger3L[3] = m_jetMet->getP4(3);
+	  jetTrigger3L[4] = m_jetMet->getP4(4);
+	  jetTrigger3L[5] = m_jetMet->getP4(5);
+	}
+      
+      if (m_jetMet->getSize()<6 || jetTrigger3L[0]->Pt()<TriggerDiJet1_2 ||jetTrigger3L[1]->Pt()<TriggerDiJet1_2 || jetTrigger3L[2]->Pt()<TriggerDiJet3_4 || jetTrigger3L[3]->Pt()<TriggerDiJet3_4 || jetTrigger3L[4]->Pt()<TriggerDiJet5_6 || jetTrigger3L[5]->Pt()<TriggerDiJet5_6) return 0;  
+      /////////////////////////
+    }
+
+  n_jets = m_jetMet->getSize();
+  //cout << "3L Njets: " << n_jets << endl;
+  bool JetsInAcceptance[n_jets]; //Mas for keeping track of jets inside acceptance
+  bool jetIsBTagged[n_jets]; //Mask for keeping track of b-tagged jets
+  bool jetIsLooseBTagged[n_jets]; //Mask for keeping track of loose b-tagged jets
+  bool jetIsTightBTagged[n_jets];
+  int CountingGoodJets=0;
+  int CountingBadJets=0;
+  float TotalHT=0;
+  TLorentzVector LeadingJet={0,0,0,0};
+  int BtagCounter=0;
+  int LooseBtagCounter=0;
+  int TightBtagCounter=0;
+
+  ScaleFactor jetSF[n_jets];
+
+  TLorentzVector AllJets[n_jets];
+
+  //Loop over jets
+
+  //float MinimalCSVM=0.0; int CSVM_M_Marker=0;
+	  
+  for (int i=0;i<n_jets;++i)
+    {
+      TLorentzVector *jeti = m_jetMet->getP4(i);
+
+      TotalHT+=fabs(jeti->Pt());
+      AllJets[i].SetPxPyPzE(jeti->Px(),jeti->Py(),jeti->Pz(),jeti->E());
+      if (m_isMC) jetSF[i] = m_jetMet->getScaleFactor(i);
+
+      if (isJetForwSel(jeti)) CountingBadJets++;
+      jetIsBTagged[i] = false; jetIsLooseBTagged[i] = false; JetsInAcceptance[i]=false; jetIsTightBTagged[i] = false;
+      if (isJetAccepSel(jeti)) 
+	{
+	  if (CountingGoodJets==0) LeadingJet=AllJets[i];
+	  JetsInAcceptance[i]=true; CountingGoodJets++;
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVT)
+	    {
+	      ++m_NBtaggedJets_CSVT;
+	      ++TightBtagCounter;
+	      jetIsTightBTagged[i] = true;
+	    }
+	  
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVM)
+	    {
+	      ++m_NBtaggedJets_CSVM;
+	      ++m_NBtaggedJets_CSVL;
+	      jetIsBTagged[i] = true;
+	      ++BtagCounter;
+	      jetIsLooseBTagged[i] = true;
+	      ++LooseBtagCounter;
+	    }
+	  else
+	    {
+	      jetIsBTagged[i] = false;
+	      if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVL)
+		{
+		  ++m_NBtaggedJets_CSVL;
+		  jetIsLooseBTagged[i] = true;
+		  ++LooseBtagCounter;
+		}
+	      else
+		{
+		  jetIsLooseBTagged[i] = false;
+		}
+	    }	  
+	}
+      else {JetsInAcceptance[i]=false;}
+    }
+
+  /////////
+  //Cut 0//
+  /////////
+
+  if(Cut0) { if (CountingGoodJets<NumberOfGoodJets || CountingBadJets<NumberOfBadJets) return 0;}
+    //if (CountingGoodJets>=NumberOfGoodJets && CountingBadJets>=NumberOfBadJets) cout << "" << endl; //cout << "Good Event 2M1L" << endl;
+    //else return 0; }
+  m_Cut0=1;
+  //cout << "Ana3L: Cut0 " << CountingGoodJets << " " << CountingBadJets << endl;
+  
+  /////////
+  //Cut 1//
+  /////////
+
+  if(Cut1) {if (LeadingJet.Pt()<LeadingJetPt) return 0;}
+  m_Cut1=1;
+  //cout << "Ana3L: Cut1 " << LeadingJet.Pt() << endl;
+
+  //cout << "The HT of the event is " << TotalHT << endl;
+  m_THT = TotalHT;
+
+  /////////
+  //Cut 2//
+  /////////
+
+  if (Cut2) {if (TotalHT<THTcut) return 0;}
+  m_Cut2=1;
+  //cout << "Ana3L: Cut2 " << TotalHT << endl;
+
+  /////////
+  //Cut 3//
+  /////////
+
+  if (Cut3) {if (LooseBtagCounter<3) return 0;}
+  //cout << "3L -> " << "CSVL: " << LooseBtagCounter << ", CSVM: " << BtagCounter << ", CSVT: " << TightBtagCounter << endl;
+  /*if (MinLooseB_tags!=0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags || LooseBtagCounter<MinLooseB_tags+MinB_tags) return 0;}
+    }
+  else if (MinTightB_tags!=0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (TightBtagCounter<MinTightB_tags || BtagCounter<MinB_tags+MinTightB_tags) return 0;}
+    }
+  else if (MinLooseB_tags==0 && MinTightB_tags==0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags) return 0;}
+    }
+  else if (MinLooseB_tags!=0 && MinB_tags==0)
+    {
+      if (Cut3) {if (LooseBtagCounter<MinLooseB_tags+MinB_tags) return 0;}
+    }
+  else if (MinTightB_tags!=0 && MinB_tags==0)
+    {
+      if (Cut3) {if (TightBtagCounter<MinTightB_tags) return 0;}
+      }*/
+  m_Cut3=1;
+
+  /////////////########///////////////////////
+  //////////HIGGS RECONSTRUCTION//////////////
+  /////////////########///////////////////////
+
+  
+  TLorentzVector FHJ3L;				
+  TLorentzVector SHJ3L; 
+  TLorentzVector FWJ3L; 
+  TLorentzVector SWJ3L; 
+  int IndexHiggsJets3L[2]={0,0};
+  int IndexWJets3L[2]={0,0};
+  int IndexTopJet3L=0;  
+
+  bool EventWithHiggs3L=false;
+  int HiggsCounter3L=0;
+  float DiffWithHiggMass3L=0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;
+      /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;} //MODIFIED!!!
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}*/
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      for (int j=i+1;j<n_jets;++j)
+	{
+	  if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;
+	  /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;} //MODIFIED!!!
+	  else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;}*/
+	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	  TLorentzVector DiBjet = jeti+jetj;
+	  if (fabs(DiBjet.M()-HiggsMass)>HiggsMassWindow) continue;
+	  if (jeti.DeltaR(jetj)>DeltaRHiggsJets) continue;
+	  EventWithHiggs3L=true;
+	  if (HiggsCounter3L==0)
+	    {
+	      ++HiggsCounter3L; DiffWithHiggMass3L=fabs(DiBjet.M()-HiggsMass);
+	      IndexHiggsJets3L[0]=i; IndexHiggsJets3L[1]=j; ReconstructedHiggs3L->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
+	      FirstHiggsJet3L->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondHiggsJet3L->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+	    }
+	  else
+	    {
+	      ++HiggsCounter3L;
+	      if (DiffWithHiggMass3L>fabs(DiBjet.M()-HiggsMass)) 
+		{
+		  IndexHiggsJets3L[0]=i; IndexHiggsJets3L[1]=j; 
+		  DiffWithHiggMass3L=fabs(DiBjet.M()-HiggsMass); ReconstructedHiggs3L->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E()); 
+		  FirstHiggsJet3L->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondHiggsJet3L->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+		}
+	    }
+	}
+    }
+
+  /////////
+  //Cut 4//
+  /////////
+
+  if (Cut4) {if (!EventWithHiggs3L) return 0;}
+  m_Cut4=1;
+
+  FHJ3L.SetPxPyPzE(FirstHiggsJet3L->Px(), FirstHiggsJet3L->Py(), FirstHiggsJet3L->Pz(), FirstHiggsJet3L->E());
+  SHJ3L.SetPxPyPzE(SecondHiggsJet3L->Px(), SecondHiggsJet3L->Py(), SecondHiggsJet3L->Pz(), SecondHiggsJet3L->E());
+
+  //cout << "Ana3L: Cut4 " << IndexHiggsJets3L[0] << " " << IndexHiggsJets3L[1] << " " << FHJ3L.DeltaR(SHJ3L) << endl;
+
+  //////////////////////////////////////////////////////////////////
+  //Reconstruction of W from full jets collection minus Higgs jets//
+  //////////////////////////////////////////////////////////////////
+  //cout << "Entering W reconstruction" << endl;
+  bool EventWithW3L=false;
+  int WCounter3L=0;
+  float DiffWithWMass3L=0;  
+  for (int i=0;i<n_jets;++i)
+    {
+      if (IndexHiggsJets3L[0]==i || IndexHiggsJets3L[1]==i || !JetsInAcceptance[i]) continue;
+      //Enforcing third b for the top
+      if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;
+      /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;} //MODIFIED!!!
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}*/
+      /////////////////////////////////////////////////
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      for (int j=i+1;j<n_jets;++j)
+	{
+	  if (IndexHiggsJets3L[0]==j || IndexHiggsJets3L[1]==j || !JetsInAcceptance[j]) continue;
+	  //Enforcing third b for the top
+	  if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;
+	  /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags!=0) {if (jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;} //MODIFIED!!!
+	  else if (MinLooseB_tags!=0 && MinB_tags==0) {if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags==0) {if (jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;}*/
+	  /////////////////////////////////////////////////
+	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	  TLorentzVector Dijet = jeti+jetj;
+	  if (fabs(Dijet.M()-WMass)>WMassWindow) continue;
+	  if (jeti.DeltaR(jetj)>DeltaRWJets) continue;
+	  EventWithW3L=true;
+	  if (WCounter3L==0)
+	    {
+	      ++WCounter3L; DiffWithWMass3L=fabs(Dijet.M()-WMass);
+	      IndexWJets3L[0]=i; IndexWJets3L[1]=j; ReconstructedW3L->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
+	      FirstWJet3L->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondWJet3L->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+	    }
+	  else
+	    {
+	      ++WCounter3L;
+	      if (DiffWithWMass3L>fabs(Dijet.M()-WMass)) 
+		{
+		  IndexWJets3L[0]=i; IndexWJets3L[1]=j; 
+		  DiffWithWMass3L=fabs(Dijet.M()-WMass); ReconstructedW3L->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E()); 
+		  FirstWJet3L->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondWJet3L->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+		}
+	    }
+	}
+    }
+  
+  /////////
+  //Cut 5//
+  /////////
+
+  if (Cut5) {if (!EventWithW3L) return 0;}
+  m_Cut5=1;
+  //cout << "Ana3L: Cut5 " << IndexWJets3L[0] << " " << IndexWJets3L[1] << endl;
+
+  FWJ3L.SetPxPyPzE(FirstWJet3L->Px(), FirstWJet3L->Py(), FirstWJet3L->Pz(), FirstWJet3L->E());
+  SWJ3L.SetPxPyPzE(SecondWJet3L->Px(), SecondWJet3L->Py(), SecondWJet3L->Pz(), SecondWJet3L->E());
+
+  /////////////////////////
+  //Reconstruction of Top//
+  /////////////////////////
+  //cout << "Entering Top reconstruction" << endl;
+  bool EventWithTop3L=false;
+  int TopCounter3L=0;
+  float DiffWithTopMass3L=0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (IndexHiggsJets3L[0]==i || IndexHiggsJets3L[1]==i || IndexWJets3L[0]==i || IndexWJets3L[1]==i || !JetsInAcceptance[i]) continue;
+      if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;
+      /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;} //MODIFIED!!!
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}*/
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      TLorentzVector wjet; wjet.SetPxPyPzE(ReconstructedW->Px(),ReconstructedW->Py(),ReconstructedW->Pz(),ReconstructedW->E());
+      TLorentzVector Trijet = jeti+wjet;
+      if (fabs(Trijet.M()-TopMass)>TopMassWindow) continue;
+      //cout << "Mass of jet i: " << jeti.M() << " and j: " << jetj.M() << endl;
+      //cout << "Mass of the b-tagged jets couple " << i << j << " is " << DiBjet.M() << endl;
+      EventWithTop3L=true;
+      if (TopCounter3L==0)
+	{
+	  ++TopCounter3L; DiffWithTopMass3L=fabs(Trijet.M()-TopMass);
+	  IndexTopJet3L=i; ReconstructedTop3L->SetPxPyPzE(jeti.Px()+wjet.Px(),jeti.Py()+wjet.Py(),jeti.Pz()+wjet.Pz(),jeti.E()+wjet.E());
+	  TopJet3L->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E());
+	}
+      else
+	{
+	  ++TopCounter3L;
+	  if (DiffWithTopMass3L>fabs(Trijet.M()-TopMass)) 
+	    {
+		  IndexTopJet3L=i;
+		  DiffWithTopMass3L=fabs(Trijet.M()-TopMass); ReconstructedTop3L->SetPxPyPzE(jeti.Px()+wjet.Px(),jeti.Py()+wjet.Py(),jeti.Pz()+wjet.Pz(),jeti.E()+wjet.E()); 
+		  TopJet3L->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E());
+	    }
+	}
+    }
+
+  if (!EventWithTop3L) return 0;
+  //cout << "Ana3L: CutTop " << IndexTopJet3L << endl;
+
+  TLorentzVector HJ3L; 
+  HJ3L.SetPxPyPzE(ReconstructedHiggs3L->Px(), ReconstructedHiggs3L->Py(), ReconstructedHiggs3L->Pz(), ReconstructedHiggs3L->E());
+  TLorentzVector TJ3L; 
+  TJ3L.SetPxPyPzE(ReconstructedTop3L->Px(), ReconstructedTop3L->Py(), ReconstructedTop3L->Pz(), ReconstructedTop3L->E());
+  TLorentzVector WJ3L; 
+  WJ3L.SetPxPyPzE(ReconstructedW3L->Px(), ReconstructedW3L->Py(), ReconstructedW3L->Pz(), ReconstructedW3L->E());
+  float DRWHiggs3L=HJ3L.DeltaR(WJ3L);
+  float RelTHT3L=(ReconstructedHiggs3L->Pt()+ReconstructedTop3L->Pt())/TotalHT; //Relative total hadronic energy
+
+  ReconstructedTprime3L->SetPxPyPzE(ReconstructedHiggs3L->Px()+ReconstructedTop3L->Px(),ReconstructedHiggs3L->Py()+ReconstructedTop3L->Py(),ReconstructedHiggs3L->Pz()+ReconstructedTop3L->Pz(),ReconstructedHiggs3L->E()+ReconstructedTop3L->E());
+
+  float RelMass3L=(HJ3L.M()+TJ3L.M())/ReconstructedTprime3L->M();
+
+  ////////////////////////////////////////////////
+  //Reconstructing a W and a Top from Higgs jets//
+  ////////////////////////////////////////////////
+  //Using chi2 algorithm to reconstruct W and top from Higgs
+
+  float WHCurrentChi2=-1;
+  int IndexWFromH=-1;
+  int WhichHiggsJetMarker=-1;
+  float Tchi2=0;
+  float Wchi2=0;
+
+  for (int i=0;i<n_jets;++i)
+    {
+      if (IndexHiggsJets3L[0]==i || IndexHiggsJets3L[1]==i || IndexWJets3L[0]==i || IndexWJets3L[1]==i || IndexTopJet3L==i || !JetsInAcceptance[i]) continue;
+      for (int j=0;j<2;++j)
+	{
+	  TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+	  if (j==0)
+	    {
+	      TLorentzVector Dijet = jeti+FHJ3L; //Constructing W from first Higgs jet
+	      Wchi2=fabs((Dijet.M()-WMassChi2)*(Dijet.M()-WMassChi2))/((WHadrWidth)*(WHadrWidth));
+	      TLorentzVector Trijet = Dijet+SHJ3L; //Constructing top from two Higgs lets
+	      Tchi2=fabs((Trijet.M()-TopMassChi2)*(Trijet.M()-TopMassChi2))/((TopHadrWidth)*(TopHadrWidth));
+	      if (IndexWFromH==-1) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+	      else
+		{
+		  if (WHCurrentChi2>(Wchi2+Tchi2)) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+		}
+	    }
+	  else
+	    {
+	      TLorentzVector Dijet = jeti+SHJ3L; //Constructing W from second Higgs jet
+	      Wchi2=fabs((Dijet.M()-WMassChi2)*(Dijet.M()-WMassChi2))/((WHadrWidth)*(WHadrWidth));
+	      TLorentzVector Trijet = Dijet+FHJ3L; //Constructing top from two Higgs lets
+	      Tchi2=fabs((Trijet.M()-TopMassChi2)*(Trijet.M()-TopMassChi2))/((TopHadrWidth)*(TopHadrWidth));
+	      if (WHCurrentChi2>(Wchi2+Tchi2)) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+	    }
+	}
+    }
+  TLorentzVector W2JChi2;
+  if ( WhichHiggsJetMarker==0 && IndexWFromH>=0) W2JChi2=FHJ3L+AllJets[IndexWFromH];
+  else if (WhichHiggsJetMarker==1 && IndexWFromH>=0) W2JChi2=SHJ3L+AllJets[IndexWFromH];
+  TLorentzVector T2JChi2;
+  if (IndexWFromH<=-1 || WhichHiggsJetMarker<0 ||  WhichHiggsJetMarker>1) T2JChi2.SetPxPyPzE(0.,0.,0.,0.);
+  else T2JChi2=FHJ3L+SHJ3L+AllJets[IndexWFromH];
+  ////////////////////////////////////////////////////////////
+
+  /////////
+  //Cut 6//
+  /////////
+  
+  if (Cut6) {if (HJ3L.Pt()<HiggsPt || TJ3L.Pt()<TopPt) return 0;}
+  m_Cut6=1;
+
+  /////////
+  //Cut 7//
+  /////////
+
+  if (Cut7) {if (HJ3L.DeltaR(WJ3L)<MinDeltaRWH || HJ3L.DeltaR(WJ3L)>MaxDeltaRWH) return 0;}
+  m_Cut7=1;
+
+  /////////
+  //Cut 8//
+  /////////
+
+  if (Cut8) {if (fabs(FHJ3L.Phi()-SHJ3L.Phi())>DeltaPhiHiggsJets || fabs(TopJet3L->Phi()-WJ3L.Phi())>DeltaPhiTopJetW) return 0;}
+  m_Cut8=1;
+
+  //////////
+  //Cut 10//
+  //////////
+
+  if (Cut10) {if (fabs(FHJ3L.Phi()-SHJ3L.Phi())>DeltaPhiHiggsJets || fabs(FWJ3L.Phi()-SWJ3L.Phi())>DeltaPhiWjets) return 0;}
+  m_Cut10=1;
+
+  //////////
+  //Cut 11//
+  //////////
+
+  if (Cut11) {if (HJ3L.M()>MaxHiggsMass || HJ3L.M()<MinHiggsMass) return 0;}
+  m_Cut11=1;
+
+  //////////
+  //Cut 12//
+  //////////
+
+  if (Cut12) {if (RelTHT3L<RelHT) return 0;}
+  m_Cut12=1;
+
+  //////////
+  //Cut 14//
+  //////////
+
+  if (Cut14) {if (HJ3L.DeltaR(TJ3L)<MinDeltaRTH || HJ3L.DeltaR(TJ3L)>MaxDeltaRTH) return 0;}
+  m_Cut14=1;
+
+  //////////
+  //Cut 15//
+  //////////
+
+  if (Cut15) {if (RelMass3L>RelMassMaxCut || RelMass3L<RelMassMinCut) return 0;}
+  m_Cut15=1;
+
+  //////////
+  //Cut 22//
+  //////////
+  
+  if (Cut22) {if (W2JChi2.M()>Wchi2Min && W2JChi2.M()<Wchi2Max) return 0;}
+  m_Cut22=1;
+
+  WFromHiggsChi23L->SetPxPyPzE(W2JChi2.Px(), W2JChi2.Py(), W2JChi2.Pz(), W2JChi2.E());
+  //if (WhichHiggsJetMarker==0) DRWjetsFromHiggsChi23L=AllJets[IndexWFromH].DeltaR(FHJ3L);
+  //else if (WhichHiggsJetMarker>=1 && IndexWFromH!=-1) {DRWjetsFromHiggsChi23L=AllJets[IndexWFromH].DeltaR(SHJ3L); /*cout << IndexWFromH << " " << IndexHiggsJets[1] << endl;*/}
+  TopFromHiggsChi23L->SetPxPyPzE(T2JChi2.Px(), T2JChi2.Py(), T2JChi2.Pz(), T2JChi2.E());
+
+  if (m_isMC) {
+    // Get scale factors
+    double sf = 1;
+    double sf_error = 0;
+
+    if (m_NBtaggedJets_CSVL >= 3 && MinB_tags>=3) {
+
+      ScaleFactor sf_jet1 = {1, 0, 0};
+      ScaleFactor sf_jet2 = {1, 0, 0};
+      ScaleFactor sf_jet3 = {1, 0, 0};
+      
+      bool gotJet1 = false;
+      bool gotJet2 = false;
+
+      for (int i = 0; i < n_jets; i++)
+      {
+        if (jetIsLooseBTagged[i]) {
+          if (!gotJet1) {
+            gotJet1 = true;
+            sf_jet1 = jetSF[i];
+          } 
+	  else if (!gotJet2 && gotJet1) {
+	    gotJet2 = true;
+            sf_jet2 = jetSF[i];
+          }
+	  else if (gotJet2 && gotJet1) {
+            sf_jet3 = jetSF[i];
+            break;
+          }
+        }
+      }
+
+      sf = sf_jet1.getValue() * sf_jet2.getValue() * sf_jet3.getValue();
+      sf_error = sf*sqrt((sf_jet1.getValue()*sf_jet1.getValue()/(sf_jet1.getErrorHigh()*sf_jet1.getErrorHigh()))+
+			 (sf_jet2.getValue()*sf_jet2.getValue()/(sf_jet2.getErrorHigh()*sf_jet2.getErrorHigh()))+
+			 (sf_jet3.getValue()*sf_jet3.getValue()/(sf_jet3.getErrorHigh()*sf_jet3.getErrorHigh())));
+      //sf_jet2.getValue() * sf_jet2.getValue() * sf_jet1.getErrorHigh() * sf_jet1.getErrorHigh() +
+      //sf_jet1.getValue() * sf_jet1.getValue() * sf_jet2.getErrorHigh() * sf_jet2.getErrorHigh();
+    }
+
+    m_weight *= sf;
+
+    double squared_sf_error = sf_error * sf_error;
+    m_weight_error_low += squared_sf_error;
+    m_weight_error_high += squared_sf_error;
+  }
+
+  return 1;
+}
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  int SingleTprime_analysis::SingleTprime_Sel_3T() 
+{
+  if (!DoMCMatching)
+    {
+      if (!m_trigger_passed) return 0;
+      m_triggercut=1;
+      
+      //Correction of trigger//
+      TLorentzVector *jetTrigger3T[6];
+      
+      if (m_jetMet->getSize()>=6)
+	{
+	  jetTrigger3T[0] = m_jetMet->getP4(0);
+	  jetTrigger3T[1] = m_jetMet->getP4(1);
+	  jetTrigger3T[2] = m_jetMet->getP4(2);
+	  jetTrigger3T[3] = m_jetMet->getP4(3);
+	  jetTrigger3T[4] = m_jetMet->getP4(4);
+	  jetTrigger3T[5] = m_jetMet->getP4(5);
+	}
+      
+      if (m_jetMet->getSize()<6 || jetTrigger3T[0]->Pt()<TriggerDiJet1_2 ||jetTrigger3T[1]->Pt()<TriggerDiJet1_2 || jetTrigger3T[2]->Pt()<TriggerDiJet3_4 || jetTrigger3T[3]->Pt()<TriggerDiJet3_4 || jetTrigger3T[4]->Pt()<TriggerDiJet5_6 || jetTrigger3T[5]->Pt()<TriggerDiJet5_6) return 0;  
+      /////////////////////////
+    }
+
+  n_jets = m_jetMet->getSize();
+  //cout << "3T Njets: " << n_jets << endl;
+  bool JetsInAcceptance[n_jets]; //Mas for keeping track of jets inside acceptance
+  bool jetIsBTagged[n_jets]; //Mask for keeping track of b-tagged jets
+  double CSV_values[n_jets];
+  bool jetIsLooseBTagged[n_jets]; //Mask for keeping track of loose b-tagged jets
+  bool jetIsTightBTagged[n_jets];
+  int CountingGoodJets=0;
+  int CountingBadJets=0;
+  float TotalHT=0;
+  TLorentzVector LeadingJet={0,0,0,0};
+  int BtagCounter=0;
+  int LooseBtagCounter=0;
+  int TightBtagCounter=0;
+
+  ScaleFactor jetSF[n_jets];
+
+  TLorentzVector AllJets[n_jets];
+
+  //Loop over jets
+
+  //float MinimalCSVM=0.0; int CSVM_M_Marker=0;
+	  
+  for (int i=0;i<n_jets;++i)
+    {
+      TLorentzVector *jeti = m_jetMet->getP4(i);
+      CSV_values[i]=0.0;
+
+      TotalHT+=fabs(jeti->Pt());
+      AllJets[i].SetPxPyPzE(jeti->Px(),jeti->Py(),jeti->Pz(),jeti->E());
+      if (m_isMC) jetSF[i] = m_jetMet->getScaleFactor(i);
+
+      if (isJetForwSel(jeti)) CountingBadJets++;
+      jetIsBTagged[i] = false; jetIsLooseBTagged[i] = false; JetsInAcceptance[i]=false; jetIsTightBTagged[i] = false;
+      if (isJetAccepSel(jeti)) 
+	{
+	  if (CountingGoodJets==0) LeadingJet=AllJets[i];
+	  CSV_values[i]=m_jetMet->getJetBTagProb_CSV(i);
+	  JetsInAcceptance[i]=true; CountingGoodJets++;
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVT)
+	    {
+	      ++m_NBtaggedJets_CSVT;
+	      ++TightBtagCounter;
+	      jetIsTightBTagged[i] = true;
+	    }
+	  
+	  if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVM)
+	    {
+	      ++m_NBtaggedJets_CSVM;
+	      ++m_NBtaggedJets_CSVL;
+	      jetIsBTagged[i] = true;
+	      ++BtagCounter;
+	      jetIsLooseBTagged[i] = true;
+	      ++LooseBtagCounter;
+	    }
+	  else
+	    {
+	      jetIsBTagged[i] = false;
+	      if ((m_jetMet->getJetBTagProb_CSV(i)) > m_JET_btag_CSVL)
+		{
+		  ++m_NBtaggedJets_CSVL;
+		  jetIsLooseBTagged[i] = true;
+		  ++LooseBtagCounter;
+		}
+	      else
+		{
+		  jetIsLooseBTagged[i] = false;
+		}
+	    }	  
+	}
+      else {JetsInAcceptance[i]=false;}
+    }
+
+  /////////
+  //Cut 0//
+  /////////
+
+  if(Cut0) { if (CountingGoodJets<NumberOfGoodJets || CountingBadJets<NumberOfBadJets) return 0;}
+    //if (CountingGoodJets>=NumberOfGoodJets && CountingBadJets>=NumberOfBadJets) cout << "" << endl; //cout << "Good Event 2M1L" << endl;
+    //else return 0; }
+  m_Cut0=1;
+  //cout << "Ana3T: Cut0 " << CountingGoodJets << " " << CountingBadJets << endl;
+  
+  /////////
+  //Cut 1//
+  /////////
+
+  if(Cut1) {if (LeadingJet.Pt()<LeadingJetPt) return 0;}
+  m_Cut1=1;
+  //cout << "Ana3T: Cut1 " << LeadingJet.Pt() << endl;
+
+  //cout << "The HT of the event is " << TotalHT << endl;
+  m_THT = TotalHT;
+
+  /////////
+  //Cut 2//
+  /////////
+
+  if (Cut2) {if (TotalHT<THTcut) return 0;}
+  m_Cut2=1;
+  //cout << "Ana3T: Cut2 " << TotalHT << endl;
+
+  /////////
+  //Cut 3//
+  /////////
+
+  if (Cut3) {if (TightBtagCounter<3) return 0;}
+  //cout << "3T -> " << "CSVL: " << LooseBtagCounter << ", CSVM: " << BtagCounter << ", CSVT: " << TightBtagCounter << endl;
+  /*if (MinLooseB_tags!=0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags || LooseBtagCounter<MinLooseB_tags+MinB_tags) return 0;}
+    }
+  else if (MinTightB_tags!=0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (TightBtagCounter<MinTightB_tags || BtagCounter<MinB_tags+MinTightB_tags) return 0;}
+    }
+  else if (MinLooseB_tags==0 && MinTightB_tags==0 && MinB_tags!=0)
+    {
+      if (Cut3) {if (BtagCounter<MinB_tags) return 0;}
+    }
+  else if (MinLooseB_tags!=0 && MinB_tags==0)
+    {
+      if (Cut3) {if (LooseBtagCounter<MinLooseB_tags+MinB_tags) return 0;}
+    }
+  else if (MinTightB_tags!=0 && MinB_tags==0)
+    {
+      if (Cut3) {if (TightBtagCounter<MinTightB_tags) return 0;}
+      }*/
+  m_Cut3=1;
+
+  //Selecting three b-jets with highest CSV
+  double tem_csv=0.0;
+  int GCSV_UM_I[3]={-1,-1,-1};
+  double Max_CSV=1.0; //m_JET_btag_CSVM;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (CSV_values[i]>tem_csv && CSV_values[i]<=Max_CSV) {GCSV_UM_I[0]=i; tem_csv=CSV_values[i];}
+      //cout << CSV_values[i] << " " << i << endl;
+      //cout << "Temporal max: " << CSV_values[GCSV_UM_I[0]] << " " << GCSV_UM_I[0] << endl;
+    }
+  tem_csv=0.0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (CSV_values[i]>tem_csv && CSV_values[i]<=CSV_values[GCSV_UM_I[0]] && i!=GCSV_UM_I[0]) {GCSV_UM_I[1]=i; tem_csv=CSV_values[i];}
+    }
+  tem_csv=0.0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (CSV_values[i]>tem_csv && CSV_values[i]<=CSV_values[GCSV_UM_I[1]] && i!=GCSV_UM_I[0] && i!=GCSV_UM_I[1]) {GCSV_UM_I[2]=i; tem_csv=CSV_values[i];}
+    }
+  if (GCSV_UM_I[0]==-1 || GCSV_UM_I[1]==-1 ||GCSV_UM_I[2]==-1)
+    {
+      cout << GCSV_UM_I[0] << " " << CSV_values[GCSV_UM_I[0]] << "; " << GCSV_UM_I[1] << " " << CSV_values[GCSV_UM_I[1]] << "; " << GCSV_UM_I[2] << " " << CSV_values[GCSV_UM_I[2]] << " " << BtagCounter << endl; 
+      for (int i=0;i<n_jets;++i)
+	{
+	  //if (i!=GCSV_UM_I[0] && i!=GCSV_UM_I[1] && i!=GCSV_UM_I[2]) continue;
+	  if (i==GCSV_UM_I[0] || i==GCSV_UM_I[1] || i==GCSV_UM_I[2]) continue;
+	  cout << i << " " << JetsInAcceptance[i] << " " << CSV_values[i] << endl;
+	}
+    }
+
+  /////////////########///////////////////////
+  //////////HIGGS RECONSTRUCTION//////////////
+  /////////////########///////////////////////
+
+  
+  TLorentzVector FHJ3T;				
+  TLorentzVector SHJ3T; 
+  TLorentzVector FWJ3T; 
+  TLorentzVector SWJ3T; 
+  int IndexHiggsJets3T[2]={0,0};
+  int IndexWJets3T[2]={0,0};
+  int IndexTopJet3T=0;  
+
+  bool EventWithHiggs3T=false;
+  int HiggsCounter3T=0;
+  float DiffWithHiggMass3T=0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (i!=GCSV_UM_I[0] && i!=GCSV_UM_I[1] && i!=GCSV_UM_I[2]) continue;
+      if (/*!jetIsTightBTagged[i] || */!JetsInAcceptance[i]) continue;
+      /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;} //MODIFIED!!!!!
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}*/
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      for (int j=i+1;j<n_jets;++j)
+	{
+	  if (j!=GCSV_UM_I[0] && j!=GCSV_UM_I[1] && j!=GCSV_UM_I[2]) continue;
+	  if (/*!jetIsTightBTagged[j] || */!JetsInAcceptance[j]) continue;
+	  /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;} //MODIFIED!!!!!
+	  else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;}*/
+	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	  TLorentzVector DiBjet = jeti+jetj;
+	  if (fabs(DiBjet.M()-HiggsMass)>HiggsMassWindow) continue;
+	  if (jeti.DeltaR(jetj)>DeltaRHiggsJets) continue;
+	  EventWithHiggs3T=true;
+	  if (HiggsCounter3T==0)
+	    {
+	      ++HiggsCounter3T; DiffWithHiggMass3T=fabs(DiBjet.M()-HiggsMass);
+	      IndexHiggsJets3T[0]=i; IndexHiggsJets3T[1]=j; ReconstructedHiggs3T->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
+	      FirstHiggsJet3T->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondHiggsJet3T->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+	    }
+	  else
+	    {
+	      ++HiggsCounter3T;
+	      if (DiffWithHiggMass3T>fabs(DiBjet.M()-HiggsMass)) 
+		{
+		  IndexHiggsJets3T[0]=i; IndexHiggsJets3T[1]=j; 
+		  DiffWithHiggMass3T=fabs(DiBjet.M()-HiggsMass); ReconstructedHiggs3T->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E()); 
+		  FirstHiggsJet3T->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondHiggsJet3T->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+		}
+	    }
+	}
+    }
+
+  /////////
+  //Cut 4//
+  /////////
+
+  if (Cut4) {if (!EventWithHiggs3T) return 0;}
+  m_Cut4=1;
+
+  FHJ3T.SetPxPyPzE(FirstHiggsJet3T->Px(), FirstHiggsJet3T->Py(), FirstHiggsJet3T->Pz(), FirstHiggsJet3T->E());
+  SHJ3T.SetPxPyPzE(SecondHiggsJet3T->Px(), SecondHiggsJet3T->Py(), SecondHiggsJet3T->Pz(), SecondHiggsJet3T->E());
+
+  //cout << "Ana3T: Cut4 " << IndexHiggsJets3T[0] << " " << IndexHiggsJets3T[1] << " " << FHJ3T.DeltaR(SHJ3T) << endl;
+
+  //////////////////////////////////////////////////////////////////
+  //Reconstruction of W from full jets collection minus Higgs jets//
+  //////////////////////////////////////////////////////////////////
+  //cout << "Entering W reconstruction" << endl;
+  bool EventWithW3T=false;
+  int WCounter3T=0;
+  float DiffWithWMass3T=0;  
+  for (int i=0;i<n_jets;++i)
+    {
+      if (i==GCSV_UM_I[0] || i==GCSV_UM_I[1] || i==GCSV_UM_I[2]) continue;
+      if (IndexHiggsJets3T[0]==i || IndexHiggsJets3T[1]==i || !JetsInAcceptance[i]) continue;
+      //Enforcing third b for the top
+      if (/*jetIsTightBTagged[i] || */!JetsInAcceptance[i]) continue;
+      /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;} //MODIFIED!!!!!
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}*/
+      /////////////////////////////////////////////////
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      for (int j=i+1;j<n_jets;++j)
+	{
+	  if (j==GCSV_UM_I[0] || j==GCSV_UM_I[1] || j==GCSV_UM_I[2]) continue;
+	  if (IndexHiggsJets3T[0]==j || IndexHiggsJets3T[1]==j || !JetsInAcceptance[j]) continue;
+	  //Enforcing third b for the top
+	  if (/*jetIsTightBTagged[j] || */!JetsInAcceptance[j]) continue;
+	  /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags!=0) {if (jetIsBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;} //MODIFIED!!!!!
+	  else if (MinLooseB_tags!=0 && MinB_tags==0) {if (jetIsLooseBTagged[j] || !JetsInAcceptance[j]) continue;}
+	  else if (MinTightB_tags!=0 && MinB_tags==0) {if (jetIsTightBTagged[j] || !JetsInAcceptance[j]) continue;}*/
+	  /////////////////////////////////////////////////
+	  TLorentzVector jetj; jetj.SetPxPyPzE(AllJets[j].Px(),AllJets[j].Py(),AllJets[j].Pz(),AllJets[j].E());
+	  TLorentzVector Dijet = jeti+jetj;
+	  if (fabs(Dijet.M()-WMass)>WMassWindow) continue;
+	  if (jeti.DeltaR(jetj)>DeltaRWJets) continue;
+	  EventWithW3T=true;
+	  if (WCounter3T==0)
+	    {
+	      ++WCounter3T; DiffWithWMass3T=fabs(Dijet.M()-WMass);
+	      IndexWJets3T[0]=i; IndexWJets3T[1]=j; ReconstructedW3T->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E());
+	      FirstWJet3T->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondWJet3T->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+	    }
+	  else
+	    {
+	      ++WCounter3T;
+	      if (DiffWithWMass3T>fabs(Dijet.M()-WMass)) 
+		{
+		  IndexWJets3T[0]=i; IndexWJets3T[1]=j; 
+		  DiffWithWMass3T=fabs(Dijet.M()-WMass); ReconstructedW3T->SetPxPyPzE(jeti.Px()+jetj.Px(),jeti.Py()+jetj.Py(),jeti.Pz()+jetj.Pz(),jeti.E()+jetj.E()); 
+		  FirstWJet3T->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E()); SecondWJet3T->SetPxPyPzE(jetj.Px(),jetj.Py(),jetj.Pz(),jetj.E());
+		}
+	    }
+	}
+    }
+  
+  /////////
+  //Cut 5//
+  /////////
+
+  if (Cut5) {if (!EventWithW3T) return 0;}
+  m_Cut5=1;
+  //cout << "Ana3T: Cut5 " << IndexWJets3T[0] << " " << IndexWJets3T[1] << endl;
+
+  FWJ3T.SetPxPyPzE(FirstWJet3T->Px(), FirstWJet3T->Py(), FirstWJet3T->Pz(), FirstWJet3T->E());
+  SWJ3T.SetPxPyPzE(SecondWJet3T->Px(), SecondWJet3T->Py(), SecondWJet3T->Pz(), SecondWJet3T->E());
+
+  /////////////////////////
+  //Reconstruction of Top//
+  /////////////////////////
+  //cout << "Entering Top reconstruction" << endl;
+  bool EventWithTop3T=false;
+  int TopCounter3T=0;
+  float DiffWithTopMass3T=0;
+  for (int i=0;i<n_jets;++i)
+    {
+      if (i!=GCSV_UM_I[0] && i!=GCSV_UM_I[1] && i!=GCSV_UM_I[2]) continue;
+      if (IndexHiggsJets3T[0]==i || IndexHiggsJets3T[1]==i || IndexWJets3T[0]==i || IndexWJets3T[1]==i || !JetsInAcceptance[i]) continue;
+      if (/*!jetIsTightBTagged[i] || */!JetsInAcceptance[i]) continue;
+      /*if (MinLooseB_tags!=0 && MinB_tags!=0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags!=0) {if (!jetIsBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags==0 && MinLooseB_tags==0 && MinB_tags!=0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;} //MODIFIED!!!!!
+      else if (MinLooseB_tags!=0 && MinB_tags==0) {if (!jetIsLooseBTagged[i] || !JetsInAcceptance[i]) continue;}
+      else if (MinTightB_tags!=0 && MinB_tags==0) {if (!jetIsTightBTagged[i] || !JetsInAcceptance[i]) continue;}*/
+      TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+      TLorentzVector wjet; wjet.SetPxPyPzE(ReconstructedW->Px(),ReconstructedW->Py(),ReconstructedW->Pz(),ReconstructedW->E());
+      TLorentzVector Trijet = jeti+wjet;
+      if (fabs(Trijet.M()-TopMass)>TopMassWindow) continue;
+      //cout << "Mass of jet i: " << jeti.M() << " and j: " << jetj.M() << endl;
+      //cout << "Mass of the b-tagged jets couple " << i << j << " is " << DiBjet.M() << endl;
+      EventWithTop3T=true;
+      if (TopCounter3T==0)
+	{
+	  ++TopCounter3T; DiffWithTopMass3T=fabs(Trijet.M()-TopMass);
+	  IndexTopJet3T=i; ReconstructedTop3T->SetPxPyPzE(jeti.Px()+wjet.Px(),jeti.Py()+wjet.Py(),jeti.Pz()+wjet.Pz(),jeti.E()+wjet.E());
+	  TopJet3T->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E());
+	}
+      else
+	{
+	  ++TopCounter3T;
+	  if (DiffWithTopMass3T>fabs(Trijet.M()-TopMass)) 
+	    {
+		  IndexTopJet3T=i;
+		  DiffWithTopMass3T=fabs(Trijet.M()-TopMass); ReconstructedTop3T->SetPxPyPzE(jeti.Px()+wjet.Px(),jeti.Py()+wjet.Py(),jeti.Pz()+wjet.Pz(),jeti.E()+wjet.E()); 
+		  TopJet3T->SetPxPyPzE(jeti.Px(),jeti.Py(),jeti.Pz(),jeti.E());
+	    }
+	}
+    }
+
+  if (!EventWithTop3T) return 0;
+  //cout << "Ana3T: CutTop " << IndexTopJet3T << endl;
+
+  TLorentzVector HJ3T; 
+  HJ3T.SetPxPyPzE(ReconstructedHiggs3T->Px(), ReconstructedHiggs3T->Py(), ReconstructedHiggs3T->Pz(), ReconstructedHiggs3T->E());
+  TLorentzVector TJ3T; 
+  TJ3T.SetPxPyPzE(ReconstructedTop3T->Px(), ReconstructedTop3T->Py(), ReconstructedTop3T->Pz(), ReconstructedTop3T->E());
+  TLorentzVector WJ3T; 
+  WJ3T.SetPxPyPzE(ReconstructedW3T->Px(), ReconstructedW3T->Py(), ReconstructedW3T->Pz(), ReconstructedW3T->E());
+  float DRWHiggs3T=HJ3T.DeltaR(WJ3T);
+  float RelTHT3T=(ReconstructedHiggs3T->Pt()+ReconstructedTop3T->Pt())/TotalHT; //Relative total hadronic energy
+
+  ReconstructedTprime3T->SetPxPyPzE(ReconstructedHiggs3T->Px()+ReconstructedTop3T->Px(),ReconstructedHiggs3T->Py()+ReconstructedTop3T->Py(),ReconstructedHiggs3T->Pz()+ReconstructedTop3T->Pz(),ReconstructedHiggs3T->E()+ReconstructedTop3T->E());
+
+  float RelMass3T=(HJ3T.M()+TJ3T.M())/ReconstructedTprime3T->M();
+
+  ////////////////////////////////////////////////
+  //Reconstructing a W and a Top from Higgs jets//
+  ////////////////////////////////////////////////
+  //Using chi2 algorithm to reconstruct W and top from Higgs
+
+  float WHCurrentChi2=-1;
+  int IndexWFromH=-1;
+  int WhichHiggsJetMarker=-1;
+  float Tchi2=0;
+  float Wchi2=0;
+
+  for (int i=0;i<n_jets;++i)
+    {
+      if (IndexHiggsJets3T[0]==i || IndexHiggsJets3T[1]==i || IndexWJets3T[0]==i || IndexWJets3T[1]==i || IndexTopJet3T==i || !JetsInAcceptance[i]) continue;
+      for (int j=0;j<2;++j)
+	{
+	  TLorentzVector jeti; jeti.SetPxPyPzE(AllJets[i].Px(),AllJets[i].Py(),AllJets[i].Pz(),AllJets[i].E());
+	  if (j==0)
+	    {
+	      TLorentzVector Dijet = jeti+FHJ3T; //Constructing W from first Higgs jet
+	      Wchi2=fabs((Dijet.M()-WMassChi2)*(Dijet.M()-WMassChi2))/((WHadrWidth)*(WHadrWidth));
+	      TLorentzVector Trijet = Dijet+SHJ3T; //Constructing top from two Higgs lets
+	      Tchi2=fabs((Trijet.M()-TopMassChi2)*(Trijet.M()-TopMassChi2))/((TopHadrWidth)*(TopHadrWidth));
+	      if (IndexWFromH==-1) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+	      else
+		{
+		  if (WHCurrentChi2>(Wchi2+Tchi2)) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+		}
+	    }
+	  else
+	    {
+	      TLorentzVector Dijet = jeti+SHJ3T; //Constructing W from second Higgs jet
+	      Wchi2=fabs((Dijet.M()-WMassChi2)*(Dijet.M()-WMassChi2))/((WHadrWidth)*(WHadrWidth));
+	      TLorentzVector Trijet = Dijet+FHJ3T; //Constructing top from two Higgs lets
+	      Tchi2=fabs((Trijet.M()-TopMassChi2)*(Trijet.M()-TopMassChi2))/((TopHadrWidth)*(TopHadrWidth));
+	      if (WHCurrentChi2>(Wchi2+Tchi2)) {WHCurrentChi2=Wchi2+Tchi2; IndexWFromH=i; WhichHiggsJetMarker=j;}
+	    }
+	}
+    }
+  TLorentzVector W2JChi2;
+  if ( WhichHiggsJetMarker==0 && IndexWFromH>=0) W2JChi2=FHJ3T+AllJets[IndexWFromH];
+  else if (WhichHiggsJetMarker==1 && IndexWFromH>=0) W2JChi2=SHJ3T+AllJets[IndexWFromH];
+  TLorentzVector T2JChi2;
+  if (IndexWFromH<=-1 || WhichHiggsJetMarker<0 ||  WhichHiggsJetMarker>1) T2JChi2.SetPxPyPzE(0.,0.,0.,0.);
+  else T2JChi2=FHJ3T+SHJ3T+AllJets[IndexWFromH];
+  ////////////////////////////////////////////////////////////
+
+  /////////
+  //Cut 6//
+  /////////
+  
+  if (Cut6) {if (HJ3T.Pt()<HiggsPt || TJ3T.Pt()<TopPt) return 0;}
+  m_Cut6=1;
+
+  /////////
+  //Cut 7//
+  /////////
+
+  if (Cut7) {if (HJ3T.DeltaR(WJ3T)<MinDeltaRWH || HJ3T.DeltaR(WJ3T)>MaxDeltaRWH) return 0;}
+  m_Cut7=1;
+
+  /////////
+  //Cut 8//
+  /////////
+
+  if (Cut8) {if (fabs(FHJ3T.Phi()-SHJ3T.Phi())>DeltaPhiHiggsJets || fabs(TopJet3T->Phi()-WJ3T.Phi())>DeltaPhiTopJetW) return 0;}
+  m_Cut8=1;
+
+
+  //////////
+  //Cut 10//
+  //////////
+
+  if (Cut10) {if (fabs(FHJ3T.Phi()-SHJ3T.Phi())>DeltaPhiHiggsJets || fabs(FWJ3T.Phi()-SWJ3T.Phi())>DeltaPhiWjets) return 0;}
+  m_Cut10=1;
+
+  //////////
+  //Cut 11//
+  //////////
+
+  if (Cut11) {if (HJ3T.M()>MaxHiggsMass || HJ3T.M()<MinHiggsMass) return 0;}
+  m_Cut11=1;
+
+  //////////
+  //Cut 12//
+  //////////
+
+  if (Cut12) {if (RelTHT3T<RelHT) return 0;}
+  m_Cut12=1;
+
+  //////////
+  //Cut 14//
+  //////////
+
+  if (Cut14) {if (HJ3T.DeltaR(TJ3T)<MinDeltaRTH || HJ3T.DeltaR(TJ3T)>MaxDeltaRTH) return 0;}
+  m_Cut14=1;
+
+  //////////
+  //Cut 15//
+  //////////
+
+  if (Cut15) {if (RelMass3T>RelMassMaxCut || RelMass3T<RelMassMinCut) return 0;}
+  m_Cut15=1;
+
+  //////////
+  //Cut 22//
+  //////////
+  
+  if (Cut22) {if (W2JChi2.M()>Wchi2Min && W2JChi2.M()<Wchi2Max) return 0;}
+  m_Cut22=1;
+
+  WFromHiggsChi23T->SetPxPyPzE(W2JChi2.Px(), W2JChi2.Py(), W2JChi2.Pz(), W2JChi2.E());
+  //if (WhichHiggsJetMarker==0) DRWjetsFromHiggsChi23T=AllJets[IndexWFromH].DeltaR(FHJ3T);
+  //else if (WhichHiggsJetMarker>=1 && IndexWFromH!=-1) {DRWjetsFromHiggsChi23T=AllJets[IndexWFromH].DeltaR(SHJ3T); /*cout << IndexWFromH << " " << IndexHiggsJets[1] << endl;*/}
+  TopFromHiggsChi23T->SetPxPyPzE(T2JChi2.Px(), T2JChi2.Py(), T2JChi2.Pz(), T2JChi2.E());
+
+  if (m_isMC) {
+    // Get scale factors
+    double sf = 1;
+    double sf_error = 0;
+
+    if (m_NBtaggedJets_CSVL >= 3 && MinB_tags>=3) {
+
+      ScaleFactor sf_jet1 = {1, 0, 0};
+      ScaleFactor sf_jet2 = {1, 0, 0};
+      ScaleFactor sf_jet3 = {1, 0, 0};
+      
+      bool gotJet1 = false;
+      bool gotJet2 = false;
+
+      for (int i = 0; i < n_jets; i++)
+      {
+        if (jetIsLooseBTagged[i]) {
+          if (!gotJet1) {
+            gotJet1 = true;
+            sf_jet1 = jetSF[i];
+          } 
+	  else if (!gotJet2 && gotJet1) {
+	    gotJet2 = true;
+            sf_jet2 = jetSF[i];
+          }
+	  else if (gotJet2 && gotJet1) {
+            sf_jet3 = jetSF[i];
+            break;
+          }
+        }
+      }
+
+      sf = sf_jet1.getValue() * sf_jet2.getValue() * sf_jet3.getValue();
+      sf_error = sf*sqrt((sf_jet1.getValue()*sf_jet1.getValue()/(sf_jet1.getErrorHigh()*sf_jet1.getErrorHigh()))+
+			 (sf_jet2.getValue()*sf_jet2.getValue()/(sf_jet2.getErrorHigh()*sf_jet2.getErrorHigh()))+
+			 (sf_jet3.getValue()*sf_jet3.getValue()/(sf_jet3.getErrorHigh()*sf_jet3.getErrorHigh())));
+      //sf_jet2.getValue() * sf_jet2.getValue() * sf_jet1.getErrorHigh() * sf_jet1.getErrorHigh() +
+      //sf_jet1.getValue() * sf_jet1.getValue() * sf_jet2.getErrorHigh() * sf_jet2.getErrorHigh();
+    }
+
+    m_weight *= sf;
+
+    double squared_sf_error = sf_error * sf_error;
+    m_weight_error_low += squared_sf_error;
+    m_weight_error_high += squared_sf_error;
   }
 
   return 1;
@@ -1840,9 +3669,9 @@ namespace patextractor {
   //Cut 0//
   /////////
 
-  if(Cut0) {
-    if (CountingGoodJets>=NumberOfGoodJets && CountingBadJets>=NumberOfBadJets) cout << "" << endl; //cout << "Good Event 2M1L" << endl;
-  else return 0; }
+  if(Cut0) {if (CountingGoodJets<NumberOfGoodJets || CountingBadJets<NumberOfBadJets) return 0;}
+  //if (CountingGoodJets>=NumberOfGoodJets && CountingBadJets>=NumberOfBadJets) cout << "" << endl; //cout << "Good Event 2M1L" << endl;
+  //else return 0; }
   //m_Cut0=1;
   
   /////////
@@ -2040,7 +3869,7 @@ namespace patextractor {
 
   float WHCurrentChi2=-1;
   int IndexWFromH=-1;
-  bool WhichHiggsJetMarker=-1;
+  int WhichHiggsJetMarker=-1;
   float Tchi2=0;
   float Wchi2=0;
 
@@ -2073,9 +3902,11 @@ namespace patextractor {
 	}
     }
   TLorentzVector W2JChi2;
-  if ( WhichHiggsJetMarker==0 && IndexWFromH!=-1) W2JChi2=FHJ2M1L+AllJets[IndexWFromH];
-  else if (WhichHiggsJetMarker>=1 && IndexWFromH!=-1) W2JChi2=SHJ2M1L+AllJets[IndexWFromH];
-  TLorentzVector T2JChi2; T2JChi2=FHJ2M1L+SHJ2M1L+AllJets[IndexWFromH];
+  if ( WhichHiggsJetMarker==0 && IndexWFromH>=0) W2JChi2=FHJ2M1L+AllJets[IndexWFromH];
+  else if (WhichHiggsJetMarker==1 && IndexWFromH>=0) W2JChi2=SHJ2M1L+AllJets[IndexWFromH];
+  TLorentzVector T2JChi2; 
+  if (IndexWFromH<=-1 || WhichHiggsJetMarker<0 ||  WhichHiggsJetMarker>1) T2JChi2.SetPxPyPzE(0.,0.,0.,0.);
+  else T2JChi2=FHJ2M1L+SHJ2M1L+AllJets[IndexWFromH];
   ////////////////////////////////////////////////////////////
 
   /////////
@@ -2281,17 +4112,35 @@ void SingleTprime_analysis::analyze(const edm::EventSetup& iSetup, PatExtractor&
   m_nPU = m_event->nPU();
   m_evt = m_event->n_events();
   n_vtx = m_vertex->getSize();
-  evt_num++; cout << evt_num << endl;
+  evt_num++; //cout << evt_num << endl;
   if (m_isMC) n_TrueInteractions = m_event->nTrueInteractions(); //cout << "Number of true Interactions -> " << m_event->nTrueInteractions() << endl;
 
   //Performing analysis
   //cout << "Going to selection" << endl;
   int ToFillTree = SingleTprime_Sel();
-  int ToFillTree2M1L = SingleTprime_Sel2M1L();
-
+  m_tree_cuts->Fill();  
   if (ToFillTree==1) fillTree();
+  reset_common();  
+
+  int ToFillTreeInvHptTpt = SingleTprime_Sel_InvHptTpt();
+  m_tree_cutsInvHptTpt->Fill();
+  if (ToFillTreeInvHptTpt==1) fillTreeInvHptTpt();
+  reset_common();
+
+  int ToFillTree3L = SingleTprime_Sel_3L();
+  m_tree_cuts3L->Fill();
+  if (ToFillTree3L==1) fillTree3L();
+  reset_common();
+
+  int ToFillTree3T = SingleTprime_Sel_3T();
+  m_tree_cuts3T->Fill();
+  if (ToFillTree3T==1) fillTree3T();
+  reset_common();
+
+  int ToFillTree2M1L = SingleTprime_Sel2M1L();
   if (ToFillTree2M1L==1) fillTree2M1L();
-  m_tree_cuts->Fill();
+
+  //if (ToFillTree!=ToFillTreeInvHptTpt) cout << "Difference in selection in event: " << evt_num << " with A1=" << ToFillTree << ", A2=" << ToFillTreeInvHptTpt << endl;
 }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2352,7 +4201,7 @@ void SingleTprime_analysis::MCidentification()
 	    {
 	      
 	      int motherIndex1 = patIndexToExtractorIndex(m_MC->getMom1Index(j));
-	      int grandMotherIndex1 = -1;
+	      int grandMotherIndex1 = -1; if (grandMotherIndex1!=-1) grandMotherIndex1=-1;
 	      if (motherIndex1 != -1) grandMotherIndex1 = patIndexToExtractorIndex(m_MC->getMom1Index(motherIndex1));
 	     
 	      if (abs(m_MC->getType(j)) < ID_B && abs(m_MC->getType(j))>0 && abs(m_MC->getType(motherIndex)) < ID_B && m_MC->getType(motherIndex)==m_MC->getType(motherIndex1)) 
@@ -2444,6 +4293,24 @@ void SingleTprime_analysis::reset()
   m_jet4pt = 0.;
   m_jet5pt = 0.;
   m_jet6pt = 0.;
+  m_bjet1pt = 0.;
+  m_bjet2pt = 0.;
+  m_bjet3pt = 0.;
+  m_AvBJ_pt = 0.;
+  m_Diff2LeadBJets_pt = 0.;
+  m_ExpDiff2LeadBJets_pt = 0.;
+  m_jet1_nemEfrac = 0.;
+  m_jet2_nemEfrac = 0.;
+  m_jet3_nemEfrac = 0.;
+  m_jet4_nemEfrac = 0.;
+  m_jet5_nemEfrac = 0.;
+  m_jet6_nemEfrac = 0.;
+  m_jet1_nhadEfrac = 0.;
+  m_jet2_nhadEfrac = 0.;
+  m_jet3_nhadEfrac = 0.;
+  m_jet4_nhadEfrac = 0.;
+  m_jet5_nhadEfrac = 0.;
+  m_jet6_nhadEfrac = 0.;
   m_NBtaggedJets_CSVL=0;
   m_NBtaggedJets_CSVM=0;
   m_NBtaggedJets_CSVT=0;
@@ -2479,6 +4346,7 @@ void SingleTprime_analysis::reset()
   NumberOfHiggses=0;
   LooseNoMedBtags=0;
   m_DP2LeadingJets=0;
+  m_DY2LeadingJets=0;
   chi2=0;
 
   DRWjetsFromHiggsChi2=0.;
@@ -2598,6 +4466,82 @@ void SingleTprime_analysis::reset()
   TopJet2M1L->SetPxPyPzE(0., 0., 0., 0.);
   WFromHiggsChi22M1L->SetPxPyPzE(0., 0., 0., 0.);
   TopFromHiggsChi22M1L->SetPxPyPzE(0., 0., 0., 0.);
+  JET1->SetPxPyPzE(0., 0., 0., 0.);
+  JET2->SetPxPyPzE(0., 0., 0., 0.);
+  JET3->SetPxPyPzE(0., 0., 0., 0.);
+  JET4->SetPxPyPzE(0., 0., 0., 0.);
+  JET5->SetPxPyPzE(0., 0., 0., 0.);
+  JET6->SetPxPyPzE(0., 0., 0., 0.);
+
+  ReconstructedHiggsInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedWInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedTopInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedTprimeInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  FirstHiggsJetInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  SecondHiggsJetInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  FirstWJetInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  SecondWJetInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  TopJetInvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  WFromHiggsChi2InvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+  TopFromHiggsChi2InvHptTpt->SetPxPyPzE(0., 0., 0., 0.);
+
+  ReconstructedHiggs3L->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedW3L->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedTop3L->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedTprime3L->SetPxPyPzE(0., 0., 0., 0.);
+  FirstHiggsJet3L->SetPxPyPzE(0., 0., 0., 0.);
+  SecondHiggsJet3L->SetPxPyPzE(0., 0., 0., 0.);
+  FirstWJet3L->SetPxPyPzE(0., 0., 0., 0.);
+  SecondWJet3L->SetPxPyPzE(0., 0., 0., 0.);
+  TopJet3L->SetPxPyPzE(0., 0., 0., 0.);
+  WFromHiggsChi23L->SetPxPyPzE(0., 0., 0., 0.);
+  TopFromHiggsChi23L->SetPxPyPzE(0., 0., 0., 0.);
+
+  ReconstructedHiggs3T->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedW3T->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedTop3T->SetPxPyPzE(0., 0., 0., 0.);
+  ReconstructedTprime3T->SetPxPyPzE(0., 0., 0., 0.);
+  FirstHiggsJet3T->SetPxPyPzE(0., 0., 0., 0.);
+  SecondHiggsJet3T->SetPxPyPzE(0., 0., 0., 0.);
+  FirstWJet3T->SetPxPyPzE(0., 0., 0., 0.);
+  SecondWJet3T->SetPxPyPzE(0., 0., 0., 0.);
+  TopJet3T->SetPxPyPzE(0., 0., 0., 0.);
+  WFromHiggsChi23T->SetPxPyPzE(0., 0., 0., 0.);
+  TopFromHiggsChi23T->SetPxPyPzE(0., 0., 0., 0.);
+}
+
+void SingleTprime_analysis::reset_common()
+{
+  
+  m_triggercut= 0;
+  m_Cut0= 0;
+  m_Cut1= 0;
+  m_Cut2= 0;
+  m_Cut3= 0;
+  m_CutChi2= 0;
+  m_Cut4= 0;
+  m_Cut5= 0;
+  m_Cut6= 0;
+  m_Cut7= 0;
+  m_Cut8= 0;
+  m_Cut9= 0;
+  m_Cut10= 0;
+  m_Cut11= 0;
+  m_Cut12= 0;
+  m_Cut13= 0;
+  m_Cut14= 0;
+  m_Cut15= 0;
+  m_Cut16= 0;
+  m_Cut17= 0;
+  m_Cut18= 0;
+  m_Cut19= 0;
+  m_Cut20= 0;
+  m_Cut21= 0;
+  m_Cut22= 0;
+
+  m_weight = 1.;
+  m_weight_error_low = 0.;
+  m_weight_error_high = 0.;
 }
 
 // Fill the root tree containing analysis results
@@ -2607,6 +4551,24 @@ void SingleTprime_analysis::fillTree()
   m_weight_error_low = sqrt(m_weight_error_low);
   m_weight_error_high = sqrt(m_weight_error_high);
   m_tree_stp->Fill(); 
+}
+void SingleTprime_analysis::fillTreeInvHptTpt()
+{
+  m_weight_error_low = sqrt(m_weight_error_low);
+  m_weight_error_high = sqrt(m_weight_error_high);
+  m_tree_stp_InvHptTpt->Fill(); 
+}
+void SingleTprime_analysis::fillTree3L()
+{
+  m_weight_error_low = sqrt(m_weight_error_low);
+  m_weight_error_high = sqrt(m_weight_error_high);
+  m_tree_stp_3L->Fill(); 
+}
+void SingleTprime_analysis::fillTree3T()
+{
+  m_weight_error_low = sqrt(m_weight_error_low);
+  m_weight_error_high = sqrt(m_weight_error_high);
+  m_tree_stp_3T->Fill(); 
 }
 void SingleTprime_analysis::fillTree2M1L()
 {

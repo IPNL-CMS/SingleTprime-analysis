@@ -66,10 +66,10 @@ float PUR_function(int TI) //function with input the Number of True Interactions
 
 }
 
-void SingleT()
+void Diboson()
 {
-  int ParcialTestMax=9;
-  int ParcialTestMin=4;
+  int ParcialTestMax=3;
+  int ParcialTestMin=0;
   TH1F *FiveJetsMass[NumberOfProcesses];
   TH1F *LeadingJetPT[NumberOfProcesses];
   TH1F *Leading2JetPT[NumberOfProcesses];
@@ -106,12 +106,12 @@ void SingleT()
   TH1F *CSVLB[NumberOfProcesses];
   TH1F *CSVMB[NumberOfProcesses];
   TH1F *CSVTB[NumberOfProcesses];
-  TH1F *Vtcs[NumberOfProcesses];    
+  TH1F *Vtcs[NumberOfProcesses];   
   TH2F *HptTpt[6][NumberOfProcesses]; 
   TH2F *HTCSVM[NumberOfProcesses];  
   TH1F *HiggsMassCuts[6][NumberOfProcesses];
   TH1F *HiggsMassReversedHptTpt[6][NumberOfProcesses];
-  TH1F *TprimeMassReversedHptTpt[6][NumberOfProcesses];   
+  TH1F *TprimeMassReversedHptTpt[6][NumberOfProcesses]; 
   TH1F *WMassFromHiggs[6][NumberOfProcesses];
   TH1F *TopMassFromHiggs[NumberOfProcesses];
   //ADDITIONAL INFO ON JETS  
@@ -139,35 +139,20 @@ void SingleT()
       TChain CutsChain("cuts");
       TChain AnalysisChain("stp");
       TH1F *ALLCuts[NumberOfHistos];
-      if (k==3)
+      if (k==0)
 	{
-	  CutsChain.Add(MainFolder + "T-s_Full_analyzed.root");
-	  AnalysisChain.Add(MainFolder + "T-s_Full_analyzed.root");
+	  CutsChain.Add(MainFolder + "ZZ_Full_analyzed.root");
+	  AnalysisChain.Add(MainFolder + "ZZ_Full_analyzed.root");
 	}
-      else if (k==4)
+      else if (k==1)
 	{
-	  CutsChain.Add(MainFolder + "T-t_Full_analyzed.root");
-	  AnalysisChain.Add(MainFolder + "T-t_Full_analyzed.root");
+	  CutsChain.Add(MainFolder + "WZ_Full_analyzed.root");
+	  AnalysisChain.Add(MainFolder + "WZ_Full_analyzed.root");
 	}
-      else if (k==5)
+      else if (k==2)
 	{
-	  CutsChain.Add(MainFolder + "T-tw_Full_analyzed.root");
-	  AnalysisChain.Add(MainFolder + "T-tw_Full_analyzed.root");
-	}
-      else if (k==6)
-	{
-	  CutsChain.Add(MainFolder + "Tbar-s_Full_analyzed.root");
-	  AnalysisChain.Add(MainFolder + "Tbar-s_Full_analyzed.root");
-	}
-      else if (k==7)
-	{
-	  CutsChain.Add(MainFolder + "Tbar-t_Full_analyzed.root");
-	  AnalysisChain.Add(MainFolder + "Tbar-t_Full_analyzed.root");
-	}
-      else if (k==8)
-	{
-	  CutsChain.Add(MainFolder + "Tbar-tw_Full_analyzed.root");
-	  AnalysisChain.Add(MainFolder + "Tbar-tw_Full_analyzed.root");
+	  CutsChain.Add(MainFolder + "WW_Full_analyzed.root");
+	  AnalysisChain.Add(MainFolder + "WW_Full_analyzed.root");
 	}
       
       int EntriesPerCut[NumberOfHistos];
@@ -578,10 +563,10 @@ void SingleT()
 	  AnalysisChain.Draw(HM1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && Relative_THT>=0.65 && (Relative_Mass>=0.3 && Relative_Mass<=0.5)");
 	  HiggsMassCuts[5][k] = (TH1F*)gDirectory->Get(HM2.c_str());
 	  gPad->Close();
-	  /*///////////////////////
+	  ///////////////////////
 	  //Sideband estimation//
 	  ///////////////////////
-	  string WFH1 = Form("W_From_Matching.M() >> WMFH0%i(44,60.0,500)",k);
+	  /*string WFH1 = Form("W_From_Matching.M() >> WMFH0%i(44,60.0,500)",k);
 	  string WFH2 = Form("WMFH0%i",k);
 	  AnalysisChain.Draw(WFH1.c_str(),"Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200");
 	  WMassFromHiggs[0][k] = (TH1F*)gDirectory->Get(WFH2.c_str());
@@ -616,7 +601,8 @@ void SingleT()
 	  AnalysisChain.Draw(WFH1.c_str(),"(Reconstructed_Higgs.Pt()>200 && Reconstructed_Top.Pt()>200) && (DeltaR_of_W_Higgs>=2.2 && DeltaR_of_W_Higgs<=3.5) && (TMath::Abs(First_Higgs_Jet.Phi()-Second_Higgs_Jet.Phi())<=1.2 && TMath::Abs(Top_Jet.Phi()-Reconstructed_W.Phi())<=1.2) && TMath::Abs(First_W_Jet.Phi()-Second_W_Jet.Phi())<=2.0 && Relative_THT>=0.65 && (Relative_Mass>=0.3 && Relative_Mass<=0.5)");
 	  WMassFromHiggs[5][k] = (TH1F*)gDirectory->Get(WFH2.c_str());
 	  gPad->Close();*/
-          ////////
+	  //
+	  ////////
           //////////
           A1 = Form("Top_From_Higgs_Chi2.M() >> TopFromHiggsChi2Mass%i(95,50,1000)",k);
           A2 = Form("TopFromHiggsChi2Mass%i",k);
@@ -897,9 +883,9 @@ void SingleT()
   QCDTprimeMassHMCuts[4]=(TH1F*)gDirectory->Get(A.c_str());
   //
   A=Form("HM5%i",FirstGoodMarker);
-  QCDTprimeMassHMCuts[5]=(TH1F*)gDirectory->Get(A.c_str()); 
-  /*//W Mass from Higgs histo recollection
-  TH1F *QCDTprimeMassWMFHCuts[6];
+  QCDTprimeMassHMCuts[5]=(TH1F*)gDirectory->Get(A.c_str());  
+  //W Mass from Higgs histo recollection
+  /*TH1F *QCDTprimeMassWMFHCuts[6];
   A=Form("WMFH0%i",FirstGoodMarker);
   QCDTprimeMassWMFHCuts[0]=(TH1F*)gDirectory->Get(A.c_str()); 
   //
@@ -917,10 +903,10 @@ void SingleT()
   //
   A=Form("WMFH5%i",FirstGoodMarker);
   QCDTprimeMassWMFHCuts[5]=(TH1F*)gDirectory->Get(A.c_str()); */
-  //     
+  //  
   //TopMassFromHiggs histo recollection
   A=Form("TopFromHiggsChi2Mass%i",FirstGoodMarker);
-  TH1F *QCDTopMassFromHiggs=(TH1F*)gDirectory->Get(A.c_str());  
+  TH1F *QCDTopMassFromHiggs=(TH1F*)gDirectory->Get(A.c_str());
   //
   A=Form("jet1_eta%i",FirstGoodMarker);
   TH1F *QCDJET1ETA=(TH1F*)gDirectory->Get(A.c_str());
@@ -1001,11 +987,11 @@ void SingleT()
       CSVLB[k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);
       CSVMB[k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);
       CSVTB[k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);  
-      Vtcs[k]->Scale(Lumi*XS[k]/ProcessedEvents[k]); 
+      Vtcs[k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);  
       for (int i=0; i<6; i++) HptTpt[i][k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);
       HTCSVM[k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);
       for (int i=0; i<6; i++) HiggsMassReversedHptTpt[i][k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);
-      for (int i=0; i<6; i++) TprimeMassReversedHptTpt[i][k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);   
+      for (int i=0; i<6; i++) TprimeMassReversedHptTpt[i][k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);      
       for (int i=0; i<6; i++) HiggsMassCuts[i][k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);
       /*for (int i=0; i<6; i++) WMassFromHiggs[i][k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);*/
       TopMassFromHiggs[k]->Scale(Lumi*XS[k]/ProcessedEvents[k]);
@@ -1025,98 +1011,61 @@ void SingleT()
       //Settings for Single Top
       if (k<=ParcialTestMax && k>=ParcialTestMin) 
 	{
-	  FiveJetsMass[k]->SetFillColor(kBlack);
-	  FiveJetsMass[k]->SetFillStyle(3305);
-	  LeadingJetPT[k]->SetFillColor(kBlack);
-	  LeadingJetPT[k]->SetFillStyle(3305);
-	  Leading2JetPT[k]->SetFillColor(kBlack);
-	  Leading2JetPT[k]->SetFillStyle(3305);
-	  Leading3JetPT[k]->SetFillColor(kBlack);
-	  Leading3JetPT[k]->SetFillStyle(3305);
-	  Leading4JetPT[k]->SetFillColor(kBlack);
-	  Leading4JetPT[k]->SetFillStyle(3305);
-	  Leading5JetPT[k]->SetFillColor(kBlack);
-	  Leading5JetPT[k]->SetFillStyle(3305);
-	  Leading6JetPT[k]->SetFillColor(kBlack);
-	  Leading6JetPT[k]->SetFillStyle(3305);
-	  THT[k]->SetFillColor(kBlack);
-	  THT[k]->SetFillStyle(3305);
-	  DRHjets[k]->SetFillColor(kBlack);
-	  DRHjets[k]->SetFillStyle(3305);
-	  DRWjets[k]->SetFillColor(kBlack);
-	  DRWjets[k]->SetFillStyle(3305);
-	  Hpt[k]->SetFillColor(kBlack);
-	  Hpt[k]->SetFillStyle(3305);
-	  Tpt[k]->SetFillColor(kBlack);
-	  Tpt[k]->SetFillStyle(3305);
-	  DRWH[k]->SetFillColor(kBlack);
-	  DRWH[k]->SetFillStyle(3305);
-	  DPHjets[k]->SetFillColor(kBlack);
-	  DPHjets[k]->SetFillStyle(3305);
-	  DPWjets[k]->SetFillColor(kBlack);
-	  DPWjets[k]->SetFillStyle(3305);
-	  DPTjets[k]->SetFillColor(kBlack);
-	  DPTjets[k]->SetFillStyle(3305);
-	  HiggsMass[k]->SetFillColor(kBlack);
-	  HiggsMass[k]->SetFillStyle(3305);
-	  RelHT[k]->SetFillColor(kBlack);
-	  RelHT[k]->SetFillStyle(3305);
-	  DRTH[k]->SetFillColor(kBlack);
-	  DRTH[k]->SetFillStyle(3305);
-	  PtNormalizedMass[k]->SetFillColor(kBlack);
-	  PtNormalizedMass[k]->SetFillStyle(3305);
-	  RelativeMass[k]->SetFillColor(kBlack);
-	  RelativeMass[k]->SetFillStyle(3305);
-	  MotherPtNormalizedMass[k]->SetFillColor(kBlack);
-	  MotherPtNormalizedMass[k]->SetFillStyle(3305);
-	  NumberOfTops[k]->SetFillColor(kBlack);
-	  NumberOfTops[k]->SetFillStyle(3305);
-	  HiggsMassOverTopMass[k]->SetFillColor(kBlack);
-	  HiggsMassOverTopMass[k]->SetFillStyle(3305);
-	  HiggsTopAsymmetry[k]->SetFillColor(kBlack);
-	  HiggsTopAsymmetry[k]->SetFillStyle(3305);
-	  ThirdLooseBtag[k]->SetFillColor(kBlack);
-	  ThirdLooseBtag[k]->SetFillStyle(3305);
-	  TopMass[k]->SetFillColor(kBlack);
-	  TopMass[k]->SetFillStyle(3305);
-	  Chi2[k]->SetFillColor(kBlack);
-	  Chi2[k]->SetFillStyle(3305);
-	  UQuarkContent[k]->SetFillColor(kBlack);
-	  UQuarkContent[k]->SetFillStyle(3305);
-	  DQuarkContent[k]->SetFillColor(kBlack);
-	  DQuarkContent[k]->SetFillStyle(3305);
-	  SQuarkContent[k]->SetFillColor(kBlack);
-	  SQuarkContent[k]->SetFillStyle(3305);
-	  CQuarkContent[k]->SetFillColor(kBlack);
-	  CQuarkContent[k]->SetFillStyle(3305);
-	  BQuarkContent[k]->SetFillColor(kBlack);
-	  BQuarkContent[k]->SetFillStyle(3305);	  
-	  CSVLB[k]->SetFillColor(kBlack);
-	  CSVLB[k]->SetFillStyle(3305);    
-	  CSVMB[k]->SetFillColor(kBlack);
-	  CSVMB[k]->SetFillStyle(3305);
-	  CSVTB[k]->SetFillColor(kBlack);
-	  CSVTB[k]->SetFillStyle(3305);
-	  Vtcs[k]->SetFillColor(kBlack);
-	  Vtcs[k]->SetFillStyle(3305);
-	  for (int i=0; i<6; i++) {HiggsMassReversedHptTpt[i][k]->SetFillColor(kBlack); HiggsMassReversedHptTpt[i][k]->SetFillStyle(3305);}
-	  for (int i=0; i<6; i++) {TprimeMassReversedHptTpt[i][k]->SetFillColor(kBlack); TprimeMassReversedHptTpt[i][k]->SetFillStyle(3305);}
-	  for (int i=0; i<6; i++) {HiggsMassCuts[i][k]->SetFillColor(kBlack); HiggsMassCuts[i][k]->SetFillStyle(3305);}
-	  /*for (int i=0; i<6; i++) {WMassFromHiggs[i][k]->SetFillColor(kBlack); WMassFromHiggs[i][k]->SetFillStyle(3305);}*/
-          TopMassFromHiggs[k]->SetFillColor(kBlack); TopMassFromHiggs[k]->SetFillStyle(3305);
-	  JET1ETA[k]->SetFillColor(kBlack); JET1ETA[k]->SetFillStyle(3305);
-	  JET2ETA[k]->SetFillColor(kBlack); JET2ETA[k]->SetFillStyle(3305);
-	  JET3ETA[k]->SetFillColor(kBlack); JET3ETA[k]->SetFillStyle(3305);
-	  JET4ETA[k]->SetFillColor(kBlack); JET4ETA[k]->SetFillStyle(3305);
-	  JET5ETA[k]->SetFillColor(kBlack); JET5ETA[k]->SetFillStyle(3305);
-	  JET6ETA[k]->SetFillColor(kBlack); JET6ETA[k]->SetFillStyle(3305);
-	  JET1PHI[k]->SetFillColor(kBlack); JET1PHI[k]->SetFillStyle(3305);
-	  JET2PHI[k]->SetFillColor(kBlack); JET2PHI[k]->SetFillStyle(3305);
-	  JET3PHI[k]->SetFillColor(kBlack); JET3PHI[k]->SetFillStyle(3305);
-	  JET4PHI[k]->SetFillColor(kBlack); JET4PHI[k]->SetFillStyle(3305);
-	  JET5PHI[k]->SetFillColor(kBlack); JET5PHI[k]->SetFillStyle(3305);
-	  JET6PHI[k]->SetFillColor(kBlack); JET6PHI[k]->SetFillStyle(3305);
-	  JETMULTI[k]->SetFillColor(kBlack); JETMULTI[k]->SetFillStyle(3305);
+	  FiveJetsMass[k]->SetFillColor(kWhite);
+	  LeadingJetPT[k]->SetFillColor(kWhite);
+	  Leading2JetPT[k]->SetFillColor(kWhite);
+	  Leading3JetPT[k]->SetFillColor(kWhite);
+	  Leading4JetPT[k]->SetFillColor(kWhite);
+	  Leading5JetPT[k]->SetFillColor(kWhite);
+	  Leading6JetPT[k]->SetFillColor(kWhite);
+	  THT[k]->SetFillColor(kWhite);
+	  DRHjets[k]->SetFillColor(kWhite);
+	  DRWjets[k]->SetFillColor(kWhite);
+	  Hpt[k]->SetFillColor(kWhite);
+	  Tpt[k]->SetFillColor(kWhite);
+	  DRWH[k]->SetFillColor(kWhite);
+	  DPHjets[k]->SetFillColor(kWhite);
+	  DPWjets[k]->SetFillColor(kWhite);
+	  DPTjets[k]->SetFillColor(kWhite);
+	  HiggsMass[k]->SetFillColor(kWhite);
+	  RelHT[k]->SetFillColor(kWhite);
+	  DRTH[k]->SetFillColor(kWhite);
+	  PtNormalizedMass[k]->SetFillColor(kWhite);
+	  RelativeMass[k]->SetFillColor(kWhite);
+	  MotherPtNormalizedMass[k]->SetFillColor(kWhite);
+	  NumberOfTops[k]->SetFillColor(kWhite);
+	  HiggsMassOverTopMass[k]->SetFillColor(kWhite);
+	  HiggsTopAsymmetry[k]->SetFillColor(kWhite);
+	  ThirdLooseBtag[k]->SetFillColor(kWhite);
+	  TopMass[k]->SetFillColor(kWhite);
+	  Chi2[k]->SetFillColor(kWhite);
+	  UQuarkContent[k]->SetFillColor(kWhite);
+	  DQuarkContent[k]->SetFillColor(kWhite);
+	  SQuarkContent[k]->SetFillColor(kWhite);
+	  CQuarkContent[k]->SetFillColor(kWhite);
+	  BQuarkContent[k]->SetFillColor(kWhite);
+	  CSVLB[k]->SetFillColor(kWhite);
+	  CSVMB[k]->SetFillColor(kWhite);
+	  CSVTB[k]->SetFillColor(kWhite);
+	  Vtcs[k]->SetFillColor(kWhite);
+	  for (int i=0; i<6; i++) HiggsMassReversedHptTpt[i][k]->SetFillColor(kWhite); 
+	  for (int i=0; i<6; i++) TprimeMassReversedHptTpt[i][k]->SetFillColor(kWhite); 
+	  for (int i=0; i<6; i++) HiggsMassCuts[i][k]->SetFillColor(kWhite);
+	  /*for (int i=0; i<6; i++) WMassFromHiggs[i][k]->SetFillColor(kWhite);*/
+	  TopMassFromHiggs[k]->SetFillColor(kWhite);
+	  JET1ETA[k]->SetFillColor(kWhite);
+	  JET2ETA[k]->SetFillColor(kWhite);
+	  JET3ETA[k]->SetFillColor(kWhite);
+	  JET4ETA[k]->SetFillColor(kWhite);
+	  JET5ETA[k]->SetFillColor(kWhite);
+	  JET6ETA[k]->SetFillColor(kWhite);
+	  JET1PHI[k]->SetFillColor(kWhite);
+	  JET2PHI[k]->SetFillColor(kWhite);
+	  JET3PHI[k]->SetFillColor(kWhite);
+	  JET4PHI[k]->SetFillColor(kWhite);
+	  JET5PHI[k]->SetFillColor(kWhite);
+	  JET6PHI[k]->SetFillColor(kWhite);
+	  JETMULTI[k]->SetFillColor(kWhite);
 	  if (k!=ParcialTestMin) 
 	    {
 	      SingleTopTprimeMass->Add(FiveJetsMass[k]); 
@@ -1162,7 +1111,7 @@ void SingleT()
 	      for (int i=0; i<6; i++) SingleTopTprimeMassBE[i]->Add(TprimeMassReversedHptTpt[i][k]);
 	      for (int i=0; i<6; i++) QCDTprimeMassHMCuts[i]->Add(HiggsMassCuts[i][k]);
 	      /*for (int i=0; i<6; i++) QCDTprimeMassWMFHCuts[i]->Add(WMassFromHiggs[i][k]);*/
-              QCDTopMassFromHiggs->Add(TopMassFromHiggs[k]);
+	      QCDTopMassFromHiggs->Add(TopMassFromHiggs[k]);
 	      QCDJET1ETA->Add(JET1ETA[k]);
 	      QCDJET2ETA->Add(JET2ETA[k]);
 	      QCDJET3ETA->Add(JET3ETA[k]);
@@ -1179,7 +1128,7 @@ void SingleT()
 	    }
 	  if (k==LastGoodMarker)
 	    {
-	      TFile f("SingleTop.root", "RECREATE");
+	      TFile f("Diboson.root", "RECREATE");
 	      SingleTopTprimeMass->Write();
 	      SingleTopTprimeMassLJPT->Write();
 	      SingleTopTprimeMassL2JPT->Write();
@@ -1222,7 +1171,8 @@ void SingleT()
 	      for (int i=0; i<6; i++) SingleTopTprimeMassHMBE[i]->Write();
 	      for (int i=0; i<6; i++) SingleTopTprimeMassBE[i]->Write();
 	      for (int i=0; i<6; i++) QCDTprimeMassHMCuts[i]->Write();
-	      /*for (int i=0; i<6; i++) QCDTprimeMassWMFHCuts[i]->Write();*/              
+	      /*for (int i=0; i<6; i++) QCDTprimeMassWMFHCuts[i]->Write();*/
+	      
               QCDTopMassFromHiggs->Write();
 	      QCDJET1ETA->Write();
 	      QCDJET2ETA->Write();
